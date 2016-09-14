@@ -1,0 +1,88 @@
+<nav id="main-menu" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <img alt="Brand" src="/images/Saturn%20logo_empt.svg" height="40" width="40">
+                <span>The Saturn Server Network</span>
+            </a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Mods <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2151712"
+                               target="_blank">Currency</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Modpacks <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Gates">Gates</a></li>
+                        <li><a href="Radz">Radz</a></li>
+                        <li><a href="Randomfun">Random Fun</a></li>
+                        <li><a href="Survival">Survival of the Fittest</a></li>
+                        <li><a href="Technolution">Technolution Advanced</a></li>
+                    </ul>
+                </li>
+                <!--<li class="dropdown">-->
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                       <!--aria-expanded="false">-->
+                        <!--Servers <span class="caret"></span>-->
+                    <!--</a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li class="disabled"><a href="#">Technolution</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {{#ifCond user.login 'and' user.isAdmin}}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Admin <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">User management</a></li>
+                    </ul>
+                </li>
+                {{/ifCond}}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        {{#if user.login}}
+                            {{user.username}}
+                        {{else}}
+                            <i class="mdi mdi-account"></i>
+                        {{/if}}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {{#if user.login}}
+                            <li class="disabled"><a href="#">My profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout">Logout</a></li>
+                        {{else}}
+                            <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></li>
+                        {{/if}}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

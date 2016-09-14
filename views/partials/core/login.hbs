@@ -1,0 +1,59 @@
+<div class="login modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Log in</h4>
+            </div>
+
+            <form id="loginForm">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="uLogin" placeholder="Account name or Email">
+                            <label for="uLogin" id="uLogin_icon"
+                                   class="input-group-addon mdi mdi-account mdi-18px"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="uPassword" placeholder="Password">
+                            <label for="uPassword" id="uPassword_icon"
+                                   class="input-group-addon mdi mdi-key-variant mdi-18px"></label>
+                        </div>
+                    </div>
+                    <div class="loginError">
+                        <p class="login_error_text text-center"></p>
+                    </div>
+                    <!--<div class="checkbox">-->
+                    <!--<label>-->
+                    <!--<input type="checkbox" id="uCookie"> Remember me-->
+                    <!--</label>-->
+                    <!--</div>-->
+                    <!--<div class="material-switch pull-right">-->
+                    <!--<input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox"/>-->
+                    <!--<label for="someSwitchOptionDefault" class="label-default"></label>-->
+                    <!--</div>-->
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="form-control btn btn-primary disabled">Log in</button>
+
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"
+                             data-transitiongoal="100"></div>
+                        <span class="sr-only">progress</span>
+                    </div>
+                </div>
+            </form>
+            <div class="post-login text-center">
+                <h4>You are now logged in.</h4>
+            </div>
+        </div>
+
+    </div>
+</div>

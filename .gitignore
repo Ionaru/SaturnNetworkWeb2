@@ -1,0 +1,13 @@
+.idea
+*.iml
+/public/stylesheets/*.css
+/public/stylesheets/*.map
+/npm-debug.log
+/config/database.ini
+/config/mail.ini
+/config/config.ini
+/config/solder.ini
+node_modules
+/config/crts/
+/tmp/
+/logs/

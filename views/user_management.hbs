@@ -1,0 +1,114 @@
+<div class="container">
+    <h2>User Management</h2>
+    <table class="table table-responsive table-condensed table-hover sortable">
+        <thead>
+        <tr>
+            <!--<th class="text-left">Username</th>-->
+            <th class="text-left sorttable_sorted">Username
+                <span id="sorttable_sortfwdind"> <i class="fa fa-chevron-up"></i></span>
+            </th>
+            <th class="text-left">Minecraft</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Points</th>
+            <th class="text-left">Admin</th>
+            <th class="text-left">Staff</th>
+            <th class="text-right sorttable_nosort">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each users}}
+            <tr>
+                <td>{{this.user_name}}</td>
+                <td>{{this.user_mccharacter}}</td>
+                <td>{{this.user_email}}</td>
+                <td>{{this.user_points}}</td>
+                <td sorttable_customkey="{{this.user_isadmin}}">
+                    {{#if this.user_isadmin}}
+                        <i class="fa fa-circle is_admin"></i>
+                    {{else}}
+                        <i class="fa fa-circle-o is_not_admin"></i>
+                    {{/if}}
+                </td>
+                <td sorttable_customkey="{{this.user_isstaff}}">
+                    {{#if this.user_isstaff}}
+                        <i class="fa fa-circle is_staff"></i>
+                    {{else}}
+                        <i class="fa fa-circle-o is_not_staff"></i>
+                    {{/if}}
+                </td>
+                <td class="text-right">
+                    <button type="button" class="btn btn-xs btn-standard dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false"><i class="fa fa-pencil"></i> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="presentation" class="dropdown-header">{{this.user_name}}</li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal"
+                               data-target="#editUsernameModal" data-name="Altenius">Edit Username</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal"
+                               data-target="#mcModal" data-name="Altenius">Edit Minecraft Name</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal"
+                               data-target="#emailModal" data-name="Altenius">Edit Email</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1"
+                               href="?user=Altenius&amp;action=resetPassword">Reset Password</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" data-toggle="modal"
+                               data-target="#pointsModal" data-name="Altenius">Edit Points</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1"
+                               href="?user=Altenius&amp;action=toggleAdmin">Toggle Admin</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1"
+                               href="?user=Altenius&amp;action=toggleStaff">Toggle Staff</a>
+                        </li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1"
+                               href="?user=Altenius&amp;action=deleteAccount">Delete Account</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modals -->
+<div class="edit name modal fade" id="editUsernameModal" tabindex="-1" role="dialog" aria-labelledby="editUsernameModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="loginForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Edit username</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="uLogin" placeholder="New username">
+                            <label for="uLogin" id="uLogin_icon"
+                                   class="input-group-addon mdi mdi-account mdi-18px"></label>
+                        </div>
+                    </div>
+                    <div class="error">
+                        <p class="login_error_text text-center"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="form-control btn btn-primary">Log in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

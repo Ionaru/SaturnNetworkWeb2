@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+/**
+ * Initiate coffeescript and load entry file
+ */
+console.log("Initiated Node Server");
+require('coffee-script/register');
+require('./www');

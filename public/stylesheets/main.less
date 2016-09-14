@@ -1,0 +1,238 @@
+@main_colour: #01A7E1;
+
+body {
+  padding-top: 50px;
+
+  nav {
+    .navbar-brand {
+      padding-left: 35px;
+      position: relative;
+
+      img {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      span {
+        display: none;
+      }
+
+      @media only screen and (min-width: 375px) {
+        span {
+          display: inline;
+          padding-left: 25px;
+        }
+      }
+    }
+
+    .navbar-nav * {
+      font-size: medium;
+    }
+    .navbar-info {
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .jumbotron {
+    text-align: center;
+    border: none;
+    background-size: cover;
+    &.main_header {
+      background-image: url('https://saturnserver.org/img/image5.png');
+
+      .logo {
+        display: none;
+      }
+
+      @media only screen and (min-width: 1200px) {
+        .logo {
+          display: inline;
+        }
+      }
+    }
+    &.gates_header {
+      background-image: url(/images/modpacks/gates/image2C.png);
+    }
+    &.technolution_header {
+      background-image: url(/images/modpacks/technolution/qjR60blur.png);
+    }
+
+    h1, h2, h3, h4, h5, h6, p, span {
+      color: white;
+      text-shadow: black 0.0em 0.0em 0.5em;
+    }
+  }
+
+  .modpacks {
+    .modpack {
+      img {
+        width: 140px;
+        height: 140px;
+        margin-top: 50px;
+      }
+    }
+  }
+
+  .moddiv {
+    padding-left: 0;
+    padding-right: 0;
+    .modimg {
+      width: 100%;
+    }
+  }
+
+  .footer_text {
+    text-align: center;
+  }
+  .login {
+    input {
+      transition: background-color 0.3s ease-in-out
+    }
+    .modal-dialog {
+      margin: 30px auto;
+      max-width: 350px;
+    }
+    .modal-content {
+      height: 260px;
+      transition: height 0.5s ease-in-out;
+      .input-group-addon {
+        color: #fff;
+        background-color: #158cba;
+        transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      }
+      .form-control:focus + label {
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+      }
+      .post-login {
+        display: none;
+      }
+
+    }
+    .modal-footer {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      height: 70px;
+      margin: 0;
+      .btn {
+        &.disabled {
+          pointer-events: none;
+        }
+        font-weight: bold;
+      }
+      .progress {
+        display: none;
+        height: 38px;
+        margin: 0;
+      }
+      .progress-bar {
+        transition: width 1s ease-in-out;
+      }
+    }
+    .loginError {
+      .login_error_text {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .register {
+    input {
+      transition: background-color 0.3s ease-in-out
+    }
+    .modal-dialog {
+      margin: 30px auto;
+      max-width: 400px;
+    }
+    .modal-content {
+      height: 365px;
+      transition: height 0.5s ease-in-out;
+      .input-group-addon {
+        color: #fff;
+        background-color: #28b62c;
+        transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      }
+      .form-control:focus + label {
+        border-color: #66afe9;
+        outline: 0;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+      }
+    }
+    .modal-footer {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      height: 70px;
+      margin: 0;
+      .btn {
+        &.disabled {
+          pointer-events: none;
+        }
+        font-weight: bold;
+      }
+      .progress {
+        display: none;
+        height: 38px;
+        margin: 0;
+      }
+      .progress-bar {
+        transition: width 1s ease-in-out;
+      }
+    }
+    .registerError {
+      .register_error_text {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.material-switch > input[type="checkbox"] {
+  display: none;
+}
+
+.material-switch > label {
+  cursor: pointer;
+  height: 0px;
+  position: relative;
+  width: 40px;
+}
+
+.material-switch > label::before {
+  background: rgb(0, 0, 0);
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  content: '';
+  height: 16px;
+  margin-top: -8px;
+  position:absolute;
+  opacity: 0.3;
+  transition: all 0.4s ease-in-out;
+  width: 40px;
+}
+.material-switch > label::after {
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  content: '';
+  height: 24px;
+  left: -4px;
+  margin-top: -8px;
+  position: absolute;
+  top: -4px;
+  transition: all 0.3s ease-in-out;
+  width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before {
+  background: inherit;
+  opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after {
+  background: inherit;
+  left: 20px;
+}
