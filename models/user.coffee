@@ -18,7 +18,6 @@ exports.create = (username, email, password, done) ->
       db.get().query "INSERT INTO users (user_pid, user_name, user_password_hash, user_email, user_registerdate) VALUES(?, ?, ?, ?, ?)", values, (err, result) ->
         if err
           return done err
-        logger.info "New user created -> #{username}"
         done null, pid
     else
       return done("validation_error")
@@ -139,21 +138,16 @@ exports.resetPassword = (pid, done) ->
 exports.checkPassword = (username, password, done) ->
   db.get().query "SELECT user_pid, user_name, user_password_hash FROM users WHERE BINARY user_name = \"#{username}\" OR user_email = \"#{username}\";", (err, rows) ->
     if err
-      return done "incorrect_login", null
+      return done "incorrect_login"
     if rows.length is 0
-      logger.warn "User login incorrect -> #{username}"
-      return done "incorrect_login", null
+      return done "incorrect_login"
     passHash = rows[0]['user_password_hash']
     username = rows[0]['user_name']
     pid = rows[0]['user_pid']
     try
       if bcrypt.compareSync password, passHash
-        logger.info "User password validated -> #{username}"
         return done "valid_login", pid
       else
-        logger.warn "User password incorrect -> #{username}"
-        return done "incorrect_password", null
+        return done "incorrect_password"
     catch e
-      logger.error "Unable to validate password for user -> #{username}"
-      logger.error "> #{e}"
-      return done "hash_check_error", null
+      return done "hash_check_error", null, e

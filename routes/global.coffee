@@ -61,6 +61,7 @@ router.post '/register', (req, res) ->
                   login: true
                 req.app.locals.user = userResult
                 req.session.user = userResult
+                logger.info "New user created -> #{username}"
                 res.send ['account_created', userResult]
           else
             res.send ['email_in_use', null]
@@ -82,9 +83,10 @@ router.post '/login', (req, res) ->
   if (usernameValidated or emailValidated) and passwordValidated
     username = jsesc username
     password = jsesc password
-    user.checkPassword username, password, (result, pid) ->
+    user.checkPassword username, password, (result, pid, e) ->
       switch result
         when "valid_login"
+          logger.info "User password validated -> #{username}"
           user.getByUserPID pid, (err, result_user) ->
             userResult =
               pid: result_user['user_pid']
@@ -99,12 +101,16 @@ router.post '/login', (req, res) ->
             res.send [result, userResult]
           break
         when "incorrect_login"
+          logger.warn "User login incorrect -> #{username}"
           res.send [result, null]
           break
         when "incorrect_password"
+          logger.warn "User password incorrect -> #{username}"
           res.send [result, null]
           break
         when "hash_check_error"
+          logger.error "Unable to validate password for user -> #{username}"
+          logger.error "> #{e}"
           res.send [result, null]
           break
   else

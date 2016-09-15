@@ -18,7 +18,7 @@ db.connect (err) ->
   if err
     throw err
   else
-    logger.info 'Connected to MySQL database'
+    logger.info "Connected to #{dbConfig['db_name']} MySQL database"
 
 # Setup session storage
 session = require('express-session')
@@ -31,7 +31,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-logger.info 'MySQL session storage connected'
+logger.info "MySQL session storage connected to #{dbConfig['db_name']}"
 
 # Setup favicon and stylesheets
 favicon = require('serve-favicon')
