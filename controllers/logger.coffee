@@ -1,4 +1,4 @@
-fs = require('fs')
+fs = require 'fs'
 now = new Date
 
 logDirs =
@@ -17,7 +17,7 @@ for k, logDir of logDirs
   require('mkdirp').sync logDir, (err) ->
     console.log "creating ", logDir
 
-winston = require('winston')
+winston = require 'winston'
 consoleLog = new (winston.transports.Console)(
   level: 'info'
   timestamp: ->

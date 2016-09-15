@@ -11,7 +11,7 @@
             <form id="loginForm">
                 <div class="modal-body">
 
-                    <div class="form-group">
+                    <div class="form-group username_input">
                         <div class="input-group">
                             <input type="text" class="form-control" id="uLogin" placeholder="Account name or Email">
                             <label for="uLogin" id="uLogin_icon"
@@ -19,12 +19,22 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group password_input">
                         <div class="input-group">
                             <input type="password" class="form-control" id="uPassword" placeholder="Password">
                             <label for="uPassword" id="uPassword_icon"
                                    class="input-group-addon mdi mdi-key-variant mdi-18px"></label>
                         </div>
+                    </div>
+                    <div class="form-group forgot_password_input">
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="uForgot_Email" placeholder="Email">
+                            <label for="uForgot_Email" id="uForgot_Email_icon"
+                                   class="input-group-addon mdi mdi-email mdi-18px"></label>
+                        </div>
+                    </div>
+                    <div class="forgot-password-button">
+                        <button class="btn btn-warning btn-xs">Password lost?</button>
                     </div>
                     <div class="loginError">
                         <p class="login_error_text text-center"></p>
@@ -42,7 +52,7 @@
 
                 <div class="modal-footer">
                     <button type="submit" class="form-control btn btn-primary disabled">Log in</button>
-
+                    <button id="forgotpasswordbutton" type="submit" class="form-control btn btn-primary disabled">Reset password</button>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" role="progressbar"
                              data-transitiongoal="100"></div>

@@ -18,6 +18,9 @@ $(document).ready(function () {
     var loginProgress = $('.login .progress');
     var loginProgressbar = $('.login .progress .progress-bar');
     var postLoginBody = $('.post-login');
+    var forgotPasswordButton = $('.forgot-password-button button');
+    var forgotPasswordButton2 = $('.forgot-password-button');
+    var forgotPasswordEmail = $('.forgot_password_input');
 
     var registerModal = $('#registerModal');
     var registerModalTitle = $('.register .modal-title');
@@ -178,6 +181,22 @@ $(document).ready(function () {
         checkRegisterPasswords(registerPassword2);
     });
 
+    forgotPasswordButton.click(function () {
+        loginModal.attr('data-useful', 'true');
+        $('.username_input').fadeOut(function () {
+            forgotPasswordEmail.fadeIn();
+        });
+        $('.password_input').fadeOut();
+        forgotPasswordButton2.fadeOut();
+        loginModalContent.css('height', '205px');
+        loginModalTitle.fadeOut(function () {
+            loginModalTitle.text("Reset your password");
+            loginModalTitle.fadeIn();
+        });
+        loginButton.fadeOut(function() {
+            $('#forgotpasswordbutton').fadeIn();
+        });
+    });
 
     // Form interactions
     loginForm.submit(function (event) {
@@ -200,7 +219,7 @@ $(document).ready(function () {
 
                 loginButton.fadeOut(function () {
                     loginErrorDiv.fadeOut(function () {
-                        loginModalContent.css('height', '260px');
+                        loginModalContent.css('height', '295px');
                     });
                     loginButton.addClass("disabled");
                     loginProgress.fadeIn(function () {
@@ -259,7 +278,7 @@ $(document).ready(function () {
                                 else {
                                     loginErrorText.html(error);
                                     loginErrorDiv.fadeIn();
-                                    var dynamicHeight = loginModalContent.height() + loginErrorText.height();
+                                    var dynamicHeight = (loginModalContent.height() + loginErrorText.height());
                                     loginModalContent.css('height', (dynamicHeight + 10) + 'px');
                                     loginInputs.removeAttr("disabled");
                                     completeLoginAttempt(false)

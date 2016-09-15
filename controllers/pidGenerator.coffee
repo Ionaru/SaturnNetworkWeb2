@@ -1,4 +1,4 @@
-db = require('./databaseConnector')
+db = require './databaseConnector'
 
 exports.generatePid = (pidLength = 6) ->
   if pidLength is 0
