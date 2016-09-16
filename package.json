@@ -5,7 +5,7 @@
   "scripts": {
     "Compile & run": "lessc --source-map ./style/style.less ./style/style.css && cleancss --source-map --compatibility=ie8 --keep-line-breaks --output ./public/stylesheets/stylemin.css ./style/style.css && node ./bin/start_server",
     "Start Node": "node ./bin/start_server",
-    "Compile stylesheets": "lessc --source-map --clean-css=\"--advanced\" ./public/stylesheets/style.less ./public/stylesheets/style.css",
+    "Compile stylesheets": "lessc --source-map ./style/style.less ./style/style.css && cleancss --source-map --compatibility=ie8 --keep-line-breaks --output ./public/stylesheets/stylemin.css ./style/style.css",
     "Update from git": "git pull",
     "Install packages": "npm install",
     "Run tests": "mocha --compilers coffee:coffee-script/register"
