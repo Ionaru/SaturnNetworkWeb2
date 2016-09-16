@@ -36,12 +36,12 @@ logger.info "MySQL session storage connected to #{dbConfig['db_name']}"
 # Setup favicon and stylesheets
 favicon = require('serve-favicon')
 bodyParser = require('body-parser')
-app.use favicon(path.join(__dirname, 'public', 'favicon.ico'))
+app.use favicon(path.join(__dirname, '..//client/public', 'favicon.ico'))
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
 
 # Setup static folders
-app.use express.static(path.join(__dirname, 'public'))
+app.use express.static(path.join(__dirname, '..//client/public'))
 
 # Generate static data
 staticGen = require('./controllers/staticGenerator')
