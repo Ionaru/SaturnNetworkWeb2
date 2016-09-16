@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "Compile & run": "lessc --source-map --clean-css=\"--advanced\" ./public/stylesheets/style.less ./public/stylesheets/style.css && node ./bin/start_server",
+    "Compile & run": "lessc --source-map ./style/style.less ./style/style.css && cleancss --source-map --compatibility=ie8 --keep-line-breaks --output ./public/stylesheets/stylemin.css ./style/style.css && node ./bin/start_server",
     "Start Node": "node ./bin/start_server",
     "Compile stylesheets": "lessc --source-map --clean-css=\"--advanced\" ./public/stylesheets/style.less ./public/stylesheets/style.css",
     "Update from git": "git pull",
@@ -27,7 +27,6 @@
     "ini": "^1.3.4",
     "jsesc": "^2.2.0",
     "less": "^2.7.1",
-    "less-middleware": "2.2.x",
     "less-plugin-clean-css": "^1.5.1",
     "mkdirp": "^0.5.1",
     "mocha": "^3.0.2",

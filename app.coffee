@@ -39,7 +39,6 @@ bodyParser = require('body-parser')
 app.use favicon(path.join(__dirname, 'public', 'favicon.ico'))
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
-app.use require('less-middleware')(path.join(__dirname, 'public'))
 
 # Setup static folders
 app.use express.static(path.join(__dirname, 'public'))

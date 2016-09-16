@@ -2,6 +2,8 @@
 *.iml
 /public/stylesheets/*.css
 /public/stylesheets/*.map
+/style/*.css
+/style/*.map
 /npm-debug.log
 /config/database.ini
 /config/mail.ini
