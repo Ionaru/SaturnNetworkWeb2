@@ -2,6 +2,7 @@ $(document).ready ->
   usernameRegex = /^(?!.*([_ .])\1{1})(?:[a-zA-Z0-9])([\w. ]{1,18})(?:[a-zA-Z0-9])$/
   emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   passwordRegex = /^(?!.*([_ .])\1{1})(?:[a-zA-Z0-9])([\w. @#%?!]{4,})(?:[a-zA-Z0-9!?#])$/
+
   loginModal = $('#loginModal')
   loginModalTitle = $('.login .modal-title')
   loginModalBody = $('.login .modal-body')
@@ -12,11 +13,12 @@ $(document).ready ->
   loginPassword = $('#uPassword')
   loginErrorDiv = $('.login .loginError')
   loginErrorText = $('.login .loginError .login_error_text')
-  loginButton = $('.login .modal-footer .btn')
+  loginButton = $('.login .modal-footer #loginbutton')
   loginProgress = $('.login .progress')
   loginProgressbar = $('.login .progress .progress-bar')
   postLoginBody = $('.post-login')
-  forgotPasswordButton = $('.forgot-password-button button')
+
+  forgotPasswordButton = $('.forgot-password-button span')
   forgotPasswordButton2 = $('.forgot-password-button')
   forgotPasswordEmail = $('.forgot_password_input')
   registerModal = $('#registerModal')
@@ -39,31 +41,26 @@ $(document).ready ->
   setInvalid = (element) ->
     $(element + '_icon').css 'background-color': '#ff4136'
     $(element).attr 'data-valid', 'false'
-    return
 
   setValid = (element) ->
     $(element + '_icon').css 'background-color': ''
     $(element).attr 'data-valid', 'true'
-    return
 
   clearValid = (element) ->
     $(element + '_icon').css 'background-color': ''
     $(element).attr 'data-valid', 'false'
-    return
 
   checkLoginButton = ->
     if loginUsername.attr('data-valid') == 'true' and loginPassword.attr('data-valid') == 'true'
       loginButton.removeClass 'disabled'
     else
       loginButton.addClass 'disabled'
-    return
 
   checkRegisterButton = ->
     if registerUsername.attr('data-valid') == 'true' and registerEmail.attr('data-valid') == 'true' and registerPassword.attr('data-valid') == 'true' and registerPassword2.attr('data-valid') == 'true'
       registerButton.removeClass 'disabled'
     else
       registerButton.addClass 'disabled'
-    return
 
   checkUsername = ->
     entry = loginUsername.val()
@@ -75,7 +72,6 @@ $(document).ready ->
     else
       clearValid '#uLogin'
     checkLoginButton()
-    return
 
   checkPassword = ->
     entry = loginPassword.val()
@@ -87,7 +83,6 @@ $(document).ready ->
     else
       clearValid '#uPassword'
     checkLoginButton()
-    return
 
   checkRegisterUsername = ->
     entry = registerUsername.val()
@@ -99,7 +94,6 @@ $(document).ready ->
     else
       clearValid '#uRegLogin'
     checkRegisterButton()
-    return
 
   checkRegisterEmail = ->
     entry = registerEmail.val()
@@ -111,7 +105,6 @@ $(document).ready ->
     else
       clearValid '#uRegEmail'
     checkRegisterButton()
-    return
 
   checkRegisterPasswords = (passwordField) ->
     entry = passwordField.val()
@@ -134,29 +127,23 @@ $(document).ready ->
       if pass.length == 0
         clearValid '#pass2'
     checkRegisterButton()
-    return
 
   completeLoginAttempt = (success) ->
     loginProgress.fadeOut ->
       loginProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
         loginProgressbar.attr 'data-transitiongoal', 100
-        return
       if success
         loginButton.text('Continue').removeClass('btn-primary').addClass('btn-success').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
         $(document).keypress (e) ->
           if e.which == 13
             loginModal.modal 'hide'
-          return
       else
         loginButton.removeClass('disabled').fadeIn()
-      return
-    return
 
   completeRegisterAttempt = (success) ->
     registerProgress.fadeOut ->
       registerProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
         registerProgressbar.attr 'data-transitiongoal', 100
-        return
       if success
         registerButton.text('Continue').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
         $(document).keypress (e) ->
@@ -165,119 +152,109 @@ $(document).ready ->
           return
       else
         registerButton.removeClass('disabled').fadeIn()
-      return
-    return
 
   loginUsername.on 'input propertychange', ->
     checkUsername()
-    return
+
   loginPassword.on 'input propertychange', ->
     checkPassword()
-    return
+
   registerUsername.on 'input propertychange', ->
     checkRegisterUsername()
-    return
+
   registerEmail.on 'input propertychange', ->
     checkRegisterEmail()
-    return
+
   registerPassword.on 'input propertychange', ->
     checkRegisterPasswords registerPassword
-    return
+
   registerPassword2.on 'input propertychange', ->
     checkRegisterPasswords registerPassword2
-    return
+
   forgotPasswordButton.click ->
     loginModal.attr 'data-useful', 'true'
+    loginModal.attr 'data-modal-mode', 'reset'
     $('.username_input').fadeOut ->
       forgotPasswordEmail.fadeIn()
-      return
     $('.password_input').fadeOut()
     forgotPasswordButton2.fadeOut()
     loginModalContent.css 'height', '205px'
     loginModalTitle.fadeOut ->
       loginModalTitle.text 'Reset your password'
       loginModalTitle.fadeIn()
-      return
     loginButton.fadeOut ->
       $('#forgotpasswordbutton').fadeIn()
-      return
-    return
+
   # Form interactions
   loginForm.submit (event) ->
-    event.preventDefault()
-    uLogin = loginUsername.val()
-    uPassword = loginPassword.val()
-    uLoginVal = usernameRegex.test(uLogin) or emailRegex.test(uLogin)
-    uPasswordVal = passwordRegex.test(uPassword)
-    if uLoginVal and uPasswordVal
-      if loginButton.attr('data-dismiss') != 'modal'
-        request_finished = false
-        progressbar_done = false
-        login_success = false
-        user = undefined
-        error = undefined
-        loginProgressbar.attr 'data-transitiongoal', 0
-        loginInputs.attr 'disabled', 'disabled'
-        loginButton.fadeOut ->
-          loginErrorDiv.fadeOut ->
-            loginModalContent.css 'height', '295px'
-            return
-          loginButton.addClass 'disabled'
-          loginProgress.fadeIn ->
-            $.post('/login',
-              user: uLogin
-              password: uPassword).done((data) ->
-              request_finished = true
-              switch data[0]
-                when 'valid_login'
-                  login_success = true
-                when 'incorrect_login', 'incorrect_password'
-                  error = 'Username or password was incorrect.'
-                when 'error_validation'
-                  error = 'The text you entered did not pass validation.'
-                when 'hash_check_error'
-                  error = 'Your password could not be verified,\n please reset it.'
-                else
-                  error = 'An unknown error occurred, please try again.'
-                  break
-              user = data[1]
-              $(document).trigger 'continueLoginEvent'
-              return
-            ).fail ->
-              request_finished = true
-              error = 'Login request failed.'
-              $(document).trigger 'continueLoginEvent'
-              return
-            loginProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
-              progressbar_done = true
-              $(document).trigger 'continueLoginEvent'
-              return
-            $(document).on 'continueLoginEvent', ->
-              if request_finished and progressbar_done
-                request_finished = false
-                progressbar_done = false
-                if login_success
-                  loginModal.attr 'data-useful', 'true'
-                  loginModalTitle.fadeOut ->
-                    loginModalTitle.text 'Hello ' + user['username']
-                    loginModalTitle.fadeIn()
-                    return
-                  loginModalBody.fadeOut ->
-                    postLoginBody.fadeIn()
-                    loginModalContent.css 'height', '170px'
-                    return
-                  completeLoginAttempt true
-                else
-                  loginErrorText.html error
-                  loginErrorDiv.fadeIn()
-                  dynamicHeight = loginModalContent.height() + loginErrorText.height()
-                  loginModalContent.css 'height', dynamicHeight + 10 + 'px'
-                  loginInputs.removeAttr 'disabled'
-                  completeLoginAttempt false
-              return
-            return
-          return
-    return
+    if loginModal.attr('data-modal-mode') is 'login'
+      event.preventDefault()
+      uLogin = loginUsername.val()
+      uPassword = loginPassword.val()
+      uLoginVal = usernameRegex.test(uLogin) or emailRegex.test(uLogin)
+      uPasswordVal = passwordRegex.test(uPassword)
+      if uLoginVal and uPasswordVal
+        if loginButton.attr('data-dismiss') != 'modal'
+          request_finished = false
+          progressbar_done = false
+          login_success = false
+          user = undefined
+          error = undefined
+          loginProgressbar.attr 'data-transitiongoal', 0
+          loginInputs.attr 'disabled', 'disabled'
+          loginButton.fadeOut ->
+            loginErrorDiv.fadeOut ->
+              loginModalContent.css 'height', '295px'
+            loginButton.addClass 'disabled'
+            loginProgress.fadeIn ->
+              $.post('/login',
+                user: uLogin
+                password: uPassword).done((data) ->
+                request_finished = true
+                switch data[0]
+                  when 'valid_login'
+                    login_success = true
+                  when 'incorrect_login', 'incorrect_password'
+                    error = 'Username or password was incorrect.'
+                  when 'error_validation'
+                    error = 'The text you entered did not pass validation.'
+                  when 'hash_check_error'
+                    error = 'Your password could not be verified,\n please reset it.'
+                  else
+                    error = 'An unknown error occurred, please try again.'
+                    break
+                user = data[1]
+                $(document).trigger 'continueLoginEvent'
+              ).fail ->
+                request_finished = true
+                error = 'Login request failed.'
+                $(document).trigger 'continueLoginEvent'
+
+              loginProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
+                progressbar_done = true
+                $(document).trigger 'continueLoginEvent'
+
+              $(document).on 'continueLoginEvent', ->
+                if request_finished and progressbar_done
+                  request_finished = false
+                  progressbar_done = false
+                  if login_success
+                    loginModal.attr 'data-useful', 'true'
+                    loginModalTitle.fadeOut ->
+                      loginModalTitle.text 'Hello ' + user['username']
+                      loginModalTitle.fadeIn()
+                    loginModalBody.fadeOut ->
+                      postLoginBody.fadeIn()
+                      loginModalContent.css 'height', '170px'
+                    completeLoginAttempt true
+                  else
+                    loginErrorText.html error
+                    loginErrorDiv.fadeIn()
+                    dynamicHeight = loginModalContent.height() + loginErrorText.height()
+                    loginModalContent.css 'height', dynamicHeight + 10 + 'px'
+                    loginInputs.removeAttr 'disabled'
+                    completeLoginAttempt false
+
   # Form interactions
   registerForm.submit (event) ->
     event.preventDefault()
@@ -301,7 +278,6 @@ $(document).ready ->
         registerButton.fadeOut ->
           registerErrorDiv.fadeOut ->
             registerModalContent.css 'height', '365px'
-            return
           registerButton.addClass 'disabled'
           registerProgress.fadeIn ->
             $.post('/register',
@@ -325,16 +301,15 @@ $(document).ready ->
                   break
               user = data[1]
               $(document).trigger 'continueRegisterEvent'
-              return
             ).fail ->
               request_finished = true
               error = 'Register request failed.'
               $(document).trigger 'continueRegisterEvent'
-              return
+
             registerProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
               progressbar_done = true
               $(document).trigger 'continueRegisterEvent'
-              return
+
             $(document).on 'continueRegisterEvent', ->
               if request_finished and progressbar_done
                 request_finished = false
@@ -344,11 +319,9 @@ $(document).ready ->
                   registerModalTitle.fadeOut ->
                     registerModalTitle.text 'Welcome ' + user['username']
                     registerModalTitle.fadeIn()
-                    return
                   registerModalBody.fadeOut ->
                     postRegisterBody.fadeIn()
                     registerModalContent.css 'height', '170px'
-                    return
                   completeRegisterAttempt true
                 else
                   registerErrorText.html error
@@ -357,36 +330,31 @@ $(document).ready ->
                   registerModalContent.css 'height', dynamicHeight + 10 + 'px'
                   registerInputs.removeAttr 'disabled'
                   completeRegisterAttempt false
-              return
-            return
-          return
-    return
+
   # Events for the login modal
   # Trigger on open event of modal
   loginModal.on 'shown.bs.modal', ->
 # Check the input values in case the browser already filled them in
     checkUsername()
     checkPassword()
-    return
+
   # Trigger on close event of modal
   loginModal.on 'hidden.bs.modal', ->
 # Reload the page if modal did its job (login user)
     if loginModal.attr('data-useful') == 'true'
       location.reload()
-    return
+
   # Events for the register modal
+
   # Trigger on open event of modal
   registerModal.on 'shown.bs.modal', ->
 # Check the input values in case the browser already filled them in
     checkRegisterUsername()
     checkRegisterEmail()
     checkRegisterPasswords registerPassword
-    checkRegisterPasswords registerPassword2
-    return
+
   # Trigger on close event of modal
   registerModal.on 'hidden.bs.modal', ->
 # Reload the page if modal did its job (login user)
     if registerModal.attr('data-useful') == 'true'
       location.reload()
-    return
-  return

@@ -1,4 +1,4 @@
-<div class="login modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal"
+<div class="login modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal" data-modal-mode="login"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -34,7 +34,10 @@
                         </div>
                     </div>
                     <div class="forgot-password-button">
-                        <button class="btn btn-warning btn-xs">Password lost?</button>
+                        <span class="btn btn-warning btn-xs">Password lost?</span>
+                    </div>
+                    <div class="forgot-password-button">
+                        <span class="btn btn-success btn-xs">Go back</span>
                     </div>
                     <div class="loginError">
                         <p class="login_error_text text-center"></p>
@@ -51,7 +54,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" class="form-control btn btn-primary disabled">Log in</button>
+                    <button id="loginbutton" type="submit" class="form-control btn btn-primary disabled">Log in</button>
                     <button id="forgotpasswordbutton" type="submit" class="form-control btn btn-primary disabled">Reset password</button>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" role="progressbar"
