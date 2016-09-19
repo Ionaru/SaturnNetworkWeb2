@@ -18,9 +18,11 @@ $(document).ready ->
   loginProgressbar = $('.login .progress .progress-bar')
   postLoginBody = $('.post-login')
 
-  forgotPasswordButton = $('.forgot-password-button span')
-  forgotPasswordButton2 = $('.forgot-password-button')
-  forgotPasswordEmail = $('.forgot_password_input')
+  forgotPasswordButton = $('.forgot-password-button')
+  forgotPasswordSubmit = $('#forgotpasswordbutton')
+  forgotPasswordInput = $('.forgot_password_input')
+  forgotPasswordEmail = $('#uForgot_Email')
+
   registerModal = $('#registerModal')
   registerModalTitle = $('.register .modal-title')
   registerModalBody = $('.register .modal-body')
@@ -56,6 +58,12 @@ $(document).ready ->
     else
       loginButton.addClass 'disabled'
 
+  checkResetButton = ->
+    if forgotPasswordEmail.attr('data-valid') == 'true'
+      forgotPasswordSubmit.removeClass 'disabled'
+    else
+      forgotPasswordSubmit.addClass 'disabled'
+
   checkRegisterButton = ->
     if registerUsername.attr('data-valid') == 'true' and registerEmail.attr('data-valid') == 'true' and registerPassword.attr('data-valid') == 'true' and registerPassword2.attr('data-valid') == 'true'
       registerButton.removeClass 'disabled'
@@ -83,6 +91,17 @@ $(document).ready ->
     else
       clearValid '#uPassword'
     checkLoginButton()
+
+  checkForgotEmail = ->
+    entry = forgotPasswordEmail.val()
+    if entry.length != 0
+      if emailRegex.test(entry)
+        setValid '#uForgot_Email'
+      else
+        setInvalid '#uForgot_Email'
+    else
+      clearValid '#uForgot_Email'
+    checkResetButton()
 
   checkRegisterUsername = ->
     entry = registerUsername.val()
@@ -140,6 +159,18 @@ $(document).ready ->
       else
         loginButton.removeClass('disabled').fadeIn()
 
+    completeResetAttempt = (success) ->
+      loginProgress.fadeOut ->
+        loginProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
+          loginProgressbar.attr 'data-transitiongoal', 100
+        if success
+          loginButton.text('Close').removeClass('btn-primary').addClass('btn-primary').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
+          $(document).keypress (e) ->
+            if e.which == 13
+              loginModal.modal 'hide'
+        else
+          loginButton.removeClass('disabled').fadeIn()
+
   completeRegisterAttempt = (success) ->
     registerProgress.fadeOut ->
       registerProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
@@ -159,6 +190,9 @@ $(document).ready ->
   loginPassword.on 'input propertychange', ->
     checkPassword()
 
+  forgotPasswordEmail.on 'input propertychange', ->
+    checkForgotEmail()
+
   registerUsername.on 'input propertychange', ->
     checkRegisterUsername()
 
@@ -175,9 +209,9 @@ $(document).ready ->
     loginModal.attr 'data-useful', 'true'
     loginModal.attr 'data-modal-mode', 'reset'
     $('.username_input').fadeOut ->
-      forgotPasswordEmail.fadeIn()
+      forgotPasswordInput.fadeIn()
     $('.password_input').fadeOut()
-    forgotPasswordButton2.fadeOut()
+    forgotPasswordButton.fadeOut()
     loginModalContent.css 'height', '205px'
     loginModalTitle.fadeOut ->
       loginModalTitle.text 'Reset your password'
@@ -187,8 +221,8 @@ $(document).ready ->
 
   # Form interactions
   loginForm.submit (event) ->
+    event.preventDefault()
     if loginModal.attr('data-modal-mode') is 'login'
-      event.preventDefault()
       uLogin = loginUsername.val()
       uPassword = loginPassword.val()
       uLoginVal = usernameRegex.test(uLogin) or emailRegex.test(uLogin)
@@ -254,6 +288,47 @@ $(document).ready ->
                     loginModalContent.css 'height', dynamicHeight + 10 + 'px'
                     loginInputs.removeAttr 'disabled'
                     completeLoginAttempt false
+    if loginModal.attr('data-modal-mode') is 'reset'
+      console.log "RESET"
+      uEmail = forgotPasswordEmail.val()
+      uEmailVal = emailRegex.test(uEmail)
+      if uEmailVal
+        reset_success = false
+        $.post('/reset',
+          email: uEmail
+        ).done((data) ->
+          switch data[0]
+            when 'password_reset'
+              reset_success = true
+            when 'incorrect_email'
+              error = 'No user was found for that email.'
+            when 'error_validation'
+              error = 'The email you entered did not pass validation.'
+            else
+              error = 'An unknown error occurred, please try again.'
+              break
+          $(document).trigger 'continueResetEvent'
+        ).fail ->
+          error = 'Reset request failed.'
+          $(document).trigger 'continueResetEvent'
+        $(document).on 'continueResetEvent', ->
+          if reset_success
+            loginModal.attr 'data-useful', 'true'
+            loginModalTitle.fadeOut ->
+              loginModalTitle.text 'Reset request complete'
+              loginModalTitle.fadeIn()
+            loginModalBody.fadeOut ->
+              postLoginBody.fadeIn()
+              loginModalContent.css 'height', '170px'
+            completeResetAttempt true
+          else
+            loginErrorText.html error
+            loginErrorDiv.fadeIn()
+            dynamicHeight = loginModalContent.height() + loginErrorText.height()
+            loginModalContent.css 'height', dynamicHeight + 10 + 'px'
+            loginInputs.removeAttr 'disabled'
+            completeResetAttempt false
+
 
   # Form interactions
   registerForm.submit (event) ->
