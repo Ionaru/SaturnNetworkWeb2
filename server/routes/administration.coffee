@@ -1,11 +1,11 @@
 express = require('express')
 router = express.Router()
-user = require '../models/user'
+User = require '../models/user'
 
 
 router.get '/users', (req, res) ->
   if req.session.user.login && req.session.user.isAdmin is 1
-    user.getColumns ['*'], 'user_name', (err, result) ->
+    User.getColumns ['*'], 'user_name', (err, result) ->
       if not err
         res.render 'user_management', {users: result}
   else

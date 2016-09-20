@@ -19,6 +19,8 @@ exports.sendResetPassword = (user, token, done) ->
     auth:
       user: mailConfig['mail_user']
       pass: mailConfig['mail_pass']
+    tls:
+      rejectUnauthorized: false
 
   nodemailer = require('nodemailer')
   transporter = nodemailer.createTransport(smtpConfig)
@@ -28,10 +30,12 @@ exports.sendResetPassword = (user, token, done) ->
     bcc: '"Saturn Server Network" <info@saturnserver.org>'
     subject: 'Password reset request'
     html: emailTemplate
+
   # send mail with defined transport object
   transporter.sendMail mailOptions, (error, info) ->
     if error
+      logger.error error
       done error
     else
+      logger.info "Password reset mail sent to user -> #{user['user_name']} with email #{user['user_email']}"
       done null
-    console.log 'Message sent: ' + info.response

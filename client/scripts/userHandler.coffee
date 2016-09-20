@@ -269,6 +269,7 @@ $(document).ready ->
     checkChangePasswords changePasswordInputNew2
 
   forgotPasswordButton.click ->
+    loginErrorDiv.fadeOut()
     loginModal.attr 'data-useful', 'true'
     loginModal.attr 'data-modal-mode', 'reset'
     $('.username_input').fadeOut ->
@@ -368,13 +369,13 @@ $(document).ready ->
               when 'password_reset'
                 reset_success = true
               when 'incorrect_email'
-                error = 'No user was found for that email.'
+                error = 'No User was found for that email.'
               when 'error_mail'
                 error = 'Error while sending mail.'
               when 'token_error'
                 error = 'Error while making token.'
               when 'error_user'
-                error = 'Error in user.'
+                error = 'Error in User.'
               when 'error_validation'
                 error = 'The email you entered did not pass validation.'
               else

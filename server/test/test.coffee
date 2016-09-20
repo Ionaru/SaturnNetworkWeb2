@@ -43,27 +43,27 @@ describe 'User', ->
   testUserEmail = "bill_cipher@weirdmageddon.com"
   testUserPassword = "BillCipher12345"
   describe 'Create', ->
-    it 'can create a user without error', (done) ->
+    it 'can create a User without error', (done) ->
       user.create testUserName, testUserEmail, testUserPassword, (err, result) ->
         assert.equal(err, null)
         if not err
           testUserPid = result
         done()
-    it 'can find newly created user by PID', (done) ->
+    it 'can find newly created User by PID', (done) ->
       user.getByUserPID testUserPid, (err, result) ->
         assert.equal(err, null)
         if not err
           assert.equal(result['user_name'], testUserName)
           assert.equal(result['user_email'], testUserEmail)
         done()
-    it 'can find newly created user by Name', (done) ->
+    it 'can find newly created User by Name', (done) ->
       user.getByUserName testUserName, (err, result) ->
         assert.equal(err, null)
         if not err
           assert.equal(result['user_pid'], testUserPid)
           assert.equal(result['user_email'], testUserEmail)
         done()
-    it 'can find newly created user by Email', (done) ->
+    it 'can find newly created User by Email', (done) ->
       user.getByUserEmail testUserEmail, (err, result) ->
         assert.equal(err, null)
         if not err
@@ -98,11 +98,11 @@ describe 'User', ->
           done()
 
   describe 'Delete', ->
-    it 'can delete a user without error', (done) ->
+    it 'can delete a User without error', (done) ->
       user.deleteUser testUserPid, (err, result) ->
         assert.equal(err, null)
         done()
-    it 'deleted user should no longer exist', (done) ->
+    it 'deleted User should no longer exist', (done) ->
       user.getByUserPID testUserPid, (err, result) ->
         assert.equal(err, null)
         assert.equal(result, undefined)

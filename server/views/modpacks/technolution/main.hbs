@@ -121,7 +121,6 @@
         $(document).ready(function () {
             $.get("/technolution/mod_list"
             ).done(function (data) {
-                console.log(data[0]);
                 if (!data[0]) {
                     var content = "";
                     content += '<p>Latest version: ' + data[1]['modpackVersion'] + ' for Minecraft ' + data[1]['minecraftVersion'] + '</p>';

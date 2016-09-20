@@ -170,10 +170,13 @@ exports.getToken = (token, done) ->
       return done err
     if rows[0]
       done null, rows[0]
+    else
+      done "token_invalid"
 
-exports.deleteToken = (token_id, done) ->
-  db.get().query "DELETE FROM tokens WHERE token_id = \"#{token_id}\"", (err, rows) ->
+exports.deleteToken = (token, done) ->
+  db.get().query "DELETE FROM tokens WHERE token = \"#{token}\"", (err, rows) ->
     if err
-      return done err
+#      logger.error err
+      done err
     else
       done null

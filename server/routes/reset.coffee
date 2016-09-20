@@ -1,6 +1,6 @@
 express = require('express')
 router = express.Router()
-User = require('..//models/user')
+User = require('..//models/User')
 val = require('./../controllers/validationHelper')
 jsesc = require('jsesc')
 
@@ -14,10 +14,18 @@ router.get '/*', (req, res) ->
         email = user['user_email']
         User.resetPassword email, (err, newpass) ->
           if not err
+            User.deleteToken token, (err) ->
+              if not err
+                res.render 'reset',
+                  valid: true
+                  name: username
+                  new_pass: newpass
+              else
+                res.render 'reset',
+                  valid: false
+          else
             res.render 'reset',
-              valid: true
-              name: username
-              new_pass: newpass
+              valid: false
       else
         res.render 'reset',
           valid: false
