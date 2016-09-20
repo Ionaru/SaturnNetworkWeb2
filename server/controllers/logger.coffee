@@ -14,8 +14,7 @@ warnFileJSONPath = logDirs.warn + "_json.txt"
 errFileJSONPath = logDirs.error + "_json.txt"
 
 for k, logDir of logDirs
-  require('mkdirp').sync logDir, (err) ->
-    console.log "creating ", logDir
+  require('mkdirp') logDir
 
 winston = require 'winston'
 consoleLog = new (winston.transports.Console)(

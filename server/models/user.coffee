@@ -128,12 +128,12 @@ exports.checkPassword = (password, pid, done) ->
       return done true
     done false
 
-exports.resetPassword = (pid, done) ->
+exports.resetPassword = (email, done) ->
   newPassword = pidGen.generatePid()
-  db.get().query "UPDATE users SET user_password_hash = \"#{newPassword}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_password_hash = \"#{newPassword}\" WHERE user_email = \"#{email}\";", (err, rows) ->
     if err
       return done err
-    done newPassword
+    done err, newPassword
 
 exports.checkPassword = (username, password, done) ->
   db.get().query "SELECT user_pid, user_name, user_password_hash FROM users WHERE BINARY user_name = \"#{username}\" OR user_email = \"#{username}\";", (err, rows) ->
@@ -151,3 +151,32 @@ exports.checkPassword = (username, password, done) ->
         return done "incorrect_password"
     catch e
       return done "hash_check_error", null, e
+
+exports.createToken = (user, done) ->
+  db.get().query "DELETE FROM tokens WHERE user_name = \"#{user['user_name']}\" AND user_email = \"#{user['user_email']}\";", (err, rows) ->
+    if not err
+      token = pidGen.generatePid(32)
+      values = [
+        token
+        user['user_name']
+        user['user_email']
+      ]
+      db.get().query "INSERT INTO tokens (token, user_name, user_email) VALUES(?, ?, ?);", values, (err, rows) ->
+        if err
+          return done err
+        else
+          done null, token
+
+exports.getToken = (token, done) ->
+  db.get().query "SELECT * FROM tokens WHERE token = \"#{token}\"", (err, rows) ->
+    if err
+      return done err
+    if rows[0]
+      done null, rows[0]
+
+exports.deleteToken = (token_id, done) ->
+  db.get().query "DELETE FROM tokens WHERE token_id = \"#{token_id}\"", (err, rows) ->
+    if err
+      return done err
+    else
+      done null

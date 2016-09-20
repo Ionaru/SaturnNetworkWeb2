@@ -10,6 +10,10 @@ require('../controllers/configLoader')
 fs = require('fs')
 inputDirNameStyle = './client/style/'
 outputDirNameStyle = './client/public/stylesheets/'
+inputDirNameJS = './client/scripts/'
+outputDirNameJS = './client/public/javascript/'
+require('mkdirp') outputDirNameStyle
+require('mkdirp') outputDirNameJS
 lessFile = fs.readFileSync(inputDirNameStyle + 'style.less', 'utf-8')
 Less = require 'less'
 Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, output) ->
@@ -18,11 +22,9 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
     CleanCSS = require 'clean-css'
     source = fs.readFileSync(outputDirNameStyle + 'style.css', 'utf-8')
     minified = new CleanCSS().minify(source).styles
-    fs.writeFileSync(outputDirNameStyle + 'stylemin.css', minified)
+    fs.writeFileSync(outputDirNameStyle + 'style.css', minified)
     logger.info "Client-side stylesheets ready"
 
-    inputDirNameJS = './client/scripts/'
-    outputDirNameJS = './client/public/javascript/'
     Compiler = require 'coffee-script'
     coffeeFiles = fs.readdirSync(inputDirNameJS)
     if !fs.existsSync(outputDirNameJS)
@@ -35,8 +37,8 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
     fs.writeFileSync(outputDirNameJS + 'saturn.js', fileContentJS)
     UglifyJS = require 'uglify-js'
     result = UglifyJS.minify(outputDirNameJS + 'saturn.js', outSourceMap: 'saturn.js.map')
-    fs.writeFileSync(outputDirNameJS + 'saturnmin.js', result.code)
-    fs.writeFileSync(outputDirNameJS + 'saturnmin.js.map', result.map)
+    fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
+    fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
     logger.info "Client-side javascript ready"
 
 

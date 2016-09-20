@@ -36,18 +36,18 @@ logger.info "MySQL session storage connected to #{dbConfig['db_name']}"
 # Setup favicon and stylesheets
 favicon = require('serve-favicon')
 bodyParser = require('body-parser')
-app.use favicon(path.join(__dirname, '..//client/public', 'favicon.ico'))
+app.use favicon(path.join(__dirname, '../client/public', 'favicon.ico'))
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
 
 # Setup static folders
-app.use express.static(path.join(__dirname, '..//client/public'))
+app.use express.static(path.join(__dirname, '../client/public'))
 
 # Generate static data
 staticGen = require('./controllers/staticGenerator')
 staticGen.generateStaticInformation(app)
 
-# Stuff all requests through the Global router first (for login, register, cookies, permissions and stuff like that)
+# Stuff all requests through the Global router first (for login, registration, cookies, permissions and things like that)
 app.all '/*', require('./routes/global')
 
 # Route incoming requests to the correct routes
@@ -55,12 +55,9 @@ app.use '/', require('./routes/index')
 app.use '/a', require('./routes/administration')
 app.use '/gates', require('./routes/modpacks/gates')
 app.use '/technolution', require('./routes/modpacks/technolution')
+app.use '/reset', require('./routes/reset')
 #app.use '/profiles', require('./routes/profiles')
 #app.use '/profilemanager', require('./routes/profilemanager')
-
-#ftp = require './controllers/serverFiles'
-#ftp.getServerFiles('gates')
-
 
 schedule = require 'node-schedule'
 solder = require './controllers/solderAPI'

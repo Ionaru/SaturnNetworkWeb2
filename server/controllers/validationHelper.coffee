@@ -13,3 +13,7 @@ exports.validatePassword = (password) ->
 exports.validateCookieTime = (cookieTime) ->
   re = /^\d+$/
   re.test cookieTime
+
+exports.validateToken = (token) ->
+  re = /^[a-zA-Z0-9]*$/
+  re.test token

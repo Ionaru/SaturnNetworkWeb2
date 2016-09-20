@@ -123,6 +123,32 @@ router.all '/logout', (req, res) ->
   req.app.locals.user = req.session.user
   res.redirect "/"
 
+# Router that handles the logout process
+router.post '/reset', (req, res) ->
+#  res.send ['error_validation', user]
+  email = req.body.email
+  emailValidated = val.validateEmail email
+  if emailValidated
+    user.getByUserEmail email, (err, result) ->
+      if not err
+        if result
+          user.createToken result, (err, token) ->
+            if not err
+              mail = require '../controllers/pidgeon'
+              mail.sendResetPassword result, token, (err) ->
+                if not err
+                  res.send ['password_reset', user]
+                else
+                  res.send ['error_mail', null]
+            else
+              res.send ['token_error', null]
+        else
+          res.send ['incorrect_email', null]
+      else
+        res.send ['error_user', null]
+  else
+    res.send ['error_validation', null]
+
 # Router that handles the cookie notification
 router.post '/accept_cookies', (req, res) ->
   req.session.accept_cookies = true

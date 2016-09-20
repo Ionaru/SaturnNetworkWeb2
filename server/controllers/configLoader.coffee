@@ -17,3 +17,4 @@ global.dbConfig = loadConfig 'database'
 global.mailConfig = loadConfig 'mail', true
 global.solderConfig = loadConfig 'solder', true
 global.projectDir = __dirname
+logger.info "Configuration loaded"
