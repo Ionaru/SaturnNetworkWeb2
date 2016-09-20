@@ -1,5 +1,9 @@
 <div class="container">
     <h2>Password reset</h2>
-    <p>Hello {{name}}, your password has been reset, your new password is <b>{{new_pass}}</b></p>
-    <p>Please log in and change it as soon as possible</p>
+    {{#if valid}}
+        <p>Hello {{name}}, your password has been reset, your new password is <b>{{new_pass}}</b></p>
+        <p>Please log in and change it as soon as possible</p>
+    {{else}}
+        <p>That reset token is not valid.</p>
+    {{/if}}
 </div>

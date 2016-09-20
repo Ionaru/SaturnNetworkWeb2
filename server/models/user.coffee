@@ -6,7 +6,7 @@ bcrypt = require 'bcrypt-nodejs'
 exports.create = (username, email, password, done) ->
   pidGen.generateUniqueUserPid (err, pid) ->
 # Validate input again, just to be on the safe side
-    if validator.validateUsername(username) && validator.validatePassword(password) && validator.validateEmail(email)
+    if validator.validateUsername(username) and validator.validatePassword(password) and validator.validateEmail(email)
       password = bcrypt.hashSync(password)
       values = [
         pid
@@ -55,22 +55,26 @@ exports.getByUserEmail = (email, done) ->
     done null, rows[0]
 
 exports.setName = (pid, username, done) ->
+  validator.validateUsername(username)
   db.get().query "UPDATE users SET user_name = \"#{username}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
 
 exports.setEmail = (pid, email, done) ->
-  db.get().query "UPDATE users SET user_email = #{email} WHERE user_pid = \"#{pid}\";", (err, rows) ->
-    if err
-      return done err
-    done null, rows
+  if validator.validateEmail(email)
+    db.get().query "UPDATE users SET user_email = #{email} WHERE user_pid = \"#{pid}\";", (err, rows) ->
+      if err
+        return done err
+      done null, rows
 
 exports.setPassword = (pid, password, done) ->
-  db.get().query "UPDATE users SET user_password = \"#{password}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
-    if err
-      return done err
-    done null, rows
+  if validator.validatePassword(password)
+    password = bcrypt.hashSync(password)
+    db.get().query "UPDATE users SET user_password_hash = \"#{password}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
+      if err
+        return done err
+      done null, rows
 
 exports.setMC = (pid, mcName, done) ->
   db.get().query "UPDATE users SET user_mccharacter = \"#{mcName}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
@@ -120,17 +124,10 @@ exports.countUsers = (done) ->
       return done(err)
     done null, rows[0]['COUNT(user_id)']
 
-exports.checkPassword = (password, pid, done) ->
-  db.get().query "SELECT user_password_hash FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->
-    if err
-      return done err
-    if bcrypt.compareSync(password, rows[0]['user_password_hash'])
-      return done true
-    done false
-
 exports.resetPassword = (email, done) ->
   newPassword = pidGen.generatePid()
-  db.get().query "UPDATE users SET user_password_hash = \"#{newPassword}\" WHERE user_email = \"#{email}\";", (err, rows) ->
+  password = bcrypt.hashSync(newPassword)
+  db.get().query "UPDATE users SET user_password_hash = \"#{password}\" WHERE user_email = \"#{email}\";", (err, rows) ->
     if err
       return done err
     done err, newPassword
@@ -146,11 +143,11 @@ exports.checkPassword = (username, password, done) ->
     pid = rows[0]['user_pid']
     try
       if bcrypt.compareSync password, passHash
-        return done "valid_login", pid
+        return done "valid_login", pid, username
       else
         return done "incorrect_password"
     catch e
-      return done "hash_check_error", null, e
+      return done "hash_check_error", null, null, e
 
 exports.createToken = (user, done) ->
   db.get().query "DELETE FROM tokens WHERE user_name = \"#{user['user_name']}\" AND user_email = \"#{user['user_email']}\";", (err, rows) ->

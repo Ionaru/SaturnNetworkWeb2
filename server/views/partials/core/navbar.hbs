@@ -35,32 +35,32 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="Gates">Gates</a></li>
-                        <li><a href="Radz">Radz</a></li>
-                        <li><a href="Randomfun">Random Fun</a></li>
-                        <li><a href="Survival">Survival of the Fittest</a></li>
+                        <!--<li><a href="Radz">Radz</a></li>-->
+                        <!--<li><a href="Randomfun">Random Fun</a></li>-->
+                        <!--<li><a href="Survival">Survival of the Fittest</a></li>-->
                         <li><a href="Technolution">Technolution Advanced</a></li>
                     </ul>
                 </li>
                 <!--<li class="dropdown">-->
-                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
-                       <!--aria-expanded="false">-->
-                        <!--Servers <span class="caret"></span>-->
-                    <!--</a>-->
-                    <!--<ul class="dropdown-menu">-->
-                        <!--<li class="disabled"><a href="#">Technolution</a></li>-->
-                    <!--</ul>-->
+                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                <!--aria-expanded="false">-->
+                <!--Servers <span class="caret"></span>-->
+                <!--</a>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li class="disabled"><a href="#">Technolution</a></li>-->
+                <!--</ul>-->
                 <!--</li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{#ifCond user.login 'and' user.isAdmin}}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        Admin <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/a/users">User management</a></li>
-                    </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">
+                            Admin <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/a/users">User management</a></li>
+                        </ul>
+                    </li>
                 {{/ifCond}}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -74,6 +74,8 @@
                     <ul class="dropdown-menu">
                         {{#if user.login}}
                             <li class="disabled"><a href="#">My profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" data-toggle="modal" data-target="#passwordModal">Change password</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">Logout</a></li>
                         {{else}}

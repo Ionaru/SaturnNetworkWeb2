@@ -1,0 +1,65 @@
+<div class="password modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="changeModelTitle">Change your password</h4>
+            </div>
+
+            <form id="changeForm">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="uOldPassword"
+                                   placeholder="Current password">
+                            <label for="uOldPassword" id="uOldPassword_icon"
+                                   class="input-group-addon mdi mdi-key-variant mdi-18px"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="uNewPassword" placeholder="New password"
+                                   autocomplete="new-password">
+                            <label for="uNewPassword" id="uNewPassword_icon"
+                                   class="input-group-addon mdi mdi-key-variant mdi-18px"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="uNewPassword2"
+                                   placeholder="Confirm new password" autocomplete="new-password">
+                            <label for="uNewPassword2" id="uNewPassword2_icon"
+                                   class="input-group-addon mdi mdi-key-variant mdi-18px"></label>
+                        </div>
+                    </div>
+
+                    <div class="changeError">
+                        <p class="change_error_text text-center"></p>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="changebutton" type="submit" class="form-control btn btn-primary disabled">Change
+                        password
+                    </button>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar"
+                             data-transitiongoal="100"></div>
+                        <span class="sr-only">progress</span>
+                    </div>
+                </div>
+
+            </form>
+            <div class="post-change text-center">
+                <p>Your password has been changed.</p>
+            </div>
+        </div>
+
+    </div>
+</div>

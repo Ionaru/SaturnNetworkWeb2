@@ -9,7 +9,11 @@
     </div>
 </footer>
 
-{{> core/login}}{{> core/register}}
+{{#if user.login}}
+    {{> core/change}}
+{{else}}
+    {{> core/login}}{{> core/register}}
+{{/if}}
 
 <script src="/javascript/saturn.js"></script>
 <script type="text/javascript">

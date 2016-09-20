@@ -24,6 +24,22 @@ $(document).ready ->
   forgotPasswordEmail = $('#uForgot_Email')
   postResetBody = $('.post-reset')
 
+  changePasswordModal = $('#passwordModal')
+  changePasswordTitle = $('#changeModelTitle')
+  changePasswordContent = $('#passwordModal .modal-content')
+  changePasswordForm = $('#changeForm')
+  changePasswordBody = $('#changeForm .modal-body')
+  changePasswordInputs = $('#changeForm input')
+  changePasswordInputOld = $('#uOldPassword')
+  changePasswordInputNew = $('#uNewPassword')
+  changePasswordInputNew2 = $('#uNewPassword2')
+  changePasswordSubmit = $('#changebutton')
+  changeErrorDiv = $('.changeError')
+  changeErrorText = $('.change_error_text')
+  changeProgress = $('.password .progress')
+  changeProgressbar = $('.password .progress .progress-bar')
+  postChangeBody = $('.post-change')
+
   registerModal = $('#registerModal')
   registerModalTitle = $('.register .modal-title')
   registerModalBody = $('.register .modal-body')
@@ -70,6 +86,14 @@ $(document).ready ->
       registerButton.removeClass 'disabled'
     else
       registerButton.addClass 'disabled'
+
+  checkChangeButton = ->
+    if changePasswordInputOld.attr('data-valid') == 'true' and
+       changePasswordInputNew.attr('data-valid') == 'true' and
+       changePasswordInputNew2.attr('data-valid') == 'true'
+      changePasswordSubmit.removeClass 'disabled'
+    else
+      changePasswordSubmit.addClass 'disabled'
 
   checkUsername = ->
     entry = loginUsername.val()
@@ -142,11 +166,44 @@ $(document).ready ->
       else
         setInvalid '#' + registerPassword2.attr('id')
     else
+      clearValid '#uRegPassword'
       pass = registerPassword2.val()
-      clearValid '#' + $(this).attr('id')
       if pass.length == 0
-        clearValid '#pass2'
+        clearValid '#uRegPassword2'
     checkRegisterButton()
+
+  checkChangePassword = ->
+    entry = changePasswordInputOld.val()
+    if entry.length != 0
+      if passwordRegex.test(entry)
+        setValid '#uOldPassword'
+      else
+        setInvalid '#uOldPassword'
+    else
+      clearValid '#uOldPassword'
+    checkChangeButton()
+
+  checkChangePasswords = (passwordField) ->
+    entry = passwordField.val()
+    invalid = undefined
+    if entry.length != 0
+      if passwordRegex.test(entry)
+        setValid '#' + passwordField.attr('id')
+      else
+        setInvalid '#' + passwordField.attr('id')
+        invalid = true
+      pass1 = changePasswordInputNew.val()
+      pass2 = changePasswordInputNew2.val()
+      if pass2 == pass1 and pass1.length != 0 and !invalid
+        setValid '#' + changePasswordInputNew2.attr('id')
+      else
+        setInvalid '#' + changePasswordInputNew2.attr('id')
+    else
+      clearValid '#uNewPassword'
+      pass = changePasswordInputNew2.val()
+      if pass.length == 0
+        clearValid '#uNewPassword2'
+    checkChangeButton()
 
   completeLoginAttempt = (success) ->
     loginProgress.fadeOut ->
@@ -202,6 +259,15 @@ $(document).ready ->
   registerPassword2.on 'input propertychange', ->
     checkRegisterPasswords registerPassword2
 
+  changePasswordInputOld.on 'input propertychange', ->
+    checkChangePassword()
+
+  changePasswordInputNew.on 'input propertychange', ->
+    checkChangePasswords changePasswordInputNew
+
+  changePasswordInputNew2.on 'input propertychange', ->
+    checkChangePasswords changePasswordInputNew2
+
   forgotPasswordButton.click ->
     loginModal.attr 'data-useful', 'true'
     loginModal.attr 'data-modal-mode', 'reset'
@@ -255,17 +321,17 @@ $(document).ready ->
                     error = 'An unknown error occurred, please try again.'
                     break
                 user = data[1]
-                $(document).trigger 'continueLoginEvent'
+                continueLoginEvent()
               ).fail ->
                 request_finished = true
                 error = 'Login request failed.'
-                $(document).trigger 'continueLoginEvent'
+                continueLoginEvent()
 
               loginProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
                 progressbar_done = true
-                $(document).trigger 'continueLoginEvent'
+                continueLoginEvent()
 
-              $(document).on 'continueLoginEvent', ->
+              continueLoginEvent = ->
                 if request_finished and progressbar_done
                   request_finished = false
                   progressbar_done = false
@@ -314,7 +380,7 @@ $(document).ready ->
               else
                 error = 'An unknown error occurred, please try again.'
                 break
-          ).fail( ->
+          ).fail(->
             error = 'Reset request failed.'
           ).always ->
             forgotPasswordSubmit.removeClass('disabled')
@@ -380,17 +446,17 @@ $(document).ready ->
                   error = 'An unknown error occurred, please try again.'
                   break
               user = data[1]
-              $(document).trigger 'continueRegisterEvent'
+              continueRegisterEvent()
             ).fail ->
               request_finished = true
               error = 'Register request failed.'
-              $(document).trigger 'continueRegisterEvent'
+              continueRegisterEvent()
 
             registerProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
               progressbar_done = true
-              $(document).trigger 'continueRegisterEvent'
+              continueRegisterEvent()
 
-            $(document).on 'continueRegisterEvent', ->
+            continueRegisterEvent = ->
               if request_finished and progressbar_done
                 request_finished = false
                 progressbar_done = false
@@ -410,6 +476,89 @@ $(document).ready ->
                   registerModalContent.css 'height', dynamicHeight + 10 + 'px'
                   registerInputs.removeAttr 'disabled'
                   completeRegisterAttempt false
+
+  # Form interactions
+  changePasswordForm.submit (event) ->
+    event.preventDefault()
+    if changePasswordSubmit.attr('data-dismiss') != 'modal'
+      uPasswordOld = changePasswordInputOld.val()
+      uPasswordNew = changePasswordInputNew.val()
+      uPasswordConfirm = changePasswordInputNew2.val()
+      vPasswordOld = passwordRegex.test(uPasswordOld)
+      vPasswordNew = passwordRegex.test(uPasswordNew)
+      vPasswordConfirm = passwordRegex.test(uPasswordConfirm)
+      if vPasswordOld and vPasswordNew and vPasswordConfirm and uPasswordNew == uPasswordConfirm
+        request_finished = false
+        progressbar_done = false
+        change_success = false
+        error = undefined
+        changeProgressbar.attr 'data-transitiongoal', 0
+        changePasswordInputs.attr 'disabled', 'disabled'
+        changePasswordSubmit.fadeOut ->
+          changeErrorDiv.fadeOut ->
+            changePasswordContent.css 'height', '312px'
+          changePasswordSubmit.addClass 'disabled'
+          changeProgress.fadeIn ->
+            $.post('/change_password',
+              old: uPasswordOld
+              new: uPasswordNew).done((data) ->
+              request_finished = true
+              switch data
+                when 'password_changed'
+                  change_success = true
+                when 'incorrect_password'
+                  error = 'The password you entered did not match your current password'
+                when 'same_password'
+                  error = 'You didn\'t really change a lot, did you?'
+                when 'error_validation'
+                  error = 'The values you entered did not pass validation.'
+                else
+                  error = 'An unknown error occurred, please try again.'
+                  break
+              continueChangeEvent()
+            ).fail ->
+              request_finished = true
+              error = 'Change request failed.'
+              continueChangeEvent()
+
+            changeProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
+              progressbar_done = true
+              continueChangeEvent()
+
+            completeChangeAttempt = (success) ->
+              changeProgress.fadeOut ->
+                changeProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
+                  changeProgressbar.attr 'data-transitiongoal', 100
+                if success
+                  changePasswordSubmit.text('Close').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
+                  $(document).keypress (e) ->
+                    if e.which == 13
+                      changePasswordModal.modal 'hide'
+                    return
+                else
+                  changePasswordSubmit.removeClass('disabled').fadeIn()
+
+            continueChangeEvent = ->
+              if request_finished and progressbar_done
+                request_finished = false
+                progressbar_done = false
+                if change_success
+                  changePasswordModal.attr 'data-useful', 'true'
+                  changePasswordTitle.fadeOut ->
+                    changePasswordTitle.text 'Password changed'
+                    changePasswordTitle.fadeIn()
+                  changePasswordBody.fadeOut ->
+                    postChangeBody.fadeIn()
+                    changePasswordContent.css 'height', '170px'
+                  completeChangeAttempt true
+                else
+                  changeErrorText.html error
+                  changeErrorDiv.fadeIn()
+                  changePasswordContent.css 'height', '350px'
+                  changePasswordInputs.removeAttr 'disabled'
+                  completeChangeAttempt false
+
+
 
   # Events for the login modal
   # Trigger on open event of modal
@@ -437,4 +586,10 @@ $(document).ready ->
   registerModal.on 'hidden.bs.modal', ->
 # Reload the page if modal did its job (login user)
     if registerModal.attr('data-useful') == 'true'
+      location.reload()
+
+  # Trigger on close event of modal
+  changePasswordModal.on 'hidden.bs.modal', ->
+# Reload the page if modal did its job (login user)
+    if changePasswordModal.attr('data-useful') == 'true'
       location.reload()

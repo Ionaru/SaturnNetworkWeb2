@@ -72,7 +72,6 @@ router.post '/register', (req, res) ->
 
 # Router that handles the login process
 router.post '/login', (req, res) ->
-#  res.send "complete"
   username = req.body.user
   password = req.body.password
   cookietime = req.body.cookietime
@@ -83,10 +82,10 @@ router.post '/login', (req, res) ->
   if (usernameValidated or emailValidated) and passwordValidated
     username = jsesc username
     password = jsesc password
-    user.checkPassword username, password, (result, pid, e) ->
+    user.checkPassword username, password, (result, pid, name, e) ->
       switch result
         when "valid_login"
-          logger.info "User password validated -> #{username}"
+          logger.info "User password validated -> #{name}"
           user.getByUserPID pid, (err, result_user) ->
             userResult =
               pid: result_user['user_pid']
@@ -116,11 +115,57 @@ router.post '/login', (req, res) ->
   else
     res.send ['error_validation', null]
 
+# Router that handles the password-change process
+router.post '/change_password', (req, res) ->
+  if req.session?.user?.login
+  #  res.send "complete"
+    oldPass = req.body.old
+    newPass = req.body.new
+    userPid = req.session.user.pid
+    username = req.session.user.username
+    oldPassVal = val.validatePassword oldPass
+    newPassVal = val.validatePassword newPass
+
+    if oldPassVal and newPassVal
+      if oldPass isnt newPass
+        oldPass = jsesc oldPass
+        newPass = jsesc newPass
+        username = jsesc username
+        user.checkPassword username, oldPass, (result, pid, name, e) ->
+          switch result
+            when "valid_login"
+              if pid is userPid and name is username
+                user.setPassword pid, newPass, (err, result) ->
+                  if not err
+                    res.send 'password_changed'
+                  else
+                    res.send 'password_set_fail'
+              break
+            when "incorrect_login"
+              res.send 'user_get_fail'
+              break
+            when "incorrect_password"
+              res.send result
+              break
+            when "hash_check_error"
+              logger.error "Unable to validate password for user -> #{username}"
+              logger.error "> #{e}"
+              res.send result
+              break
+      else
+        res.send 'same_password'
+    else
+      res.send 'error_validation'
+  else
+    res.render 'auth'
+
+
 # Router that handles the logout process
 router.all '/logout', (req, res) ->
   req.session.user =
       login: false
   req.app.locals.user = req.session.user
+  res.set('Cache-Control', 'no-cache');
   res.redirect "/"
 
 # Router that handles the logout process
