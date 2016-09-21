@@ -1,13 +1,13 @@
 express = require('express')
 router = express.Router()
-User = require('..//models/User')
+User = require('../models/user')
 val = require('./../controllers/validationHelper')
-jsesc = require('jsesc')
+Jsesc = require('jsesc')
 
 router.get '/*', (req, res) ->
   token = req.url.slice(1)
   if val.validateToken(token)
-    token = jsesc token
+    token = Jsesc token
     User.getToken token, (err, user) ->
       if not err
         username = user['user_name']

@@ -441,8 +441,6 @@ $(document).ready ->
                   error = 'This email is already in use.'
                 when 'error_validation'
                   error = 'The values you entered did not pass validation.'
-                when 'hash_check_error'
-                  error = 'Your password could not be verified,\n please reset it.'
                 else
                   error = 'An unknown error occurred, please try again.'
                   break
@@ -575,7 +573,6 @@ $(document).ready ->
       location.reload()
 
   # Events for the register modal
-
   # Trigger on open event of modal
   registerModal.on 'shown.bs.modal', ->
 # Check the input values in case the browser already filled them in
@@ -585,12 +582,13 @@ $(document).ready ->
 
   # Trigger on close event of modal
   registerModal.on 'hidden.bs.modal', ->
-# Reload the page if modal did its job (login user)
+# Reload the page if modal did its job (Register user)
     if registerModal.attr('data-useful') == 'true'
       location.reload()
 
+  # Events for the change modal
   # Trigger on close event of modal
   changePasswordModal.on 'hidden.bs.modal', ->
-# Reload the page if modal did its job (login user)
+# Reload the page if modal did its job (Change password)
     if changePasswordModal.attr('data-useful') == 'true'
       location.reload()

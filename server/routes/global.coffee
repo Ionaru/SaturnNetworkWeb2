@@ -43,7 +43,7 @@ router.post '/register', (req, res) ->
     username = jsesc username
     email = jsesc email
     password = jsesc password
-    User.getByUserName username, (err, result) ->
+    User.isNameInUse username, (err, result) ->
       unless result
         User.getByUserEmail email, (err, result) ->
           unless result

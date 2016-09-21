@@ -1,30 +1,44 @@
-<div class="container">
+<script src="http://www.appelsiini.net/download/jquery.jeditable.mini.js"></script>
+<div class="container user-management">
     <h2>User Management</h2>
+     {{users.length}} users in total.
+    <input class="form-control" type="text" id="search" placeholder="Search...">
+    <script type="text/javascript">
+        $("#search").keyup(function() {
+            var value = this.value;
+            $("table").find("tr").each(function(index) {
+                if (index === 0) return;
+                var id = $(this).find("td").first().text();
+                $(this).toggle((id.toLowerCase()).indexOf(value.toLowerCase()) !== -1);
+            });
+
+        });
+    </script>
     <table class="table table-responsive table-condensed table-hover sortable">
         <thead>
         <tr>
             <!--<th class="text-left">Username</th>-->
-            <th class="text-left sorttable_sorted">Username
+            <th class="text-left sorttable_sorted" width="20%">Username
                 <span id="sorttable_sortfwdind"> <i class="fa fa-chevron-up"></i></span>
             </th>
-            <th class="text-left">Minecraft</th>
-            <th class="text-left">Email</th>
-            <th class="text-left">Points</th>
-            <th class="text-left">Admin</th>
-            <th class="text-left">Staff</th>
-            <th class="text-right sorttable_nosort">Actions</th>
+            <th class="text-left" width="20%">Minecraft</th>
+            <th class="text-left" width="35%">Email</th>
+            <th class="text-left" width="10%">Points</th>
+            <th class="text-left" width="5%">Admin</th>
+            <th class="text-left" width="5%">Staff</th>
+            <th class="text-right sorttable_nosort" width="5%">Actions</th>
         </tr>
         </thead>
         <tbody>
         {{#each users}}
             <tr>
-                <td>{{this.user_name}}</td>
-                <td>{{this.user_mccharacter}}</td>
-                <td>{{this.user_email}}</td>
-                <td>{{this.user_points}}</td>
+                <td class="edit_username" id="username_{{this.user_pid}}">{{this.user_name}}</td>
+                <td class="edit_mc" id="mc_{{this.user_pid}}">{{this.user_mccharacter}}</td>
+                <td class="edit_email" id="mail_{{this.user_pid}}">{{this.user_email}}</td>
+                <td class="edit_points" id="points_{{this.user_pid}}">{{this.user_points}}</td>
                 <td sorttable_customkey="{{this.user_isadmin}}">
                     {{#if this.user_isadmin}}
-                        <i class="fa fa-circle is_admin"></i>
+                        <i id="" class="fa fa-circle is_admin"></i>
                     {{else}}
                         <i class="fa fa-circle-o is_not_admin"></i>
                     {{/if}}
@@ -33,9 +47,30 @@
                     {{#if this.user_isstaff}}
                         <i class="fa fa-circle is_staff"></i>
                     {{else}}
-                        <i class="fa fa-circle-o is_not_staff"></i>
+                        <i id="" class="fa fa-circle-o is_not_staff"></i>
                     {{/if}}
                 </td>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('.edit_username').editable('/a/users/update_name', {
+                            indicator: 'Saving...',
+                            event: "dblclick"
+                        });
+                        $('.edit_mc').editable('/a/users/update_minecraft_name', {
+                            indicator: 'Saving...',
+                            placeholder: '',
+                            event: "dblclick"
+                        });
+                        $('.edit_email').editable('/a/users/update_email', {
+                            indicator: 'Saving...',
+                            event: "dblclick"
+                        });
+                        $('.edit_points').editable('/a/users/update_points', {
+                            indicator: 'Saving...',
+                            event: "dblclick"
+                        });
+                    });
+                </script>
                 <td class="text-right">
                     <button type="button" class="btn btn-xs btn-standard dropdown-toggle" data-toggle="dropdown"
                             aria-expanded="false"><i class="fa fa-pencil"></i> <span class="caret"></span></button>

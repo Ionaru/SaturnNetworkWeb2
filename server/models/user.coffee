@@ -43,6 +43,12 @@ exports.getByUserPID = (pid, done) ->
     done null, rows[0]
 
 exports.getByUserName = (name, done) ->
+  db.get().query "SELECT * FROM users WHERE BINARY user_name = \"#{name}\"", (err, rows) ->
+    if err
+      return done err
+    done null, rows[0]
+
+exports.isNameInUse = (name, done) ->
   db.get().query "SELECT * FROM users WHERE user_name = \"#{name}\"", (err, rows) ->
     if err
       return done err
@@ -63,7 +69,7 @@ exports.setName = (pid, username, done) ->
 
 exports.setEmail = (pid, email, done) ->
   if validator.validateEmail(email)
-    db.get().query "UPDATE users SET user_email = #{email} WHERE user_pid = \"#{pid}\";", (err, rows) ->
+    db.get().query "UPDATE users SET user_email = \"#{email}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
       if err
         return done err
       done null, rows
