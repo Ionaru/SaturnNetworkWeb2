@@ -1,287 +1,295 @@
 @main_colour: #01A7E1;
 
-body {
-  padding-top: 50px;
+html {
+  body {
+    padding-top: 50px;
 
-  nav {
-    .navbar-brand {
-      padding-left: 35px;
-      position: relative;
-
-      img {
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
+    &.modal-open {
+      ul.nav.navbar-nav.navbar-right {
+        padding-right: 17px;
       }
-      span {
-        display: none;
-      }
+    }
 
-      @media only screen and (min-width: 375px) {
+    nav {
+      .navbar-brand {
+        padding-left: 35px;
+        position: relative;
+
+        img {
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
         span {
-          display: inline;
-          padding-left: 25px;
+          display: none;
+        }
+
+        @media only screen and (min-width: 375px) {
+          span {
+            display: inline;
+            padding-left: 25px;
+          }
         }
       }
-    }
 
-    .navbar-nav * {
-      font-size: medium;
-    }
-    .navbar-info {
-      cursor: default;
-      pointer-events: none;
-    }
-    .dropdown-menu > li > form > input {
-      display: block;
-      padding: 3px 20px;
-      clear: both;
-      font-weight: normal;
-      line-height: 1.42857143;
-      color: #999999;
-      white-space: nowrap;
-    }
-  }
-
-  .jumbotron {
-    text-align: center;
-    border: none;
-    background-size: cover;
-    &.main_header {
-      background-image: url('https://saturnserver.org/img/image5.png');
-
-      .logo {
-        display: none;
+      .navbar-nav * {
+        font-size: medium;
       }
+      .navbar-info {
+        cursor: default;
+        pointer-events: none;
+      }
+      .dropdown-menu > li > form > input {
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.42857143;
+        color: #999999;
+        white-space: nowrap;
+      }
+    }
 
-      @media only screen and (min-width: 1200px) {
+    .jumbotron {
+      text-align: center;
+      border: none;
+      background-size: cover;
+      &.main_header {
+        background-image: url('https://saturnserver.org/img/image5.png');
+
         .logo {
-          display: inline;
+          display: none;
+        }
+
+        @media only screen and (min-width: 1200px) {
+          .logo {
+            display: inline;
+          }
+        }
+      }
+      &.gates_header {
+        background-image: url(/images/modpacks/gates/image2C.png);
+      }
+      &.technolution_header {
+        background-image: url(/images/modpacks/technolution/qjR60blur.png);
+      }
+
+      h1, h2, h3, h4, h5, h6, p, span {
+        color: white;
+        text-shadow: black 0.0em 0.0em 0.5em;
+      }
+    }
+
+    .modpacks {
+      .modpack {
+        img {
+          width: 140px;
+          height: 140px;
+          margin-top: 50px;
         }
       }
     }
-    &.gates_header {
-      background-image: url(/images/modpacks/gates/image2C.png);
-    }
-    &.technolution_header {
-      background-image: url(/images/modpacks/technolution/qjR60blur.png);
-    }
 
-    h1, h2, h3, h4, h5, h6, p, span {
-      color: white;
-      text-shadow: black 0.0em 0.0em 0.5em;
-    }
-  }
-
-  .modpacks {
-    .modpack {
-      img {
-        width: 140px;
-        height: 140px;
-        margin-top: 50px;
+    .moddiv {
+      padding-left: 0;
+      padding-right: 0;
+      .modimg {
+        width: 100%;
       }
     }
-  }
 
-  .moddiv {
-    padding-left: 0;
-    padding-right: 0;
-    .modimg {
-      width: 100%;
-    }
-  }
-
-  .user-management {
-    h2 {
-      display: inline-block;
-    }
-    #search {
-      float: right;
-      margin-top: 25px;
-      width: 50%;
-    }
-  }
-
-  .footer_text {
-    text-align: center;
-  }
-  .login {
-    input {
-      transition: background-color 0.3s ease-in-out
-    }
-    .modal-dialog {
-      margin: 30px auto;
-      max-width: 350px;
-    }
-    .modal-content {
-      height: 295px;
-      transition: height 0.5s ease-in-out;
-      .input-group-addon {
-        color: #fff;
-        background-color: #158cba;
-        transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    .user-management {
+      h2 {
+        display: inline-block;
       }
-      .form-control:focus + label {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+      #search {
+        float: right;
+        margin-top: 25px;
+        width: 50%;
       }
-      .post-login, .post-reset {
-        display: none;
-        p {
-          padding: 9px;
+    }
+
+    .footer_text {
+      text-align: center;
+    }
+    .login {
+      input {
+        transition: background-color 0.3s ease-in-out
+      }
+      .modal-dialog {
+        margin: 30px auto;
+        max-width: 350px;
+      }
+      .modal-content {
+        height: 295px;
+        transition: height 0.5s ease-in-out;
+        .input-group-addon {
+          color: #fff;
+          background-color: #158cba;
+          transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        .form-control:focus + label {
+          border-color: #66afe9;
+          outline: 0;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+        .post-login, .post-reset {
+          display: none;
+          p {
+            padding: 9px;
+          }
+        }
+        .forgot_password_input {
+          display: none;
+        }
+        .forgot-password-button {
+          margin-bottom: 11px;
+          text-align: right;
+          &.go-back {
+            display: none;
+          }
         }
       }
-      .forgot_password_input {
-        display: none;
-      }
-      .forgot-password-button {
-        margin-bottom: 11px;
-        text-align: right;
-        &.go-back {
-          display:none;
-        }
-      }
-    }
-    .modal-footer {
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      height: 70px;
-      margin: 0;
-      .btn {
-        &.disabled {
-          pointer-events: none;
-        }
-        font-weight: bold;
-      }
-      #forgotpasswordbutton {
-        display: none;
-        margin-left: 0;
-      }
-      .progress {
-        display: none;
-        height: 38px;
+      .modal-footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 70px;
         margin: 0;
+        .btn {
+          &.disabled {
+            pointer-events: none;
+          }
+          font-weight: bold;
+        }
+        #forgotpasswordbutton {
+          display: none;
+          margin-left: 0;
+        }
+        .progress {
+          display: none;
+          height: 38px;
+          margin: 0;
+        }
+        .progress-bar {
+          transition: width 1s ease-in-out;
+        }
       }
-      .progress-bar {
-        transition: width 1s ease-in-out;
+      .loginError {
+        .login_error_text {
+          color: red;
+          font-weight: bold;
+        }
       }
     }
-    .loginError {
-      .login_error_text {
-        color: red;
-        font-weight: bold;
-      }
-    }
-  }
 
-  .register {
-    input {
-      transition: background-color 0.3s ease-in-out
-    }
-    .modal-dialog {
-      margin: 30px auto;
-      max-width: 400px;
-    }
-    .modal-content {
-      height: 365px;
-      transition: height 0.5s ease-in-out;
-      .input-group-addon {
-        color: #fff;
-        background-color: #28b62c;
-        transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    .register {
+      input {
+        transition: background-color 0.3s ease-in-out
       }
-      .form-control:focus + label {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+      .modal-dialog {
+        margin: 30px auto;
+        max-width: 400px;
       }
-      .post-register {
-        display: none;
-      }
-    }
-    .modal-footer {
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      height: 70px;
-      margin: 0;
-      .btn {
-        &.disabled {
-          pointer-events: none;
+      .modal-content {
+        height: 365px;
+        transition: height 0.5s ease-in-out;
+        .input-group-addon {
+          color: #fff;
+          background-color: #28b62c;
+          transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         }
-        font-weight: bold;
+        .form-control:focus + label {
+          border-color: #66afe9;
+          outline: 0;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+        .post-register {
+          display: none;
+        }
       }
-      .progress {
-        display: none;
-        height: 38px;
+      .modal-footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 70px;
         margin: 0;
+        .btn {
+          &.disabled {
+            pointer-events: none;
+          }
+          font-weight: bold;
+        }
+        .progress {
+          display: none;
+          height: 38px;
+          margin: 0;
+        }
+        .progress-bar {
+          transition: width 1s ease-in-out;
+        }
       }
-      .progress-bar {
-        transition: width 1s ease-in-out;
-      }
-    }
-    .registerError {
-      .register_error_text {
-        color: red;
-        font-weight: bold;
-      }
-    }
-  }
-  .password {
-    input {
-      transition: background-color 0.3s ease-in-out
-    }
-    .modal-dialog {
-      margin: 30px auto;
-      max-width: 350px;
-    }
-    .modal-content {
-      height: 312px;
-      transition: height 0.5s ease-in-out;
-      .input-group-addon {
-        color: #fff;
-        background-color: #158cba;
-        transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      }
-      .form-control:focus + label {
-        border-color: #66afe9;
-        outline: 0;
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-      }
-      .post-change {
-        display: none;
-        p {
-          padding: 9px;
+      .registerError {
+        .register_error_text {
+          color: red;
+          font-weight: bold;
         }
       }
     }
-    .modal-footer {
-      position: absolute;
-      width: 100%;
-      bottom: 0;
-      height: 70px;
-      margin: 0;
-      .btn {
-        &.disabled {
-          pointer-events: none;
-        }
-        font-weight: bold;
+    .password {
+      input {
+        transition: background-color 0.3s ease-in-out
       }
-      .progress {
-        display: none;
-        height: 38px;
+      .modal-dialog {
+        margin: 30px auto;
+        max-width: 350px;
+      }
+      .modal-content {
+        height: 312px;
+        transition: height 0.5s ease-in-out;
+        .input-group-addon {
+          color: #fff;
+          background-color: #158cba;
+          transition: background-color 0.3s ease-in-out, border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+        .form-control:focus + label {
+          border-color: #66afe9;
+          outline: 0;
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+        .post-change {
+          display: none;
+          p {
+            padding: 9px;
+          }
+        }
+      }
+      .modal-footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 70px;
         margin: 0;
+        .btn {
+          &.disabled {
+            pointer-events: none;
+          }
+          font-weight: bold;
+        }
+        .progress {
+          display: none;
+          height: 38px;
+          margin: 0;
+        }
+        .progress-bar {
+          transition: width 1s ease-in-out;
+        }
       }
-      .progress-bar {
-        transition: width 1s ease-in-out;
-      }
-    }
-    .changeError {
-      .change_error_text {
-        color: red;
-        font-weight: bold;
+      .changeError {
+        .change_error_text {
+          color: red;
+          font-weight: bold;
+        }
       }
     }
   }

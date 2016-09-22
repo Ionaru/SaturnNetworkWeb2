@@ -50,27 +50,6 @@
                         <i id="" class="fa fa-circle-o is_not_staff"></i>
                     {{/if}}
                 </td>
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        $('.edit_username').editable('/a/users/update_name', {
-                            indicator: 'Saving...',
-                            event: "dblclick"
-                        });
-                        $('.edit_mc').editable('/a/users/update_minecraft_name', {
-                            indicator: 'Saving...',
-                            placeholder: '',
-                            event: "dblclick"
-                        });
-                        $('.edit_email').editable('/a/users/update_email', {
-                            indicator: 'Saving...',
-                            event: "dblclick"
-                        });
-                        $('.edit_points').editable('/a/users/update_points', {
-                            indicator: 'Saving...',
-                            event: "dblclick"
-                        });
-                    });
-                </script>
                 <td class="text-right">
                     <button type="button" class="btn btn-xs btn-standard dropdown-toggle" data-toggle="dropdown"
                             aria-expanded="false"><i class="fa fa-pencil"></i> <span class="caret"></span></button>
@@ -116,6 +95,27 @@
         {{/each}}
         </tbody>
     </table>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.edit_username').editable('/a/users/update_name', {
+                indicator: 'Saving...',
+                event: "dblclick"
+            });
+            $('.edit_mc').editable('/a/users/update_minecraft_name', {
+                indicator: 'Saving...',
+                placeholder: '',
+                event: "dblclick"
+            });
+            $('.edit_email').editable('/a/users/update_email', {
+                indicator: 'Saving...',
+                event: "dblclick"
+            });
+            $('.edit_points').editable('/a/users/update_points', {
+                indicator: 'Saving...',
+                event: "dblclick"
+            });
+        });
+    </script>
 </div>
 
 <!-- Modals -->
