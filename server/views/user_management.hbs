@@ -103,42 +103,36 @@
                 event: "dblclick"
             });
             $('.admin_status').click(function () {
-                var element = $(this);
-                element.css('pointer-events', 'none');
-                element.addClass('hover-jq');
-                $.post('/a/users/toggle_admin', {id: this.id}
-                ).done(function (admin) {
-                    toggleIcon(element, admin);
-                });
+                toggleStatus('admin', this);
             });
             $('.staff_status').click(function () {
-                var element = $(this);
+                toggleStatus('staff', this);
+            });
+            function toggleStatus(type, focus) {
+                var element = $(focus);
                 element.css('pointer-events', 'none');
                 element.addClass('hover-jq');
-                $.post('/a/users/toggle_staff', {id: this.id}
-                ).done(function (staff) {
-                    toggleIcon(element, staff);
-                });
-            });
-            function toggleIcon(element, status) {
-                var originalColor = '#555555';
-                var color = '#28b62c';
-                var classEnabled = 'fa-circle';
-                var classDisabled = 'fa-circle-o';
-                if(status == "0"){
-                    color = '#ff4136';
-                    classDisabled = [classEnabled, classEnabled = classDisabled][0];
-                }
-                element.fadeOut(function () {
-                    element.removeClass(classDisabled);
-                    element.addClass(classEnabled);
-                    element.css('color', color);
-                    element.fadeIn(function () {
-                        element.removeClass('hover-jq');
-                        element.css('pointer-events', '');
-                        element.animate({
-                            color: originalColor
-                        }, 1500);
+                $.post('/a/users/toggle_' + type, {id: focus.id}
+                ).done(function (status) {
+                    var originalColor = '#555555';
+                    var color = '#28b62c';
+                    var classEnabled = 'fa-circle';
+                    var classDisabled = 'fa-circle-o';
+                    if (status == "0") {
+                        color = '#ff4136';
+                        classDisabled = [classEnabled, classEnabled = classDisabled][0];
+                    }
+                    element.fadeOut(function () {
+                        element.removeClass(classDisabled);
+                        element.addClass(classEnabled);
+                        element.css('color', color);
+                        element.fadeIn(function () {
+                            element.removeClass('hover-jq');
+                            element.css('pointer-events', '');
+                            element.animate({
+                                color: originalColor
+                            }, 1500);
+                        });
                     });
                 });
             }
