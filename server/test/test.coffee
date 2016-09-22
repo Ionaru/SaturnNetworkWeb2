@@ -1,4 +1,5 @@
 assert = require 'assert'
+
 describe 'Prologue', ->
   describe 'First test, ensure Mocha is working.', ->
     it 'should complete this regular test', ->
@@ -69,6 +70,14 @@ describe 'User', ->
         if not err
           assert.equal(result['user_pid'], testUserPid)
           assert.equal(result['user_name'], testUserName)
+        done()
+    it 'can\'t create a User with the same name', (done) ->
+      user.create testUserName, "2" + testUserEmail, testUserPassword, (err, result) ->
+        assert.equal(err.code, "ER_DUP_ENTRY")
+        done()
+    it 'can\'t create a User with the same email', (done) ->
+      user.create testUserName + "2", testUserEmail, testUserPassword, (err, result) ->
+        assert.equal(err.code, "ER_DUP_ENTRY")
         done()
 
   describe 'Modify', ->

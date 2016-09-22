@@ -1,31 +1,43 @@
-<script src="http://www.appelsiini.net/download/jquery.jeditable.mini.js"></script>
+<script src="/libs/js/jquery.jeditable.mini.js"></script>
+<script src="/libs/js/jquery.color.plus-names-2.1.2.min.js"></script>
 <div class="container user-management">
-    <h2>User Management</h2>
-     {{users.length}} users in total.
+    <h2>User Management </h2><span id="sub-title">
+     Showing all {{users.length}} users.</span>
     <input class="form-control" type="text" id="search" placeholder="Search...">
     <script type="text/javascript">
-        $("#search").keyup(function() {
+        $("#search").keyup(function () {
             var value = this.value;
-            $("table").find("tr").each(function(index) {
+            var table = $("table");
+            table.find("tr").each(function (index) {
                 if (index === 0) return;
                 var id = $(this).find("td").first().text();
                 $(this).toggle((id.toLowerCase()).indexOf(value.toLowerCase()) !== -1);
             });
-
+            var count = 0;
+            table.find("tr").each(function () {
+                if ($(this).css('display') !== 'none') {
+                    count++;
+                }
+            });
+            if (count - 1 == {{users.length}}) {
+                $('#sub-title').text("Showing all {{users.length}} users.");
+            }
+            else {
+                $('#sub-title').text("Showing " + (count - 1) + " out of {{users.length}} users.");
+            }
         });
     </script>
     <table class="table table-responsive table-condensed table-hover sortable">
         <thead>
         <tr>
-            <!--<th class="text-left">Username</th>-->
             <th class="text-left sorttable_sorted" width="20%">Username
                 <span id="sorttable_sortfwdind"> <i class="fa fa-chevron-up"></i></span>
             </th>
             <th class="text-left" width="20%">Minecraft</th>
             <th class="text-left" width="35%">Email</th>
             <th class="text-left" width="10%">Points</th>
-            <th class="text-left" width="5%">Admin</th>
-            <th class="text-left" width="5%">Staff</th>
+            <th class="text-center" width="5%">Admin</th>
+            <th class="text-center" width="5%">Staff</th>
             <th class="text-right sorttable_nosort" width="5%">Actions</th>
         </tr>
         </thead>
@@ -36,53 +48,29 @@
                 <td class="edit_mc" id="mc_{{this.user_pid}}">{{this.user_mccharacter}}</td>
                 <td class="edit_email" id="mail_{{this.user_pid}}">{{this.user_email}}</td>
                 <td class="edit_points" id="points_{{this.user_pid}}">{{this.user_points}}</td>
-                <td sorttable_customkey="{{this.user_isadmin}}">
+                <td class="text-center" sorttable_customkey="{{this.user_isadmin}}">
                     {{#if this.user_isadmin}}
-                        <i id="" class="fa fa-circle is_admin"></i>
+                        <i id="admin_{{this.user_pid}}" class="fa fa-circle admin_status"></i>
                     {{else}}
-                        <i class="fa fa-circle-o is_not_admin"></i>
+                        <i id="admin_{{this.user_pid}}" class="fa fa-circle-o admin_status"></i>
                     {{/if}}
                 </td>
-                <td sorttable_customkey="{{this.user_isstaff}}">
+                <td class="text-center" sorttable_customkey="{{this.user_isstaff}}">
                     {{#if this.user_isstaff}}
-                        <i class="fa fa-circle is_staff"></i>
+                        <i id="staff_{{this.user_pid}}" class="fa fa-circle staff_status"></i>
                     {{else}}
-                        <i id="" class="fa fa-circle-o is_not_staff"></i>
+                        <i id="staff_{{this.user_pid}}" class="fa fa-circle-o staff_status"></i>
                     {{/if}}
                 </td>
-                <td class="text-right">
+                <td class="text-right dropdown">
                     <button type="button" class="btn btn-xs btn-standard dropdown-toggle" data-toggle="dropdown"
                             aria-expanded="false"><i class="fa fa-pencil"></i> <span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu">
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
                         <li role="presentation" class="dropdown-header">{{this.user_name}}</li>
                         <li role="presentation" class="divider"></li>
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal"
-                               data-target="#editUsernameModal" data-name="Altenius">Edit Username</a>
-                        </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal"
-                               data-target="#mcModal" data-name="Altenius">Edit Minecraft Name</a>
-                        </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal"
-                               data-target="#emailModal" data-name="Altenius">Edit Email</a>
-                        </li>
-                        <li role="presentation">
                             <a role="menuitem" tabindex="-1"
                                href="?user=Altenius&amp;action=resetPassword">Reset Password</a>
-                        </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1" data-toggle="modal"
-                               data-target="#pointsModal" data-name="Altenius">Edit Points</a>
-                        </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1"
-                               href="?user=Altenius&amp;action=toggleAdmin">Toggle Admin</a>
-                        </li>
-                        <li role="presentation">
-                            <a role="menuitem" tabindex="-1"
-                               href="?user=Altenius&amp;action=toggleStaff">Toggle Staff</a>
                         </li>
                         <li role="presentation" class="divider"></li>
                         <li role="presentation">
@@ -96,7 +84,7 @@
         </tbody>
     </table>
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.edit_username').editable('/a/users/update_name', {
                 indicator: 'Saving...',
                 event: "dblclick"
@@ -114,40 +102,46 @@
                 indicator: 'Saving...',
                 event: "dblclick"
             });
+            $('.admin_status').click(function () {
+                var element = $(this);
+                element.css('pointer-events', 'none');
+                element.addClass('hover-jq');
+                $.post('/a/users/toggle_admin', {id: this.id}
+                ).done(function (admin) {
+                    toggleIcon(element, admin);
+                });
+            });
+            $('.staff_status').click(function () {
+                var element = $(this);
+                element.css('pointer-events', 'none');
+                element.addClass('hover-jq');
+                $.post('/a/users/toggle_staff', {id: this.id}
+                ).done(function (staff) {
+                    toggleIcon(element, staff);
+                });
+            });
+            function toggleIcon(element, status) {
+                var originalColor = '#555555';
+                var color = '#28b62c';
+                var classEnabled = 'fa-circle';
+                var classDisabled = 'fa-circle-o';
+                if(status == "0"){
+                    color = '#ff4136';
+                    classDisabled = [classEnabled, classEnabled = classDisabled][0];
+                }
+                element.fadeOut(function () {
+                    element.removeClass(classDisabled);
+                    element.addClass(classEnabled);
+                    element.css('color', color);
+                    element.fadeIn(function () {
+                        element.removeClass('hover-jq');
+                        element.css('pointer-events', '');
+                        element.animate({
+                            color: originalColor
+                        }, 1500);
+                    });
+                });
+            }
         });
     </script>
 </div>
-
-<!-- Modals -->
-<div class="edit name modal fade" id="editUsernameModal" tabindex="-1" role="dialog" aria-labelledby="editUsernameModal"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="loginForm">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">Edit username</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="uLogin" placeholder="New username">
-                            <label for="uLogin" id="uLogin_icon"
-                                   class="input-group-addon mdi mdi-account mdi-18px"></label>
-                        </div>
-                    </div>
-                    <div class="error">
-                        <p class="login_error_text text-center"></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="form-control btn btn-primary">Log in</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-
-</script>

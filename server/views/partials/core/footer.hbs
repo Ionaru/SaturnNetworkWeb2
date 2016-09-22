@@ -20,4 +20,9 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
+    $('.modal').on('scroll touchmove mousewheel', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    })
 </script>

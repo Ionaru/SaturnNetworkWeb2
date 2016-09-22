@@ -4,14 +4,16 @@ User = require '../models/user'
 Validator = require '../controllers/validationHelper'
 Jsesc = require('jsesc')
 
-
-router.get '/users', (req, res) ->
+router.all '/*', (req, res, next) ->
   if req.session.user.login and req.session.user.isAdmin is 1
-    User.getColumns ['*'], 'user_name', (err, result) ->
-      if not err
-        res.render 'user_management', {users: result}
+    next()
   else
     res.render '404'
+
+router.get '/users', (req, res) ->
+  User.getColumns ['*'], 'user_name', (err, result) ->
+    if not err
+      res.render 'user_management', {users: result}
 
 router.post '/users/update_name', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -94,8 +96,22 @@ router.post '/users/update_points', (req, res) ->
       if not err
         res.send result['user_points'].toString()
   return
-#router.put '/users/update_staff_status', (req, res) ->
-#router.put '/users/update_admin_status', (req, res) ->
+
+router.post '/users/toggle_staff', (req, res) ->
+  pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
+  User.toggleStaff pid, (err, result) ->
+    if not err
+      res.send result.toString()
+
+router.post '/users/toggle_admin', (req, res) ->
+  pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
+  if req.session.user.pid isnt pid
+    User.toggleAdmin pid, (err, result) ->
+      if not err
+        res.send result.toString()
+  else
+    res.send "1"
+#router.delete '/users/reset_password', (req, res) ->
 #router.delete '/users/delete_user', (req, res) ->
 
 module.exports = router

@@ -1,13 +1,17 @@
 @main_colour: #01A7E1;
 
 html {
+
+  overflow-y: scroll;
   body {
     padding-top: 50px;
 
     &.modal-open {
-      ul.nav.navbar-nav.navbar-right {
-        padding-right: 17px;
-      }
+      padding-right: 0 !important;
+    }
+
+    .modal {
+      padding-right: 0 !important;
     }
 
     nav {
@@ -101,11 +105,19 @@ html {
     .user-management {
       h2 {
         display: inline-block;
+        padding-right: 10px;
       }
       #search {
         float: right;
         margin-top: 25px;
         width: 50%;
+      }
+      .staff_status, .admin_status {
+        padding: 5px;
+        transition: transform 0.3s ease-in-out;
+        &:hover, &.hover-jq {
+          transform: scale(2, 2);
+        }
       }
     }
 

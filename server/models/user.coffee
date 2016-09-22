@@ -110,13 +110,19 @@ exports.toggleAdmin = (pid, done) ->
   db.get().query "UPDATE users SET user_isadmin = IF(user_isadmin=1, 0, 1) WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
-    done null, rows
+    exports.getColumnsForPID ['user_isadmin'], pid, (err, result) ->
+      if err
+        return done err
+      done null, result[0]['user_isadmin']
 
 exports.toggleStaff = (pid, done) ->
   db.get().query "UPDATE users SET user_isstaff = IF(user_isstaff=1, 0, 1) WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
-    done null, rows
+    exports.getColumnsForPID ['user_isstaff'], pid, (err, result) ->
+      if err
+        return done err
+      done null, result[0]['user_isstaff']
 
 exports.deleteUser = (pid, done) ->
   db.get().query "DELETE FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->
