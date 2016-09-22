@@ -13,7 +13,7 @@ exports.connect = (done, customConfig=null) ->
       host: dbConfig['db_host']
       user: dbConfig['db_user']
       password: dbConfig['db_pass']
-      database: dbConfig['db_name'] + '_test'
+      database: dbConfig['db_name']
       ssl:
         ca: fs.readFileSync('./config/crts/' + dbConfig['db_ca_f'])
         cert: fs.readFileSync('./config/crts/' + dbConfig['db_cc_f'])
