@@ -46,6 +46,7 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
     # Init application
     ###
     app = require('../app')
+    app.enable('trust proxy')
 
     ###*
     # Get port from environment and store in Express.

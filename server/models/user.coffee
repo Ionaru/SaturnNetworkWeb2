@@ -34,7 +34,7 @@ exports.getColumnsForPID = (columns, pid, done) ->
   db.get().query "SELECT #{columns.join(',')} FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
-    done null, rows
+    done null, rows[0]
 
 exports.getByUserPID = (pid, done) ->
   db.get().query "SELECT * FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->

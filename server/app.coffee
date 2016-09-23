@@ -69,7 +69,7 @@ schedule.scheduleJob '* /15 * * * *', ->
 app.use (req, res) ->
   err = new Error('Not Found')
   err.status = 404
-  res.render '404'
+  res.render 'status/404'
 
 # error handlers
 # development error handler
