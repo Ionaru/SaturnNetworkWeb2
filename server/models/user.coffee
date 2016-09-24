@@ -22,7 +22,7 @@ exports.create = (username, email, password, done) ->
     else
       return done("validation_error")
 
-exports.getColumns = (columns, order=false, done) ->
+exports.getColumns = (columns, order = false, done) ->
   if order
     orderString = "ORDER BY #{order}"
   db.get().query "SELECT #{columns.join(',')} FROM users #{orderString};", (err, rows) ->
@@ -113,7 +113,7 @@ exports.toggleAdmin = (pid, done) ->
     exports.getColumnsForPID ['user_isadmin'], pid, (err, result) ->
       if err
         return done err
-      done null, result[0]['user_isadmin']
+      done null, result['user_isadmin']
 
 exports.toggleStaff = (pid, done) ->
   db.get().query "UPDATE users SET user_isstaff = IF(user_isstaff=1, 0, 1) WHERE user_pid = \"#{pid}\";", (err, rows) ->
@@ -122,7 +122,7 @@ exports.toggleStaff = (pid, done) ->
     exports.getColumnsForPID ['user_isstaff'], pid, (err, result) ->
       if err
         return done err
-      done null, result[0]['user_isstaff']
+      done null, result['user_isstaff']
 
 exports.deleteUser = (pid, done) ->
   db.get().query "DELETE FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->

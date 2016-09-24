@@ -71,6 +71,7 @@ router.post '/users/update_minecraft_name', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
   User.getColumnsForPID ['user_name', 'user_mccharacter'], pid, (err, result) ->
     if not err
+      name = result['user_name']
       oldName = result['user_mccharacter']
       newName = req.body.value
       if newName isnt oldName and Validator.validateMinecraft newName
@@ -89,36 +90,62 @@ router.post '/users/update_minecraft_name', (req, res) ->
 
 router.post '/users/update_points', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
-  newPoints = req.body.value
-  if Validator.validatePoints newPoints
-    newPoints = Jsesc newPoints
-    User.setPoints pid, newPoints, (err, result) ->
-      if not err
-        res.send newPoints.toString()
-      else
-        User.getByUserPID pid, (err, result) ->
+  User.getColumnsForPID ['user_name', 'user_points'], pid, (err, result) ->
+    if not err
+      name = result['user_name']
+      oldData = result['user_points'].toString()
+      newData = req.body.value
+      if Validator.validatePoints newData
+        newData = Jsesc newData
+        User.setPoints pid, newData, (err) ->
           if not err
-            res.send result['user_points'].toString()
-  else
-    User.getByUserPID pid, (err, result) ->
-      if not err
-        res.send result['user_points'].toString()
+            newData = newData.toString()
+            logger.info "[#{req.session.user.username}] changed points balance of #{name} from #{oldData} to #{newData}"
+            res.send newData
+          else
+            res.send oldData
+      else
+        res.send oldData
+    else
+      res.send "Error"
   return
 
 router.post '/users/toggle_staff', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
-  User.toggleStaff pid, (err, result) ->
+  User.getColumnsForPID ['user_name', 'user_isstaff'], pid, (err, result) ->
     if not err
-      res.send result.toString()
+      name = result['user_name']
+      oldData = result['user_isstaff'].toString()
+      User.toggleStaff pid, (err, result) ->
+        if not err
+          newData = result.toString()
+          logger.info "[#{req.session.user.username}] changed admin status of #{name} from #{oldData} to #{newData}"
+          res.send newData
+        else
+          res.send oldData
+    else
+      res.send "error"
+  return
 
 router.post '/users/toggle_admin', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
   if req.session.user.pid isnt pid
-    User.toggleAdmin pid, (err, result) ->
+    User.getColumnsForPID ['user_name', 'user_isadmin'], pid, (err, result) ->
       if not err
-        res.send result.toString()
+        name = result['user_name']
+        oldData = result['user_isadmin'].toString()
+        User.toggleAdmin pid, (err, result) ->
+          if not err
+            newData = result.toString()
+            logger.info "[#{req.session.user.username}] changed staff status of #{name} from #{oldData} to #{newData}"
+            res.send newData
+          else
+            res.send oldData
+      else
+        res.send "error"
   else
     res.send "1"
+  return
 #router.delete '/users/reset_password', (req, res) ->
 #router.delete '/users/delete_user', (req, res) ->
 
