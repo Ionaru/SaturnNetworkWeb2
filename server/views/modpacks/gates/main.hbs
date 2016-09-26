@@ -129,9 +129,11 @@
         $(document).ready(function () {
             $.get("/gates/mod_list"
             ).done(function (data) {
-                if (!data[0]) {
+                var err = data[0];
+                var modList = data[1];
+                if (!err) {
                     var content = "";
-                    content += '<p>Latest version: ' + data[1]['modpackVersion'] + ' for Minecraft ' + data[1]['minecraftVersion'] + '</p>';
+                    content += '<p>Latest version: ' + modList['modpackVersion'] + ' for Minecraft ' + modList['minecraftVersion'] + '</p>';
                     content += '<table class="table table-hover table-responsive table-condensed sortable" style="width:100%; table-layout: fixed;">';
                     content += '<thead>';
                     content += '<tr>';
@@ -143,8 +145,8 @@
                     content += '</thead>';
                     content += '<tbody>';
 
-                    for (var modID in data[1]['mods']) {
-                        var mod = data[1]['mods'][modID];
+                    for (var modID in modList['mods']) {
+                        var mod = modList['mods'][modID];
                         content += '<tr>';
                         content += '<td class="text-left">' + mod['pretty_name'] + '</td>';
                         content += '<td class="text-left">' + mod['author'] + '</td>';
@@ -199,7 +201,9 @@
         $(document).ready(function () {
             $.get("/gates/serverfiles"
             ).done(function (data) {
-                if (!data[0]) {
+                var err = data[0];
+                var filesList = data[1];
+                if (!err) {
                     var content = "";
                     content += '<table class="table table-hover" style="width:100%; table-layout: fixed;">';
                     content += '<thead>';
@@ -210,8 +214,8 @@
                     content += '</tr>';
                     content += '</thead>';
                     content += '<tbody>';
-                    for (var packageID in data[1]) {
-                        var filePackage = data[1][packageID];
+                    for (var packageID in filesList) {
+                        var filePackage = filesList[packageID];
                         if (packageID == 0) {
                             content += '<tr class="success">';
                             content += '<td class="text-left">' + filePackage['version'] + ' - Latest</td>';
@@ -223,7 +227,7 @@
                         var packageSize = ((filePackage['size'] / 1024) / 1024).toFixed(2);
                         content += '<td class="text-left">' + packageSize + ' MB</td>';
 
-                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="ftp://serverfiles@85.25.237.10/gates/' + filePackage['name'] + '"><i class="fa fa-download"></i> Download</a></td>';
+                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="ftp://serverfiles@saturnserver.org/gates/' + filePackage['name'] + '"><i class="fa fa-download"></i> Download</a></td>';
                         content += '</tr>';
                     }
                     content += '<p class="text-right">Tip: check out these amazing projects to improve your server!<br>';
