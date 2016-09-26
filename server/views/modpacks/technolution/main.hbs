@@ -1,17 +1,16 @@
 <div class="jumbotron technolution_header">
-    <img class="modpack-logo" src="/images/modpacks/technolution/technolution_logo.svg"
-         onerror="this.src='/images/modpacks/technolution/technolution_logo.png'">
+    <img class="modpack-logo" src="/images/modpacks/technolution/technolution_logo_light.svg"
+         onerror="this.src='/images/modpacks/technolution/technolution_logo_light.png'">
     <h1>Technolution Advanced</h1>
-    <h3>Advancing In Technology</h3>
-    <h4>Who told you technology is easy?<br> In Technolution it's definitely not! We use
-        technological and gameplay mods that will provide a Minecraft experience like you've never seen before!</h4>
+    <h4>You think technology is easy?<br> In Technolution it's definitely not! We use
+        technological and gameplay mods that will provide a Minecraft experience like you've never had before!</h4>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-sm-12 text-left">
             <h3>Modpack Information</h3>
             <p>Technolution Advanced brings you the best in technological mods currently available. Tying together
-                mods in ways that have never been done before! </p>
+                mods in ways that have never been done before!</p>
             <p>With all these different mods, there are infitite ways of setting up machines to automate a huge
                 number of tasks. By playing this modpack, you will be challenged to create the most complex machine
                 setup you have ever built!</p>
@@ -23,12 +22,15 @@
                      alt="Gregtech" data-toggle="tooltip"
                      data-placement="bottom" title="Gregtech"></a>
             </div>
-            <div class="col-xs-2 col-centered moddiv"><a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1294413-pams-mods-aug-111th-2016-harvestcraft-1-9-4-1-10" target="_blank">
+            <div class="col-xs-2 col-centered moddiv"><a
+                href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1294413-pams-mods-aug-111th-2016-harvestcraft-1-9-4-1-10"
+                target="_blank">
                 <img class="modimg" src="/images/mods/pamsharvestcraft.png"
                      alt="Pam's Harvestcraft" data-toggle="tooltip"
                      data-placement="bottom" title="Pam's Harvestcraft"></a>
             </div>
-            <div class="col-xs-2 col-centered moddiv"><a href="https://mods.curse.com/mc-mods/minecraft/233785-avaritia" target="_blank">
+            <div class="col-xs-2 col-centered moddiv"><a href="https://mods.curse.com/mc-mods/minecraft/233785-avaritia"
+                                                         target="_blank">
                 <img class="modimg" src="/images/mods/binniesmods.png"
                      alt="Binnie's Mods" data-toggle="tooltip"
                      data-placement="bottom" title="Binnie's Mods"></a>
@@ -55,9 +57,8 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-md-6 col-sm-6">
-            <h3><span class="fa fa-cog" aria-hidden="true"></span> Development</h3>
-            <p>The Technolution Modpack is no longer being actively updated and maintained, however game-breaking
-                bugs will still be fixed. Problems can be submitted to Ionaru.</p>
+            <h3><span class="fa fa-cog fa-spin" aria-hidden="true"></span> Development</h3>
+            <p>Technolution Advanced is in full development, expect frequent updates and additions.</p>
         </div>
         <div class="clearfix visible-sm"></div>
         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -67,8 +68,8 @@
         <div class="clearfix visible-sm"></div>
         <div class="col-lg-4 col-md-6 col-sm-6">
             <h3><i class="fa fa-youtube"></i> Youtube</h3>
-            <p>You are free to create, publish and monetise Youtube videos of the Technolution Modpack, videos
-                submitted to Ionaru will be posted on this page.</p>
+            <p>You are free to create, publish and monetise Youtube videos playing Technolution Advanced, videos
+                submitted to Ionaru might be posted on this page.</p>
         </div>
     </div>
 </div>
@@ -78,11 +79,81 @@
     <div class="row">
         <div class="text-center col-sm-4">
             <h3>Technic Install</h3>
-            <p>Click the button below to go to the Technolution page on the Technic Platform</p>
+            <p>Use the link below to install the modpack.</p>
+            <div class="well" style="padding: 5px; margin-bottom: 2px;">
+                http://api.technicpack.net/modpack/technolution
+            </div>
+            <a id="copyTechnolutionLink" class="btn btn-default btn-md"><i class="fa fa-clipboard"></i>
+                <span class="btnText">Copy link</span></a>
             <a class="btn btn-primary btn-md" href="http://www.technicpack.net/modpack/technolution.50058"
-               target="_blank" role="button"><i class="fa fa-external-link"></i> Technic Platform</a>
+               target="_blank" role="button"><i class="fa fa-external-link"></i> Technic</a>
             <a data-target="#howto" data-toggle="collapse" class="btn btn-warning btn-md">How To Install?</a>
         </div>
+        <script>
+            function copyTextToClipboard(text) {
+                var textArea = document.createElement("textarea");
+
+                //
+                // *** This styling is an extra step which is likely not required. ***
+                //
+                // Why is it here? To ensure:
+                // 1. the element is able to have focus and selection.
+                // 2. if element was to flash render it has minimal visual impact.
+                // 3. less flakyness with selection and copying which **might** occur if
+                //    the textarea element is not visible.
+                //
+                // The likelihood is the element won't even render, not even a flash,
+                // so some of these are just precautions. However in IE the element
+                // is visible whilst the popup box asking the user for permission for
+                // the web page to copy to the clipboard.
+                //
+
+                // Place in top-left corner of screen regardless of scroll position.
+                textArea.style.position = 'fixed';
+                textArea.style.top = 0;
+                textArea.style.left = 0;
+
+                // Ensure it has a small width and height. Setting to 1px / 1em
+                // doesn't work as this gives a negative w/h on some browsers.
+                textArea.style.width = '2em';
+                textArea.style.height = '2em';
+
+                // We don't need padding, reducing the size if it does flash render.
+                textArea.style.padding = 0;
+
+                // Clean up any borders.
+                textArea.style.border = 'none';
+                textArea.style.outline = 'none';
+                textArea.style.boxShadow = 'none';
+
+                // Avoid flash of white box if rendered for any reason.
+                textArea.style.background = 'transparent';
+
+
+                textArea.value = text;
+
+                document.body.appendChild(textArea);
+
+                textArea.select();
+
+                var copyButton = $('#copyTechnolutionLink .btnText');
+
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    copyButton.text('Link copied');
+                } catch (err) {
+                    copyButton.text('Copy failed');
+                }
+
+                document.body.removeChild(textArea);
+            }
+
+            var copyTechnolutionLink = document.querySelector('#copyTechnolutionLink');
+            copyTechnolutionLink.addEventListener('click', function (event) {
+                copyTextToClipboard('http://api.technicpack.net/modpack/technolution');
+            });
+        </script>
         <div class="text-center col-sm-4">
             <h3>Mods</h3>
             <p>Please click the buttons below to view all the mods in this modpack.</p>
