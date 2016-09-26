@@ -136,11 +136,10 @@
 
                 textArea.select();
 
-                var copyButton = $('#copyTechnolutionLink .btnText');
+                var copyButton = $('#copyTechnolutionLink').find('.btnText');
 
                 try {
-                    var successful = document.execCommand('copy');
-                    var msg = successful ? 'successful' : 'unsuccessful';
+                    document.execCommand('copy');
                     copyButton.text('Link copied');
                 } catch (err) {
                     copyButton.text('Copy failed');
@@ -150,7 +149,7 @@
             }
 
             var copyTechnolutionLink = document.querySelector('#copyTechnolutionLink');
-            copyTechnolutionLink.addEventListener('click', function (event) {
+            copyTechnolutionLink.addEventListener('click', function () {
                 copyTextToClipboard('http://api.technicpack.net/modpack/technolution');
             });
         </script>
@@ -205,8 +204,8 @@
                     content += '</thead>';
                     content += '<tbody>';
 
-                    for (var mod in data[1]['mods']) {
-                        var mod = data[1]['mods'][mod];
+                    for (var modID in data[1]['mods']) {
+                        var mod = data[1]['mods'][modID];
                         content += '<tr>';
                         content += '<td class="text-left">' + mod['pretty_name'] + '</td>';
                         content += '<td class="text-left">' + mod['author'] + '</td>';
@@ -274,19 +273,19 @@
                     content += '</thead>';
                     content += '<tbody>';
                     for (var packageID in data[1]) {
-                        var package = data[1][packageID];
+                        var filePackage = data[1][packageID];
                         if (packageID == 0) {
                             content += '<tr class="success">';
-                            content += '<td class="text-left">' + package['version'] + ' - Latest</td>';
+                            content += '<td class="text-left">' + filePackage['version'] + ' - Latest</td>';
                         }
                         else {
                             content += '<tr>';
-                            content += '<td class="text-left">' + package['version'] + '</td>';
+                            content += '<td class="text-left">' + filePackage['version'] + '</td>';
                         }
-                        var packageSize = ((package['size'] / 1024) / 1024).toFixed(2);
+                        var packageSize = ((filePackage['size'] / 1024) / 1024).toFixed(2);
                         content += '<td class="text-left">' + packageSize + ' MB</td>';
 
-                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="ftp://serverfiles@85.25.237.10/technolution/' + package['name'] + '"><i class="fa fa-download"></i> Download</a></td>';
+                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="ftp://serverfiles@85.25.237.10/technolution/' + filePackage['name'] + '"><i class="fa fa-download"></i> Download</a></td>';
                         content += '</tr>';
                     }
                     content += '<p class="text-right">Tip: check out these amazing projects to improve your server!<br>';
