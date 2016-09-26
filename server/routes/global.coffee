@@ -1,9 +1,6 @@
 express = require('express')
 router = express.Router()
-#User = require('../models/user')
 val = require('./../controllers/validationHelper')
-#keeper = require('./../controllers/gateKeeper')
-pidGen = require '../controllers/pidGenerator'
 bcrypt = require('bcrypt-nodejs')
 User = require('../models/user')
 jsesc = require('jsesc')
@@ -74,7 +71,7 @@ router.post '/register', (req, res) ->
 router.post '/login', (req, res) ->
   username = req.body.user
   password = req.body.password
-  cookietime = req.body.cookietime
+#  cookietime = req.body.cookietime
   usernameValidated = val.validateUsername username
   emailValidated = val.validateEmail username
   passwordValidated = val.validatePassword password
@@ -134,7 +131,7 @@ router.post '/change_password', (req, res) ->
           switch result
             when "valid_login"
               if pid is userPid and name is username
-                User.setPassword pid, newPass, (err, result) ->
+                User.setPassword pid, newPass, (err) ->
                   if not err
                     res.send 'password_changed'
                   else
@@ -161,15 +158,11 @@ router.post '/change_password', (req, res) ->
 
 # Router that handles the logout process
 router.all '/logout', (req, res) ->
-  req.session.user =
-      login: false
-  req.app.locals.user = req.session.user
-  res.set('Cache-Control', 'no-cache');
-  res.redirect "/"
+  req.session.destroy ->
+    res.redirect "/"
 
 # Router that handles the logout process
 router.post '/reset', (req, res) ->
-#  res.send ['error_validation', user]
   email = req.body.email
   emailValidated = val.validateEmail email
   if emailValidated
@@ -193,9 +186,9 @@ router.post '/reset', (req, res) ->
   else
     res.send ['error_validation', null]
 
-# Router that handles the cookie notification
-router.post '/accept_cookies', (req, res) ->
-  req.session.accept_cookies = true
-  res.send "cookies_accepted"
+# Router that handles the cookie notification TODO: IMPLEMENT
+#router.post '/accept_cookies', (req, res) ->
+#  req.session.accept_cookies = true
+#  res.send "cookies_accepted"
 
 module.exports = router
