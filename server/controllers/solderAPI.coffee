@@ -68,7 +68,16 @@ writeFullModList = (modpack, old_fullModList=null) ->
                   getModInfo apiLink
             else
               fullModList['time'] = new Date().getTime()
-              fs.writeFileSync("./cache/fullModList_#{modpackName}.json", JSON.stringify(fullModList))
+              fullModList2 = {
+                time: new Date().getTime()
+                minecraftVersion: minecraftVersion
+                modpackVersion: modpack['latest']
+                mods: {}
+              }
+              for mod of fullModList['mods']
+                fullModList2['mods'][fullModList['mods'][mod]['pretty_name']] = fullModList['mods'][mod]
+              fullModList2['mods'] = sortObject(fullModList2['mods'])
+              fs.writeFileSync("./cache/fullModList_#{modpackName}.json", JSON.stringify(fullModList2))
               logger.info "Successfully refreshed data for modpack #{modpack['display_name']}."
           getModInfo apiLink
       else
@@ -77,3 +86,9 @@ writeFullModList = (modpack, old_fullModList=null) ->
           fs.writeFileSync("./cache/fullModList_#{modpackName}.json", JSON.stringify(old_fullModList))
     else
       logger.error(err)
+
+sortObject = (obj) ->
+  Object.keys(obj).sort().reduce ((result, key) ->
+    result[key] = obj[key]
+    result
+  ), {}
