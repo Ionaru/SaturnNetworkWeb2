@@ -63,9 +63,16 @@ app.use '/reset', require('./routes/reset')
 
 schedule = require 'node-schedule'
 solder = require './controllers/solderAPI'
-solder.checkFullModLists(['technolution', 'gates'])
-schedule.scheduleJob '* /15 * * * *', ->
-  solder.checkFullModLists(['technolution', 'gates'])
+cl = require './controllers/getChangelog'
+await(solder.writeFullModList('technolution', defer()))
+await(solder.writeFullModList('gates', defer()))
+await(cl.createChangelog('technolution', defer()))
+await(cl.createChangelog('gates', defer()))
+schedule.scheduleJob '*/60 * * * *', ->
+  await(solder.writeFullModList('technolution', defer()))
+  await(solder.writeFullModList('gates', defer()))
+  await(cl.createChangelog('technolution', defer()))
+  await(cl.createChangelog('gates', defer()))
 
 # Catch 404 and show pretty error page
 app.use (req, res) ->

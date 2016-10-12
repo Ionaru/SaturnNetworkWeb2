@@ -4,7 +4,6 @@ ftp = require('../../controllers/serverFiles')
 router = express.Router()
 
 ### GET home page. ###
-
 router.get '/', (req, res) ->
   res.render 'modpacks/technolution/main',
     title: "Technolution Advanced Modpack - Saturn Server Network"
@@ -14,8 +13,7 @@ router.get '/changelog', (req, res) ->
     title: "Technolution Advanced Changelog - Saturn Server Network"
 
 router.get '/mod_list', (req, res) ->
-  solder.getFullModList 'technolution', (err, fullModList) ->
-    res.send([err, fullModList])
+  res.send(solder.getFullModList('technolution'))
 
 router.get '/serverfiles', (req, res) ->
   ftp.getServerFiles 'technolution', (err, serverFilesList) ->

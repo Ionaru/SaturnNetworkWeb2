@@ -160,6 +160,7 @@
             </p>
             <a type="button" data-target="#mods" data-toggle="collapse" class="btn btn-primary btn-md">Show
                 Mods</a>
+          <a href="/Technolution/changelog" class="btn btn-primary btn-md">Changelog</a>
         </div>
         <div class="text-center col-sm-4">
             <h3>Server Files</h3>
@@ -190,9 +191,8 @@
         $(document).ready(function () {
             $.get("/technolution/mod_list"
             ).done(function (data) {
-                var err = data[0];
-                var modList = data[1];
-                if (!err) {
+                var modList = data;
+                if (data) {
                     var content = "";
                     content += '<p>Latest version: ' + modList['modpackVersion'] + ' for Minecraft ' + modList['minecraftVersion'] + '</p>';
                     content += '<table class="table table-hover table-responsive table-condensed sortable" style="width:100%; table-layout: fixed;">';

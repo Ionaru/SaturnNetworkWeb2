@@ -98,9 +98,10 @@
         </div>
         <div class="text-center col-sm-4">
             <h3>Mods</h3>
-            <p>Please click the buttons below to view all the mods in this modpack.</p>
+            <p>Please click the buttons below to view all the mods or the changelog for this modpack.</p>
             <!--<a target="_blank" href="gates/changelog" class="btn btn-primary btn-md disabled">Changelog</a>-->
-            <a data-target="#mods" data-toggle="collapse" class="btn btn-primary btn-md">Show Mods</a></div>
+            <a data-target="#mods" data-toggle="collapse" class="btn btn-primary btn-md">Show Mods</a>
+            <a href="/Gates/changelog" class="btn btn-primary btn-md">Changelog</a></div>
         <div class="text-center col-sm-4">
             <h3>Server Files</h3>
             <p>Want to start your own GATES server? Download the latest server files here!</p>
@@ -129,9 +130,8 @@
         $(document).ready(function () {
             $.get("/gates/mod_list"
             ).done(function (data) {
-                var err = data[0];
-                var modList = data[1];
-                if (!err) {
+                var modList = data;
+                if (data) {
                     var content = "";
                     content += '<p>Latest version: ' + modList['modpackVersion'] + ' for Minecraft ' + modList['minecraftVersion'] + '</p>';
                     content += '<table class="table table-hover table-responsive table-condensed sortable" style="width:100%; table-layout: fixed;">';

@@ -2,13 +2,16 @@ fs = require 'fs'
 now = new Date
 
 logDirs =
+  debug: "./logs/debug/"
   info: "./logs/info/"
   warn: "./logs/warning/"
   error: "./logs/error/"
 
+debugFilePath = logDirs.debug + "_plain.txt"
 logFilePath = logDirs.info + "_plain.txt"
 warnFilePath = logDirs.warn + "_plain.txt"
 errFilePath = logDirs.error + "_plain.txt"
+debugFileJSONPath = logDirs.debug + "_json.txt"
 logFileJSONPath = logDirs.info + "_json.txt"
 warnFileJSONPath = logDirs.warn + "_json.txt"
 errFileJSONPath = logDirs.error + "_json.txt"
@@ -23,10 +26,20 @@ consoleLog = new (winston.transports.Console)(
     getLogTimeStamp()
   colorize: true)
 
+fileDebug = new (require('winston-daily-rotate-file'))(
+  name: 'file#Debug'
+  datePattern: "log_yyyy-MM-dd"
+  level: 'debug'
+  prepend: true
+  timestamp: ->
+    getLogTimeStamp()
+  filename: debugFilePath
+  json: false)
+
 fileLog = new (require('winston-daily-rotate-file'))(
   name: 'file#log'
   datePattern: "log_yyyy-MM-dd"
-  level: 'info'
+  level: 'debug'
   prepend: true
   timestamp: ->
     getLogTimeStamp()
@@ -52,6 +65,15 @@ fileError = new (require('winston-daily-rotate-file'))(
     getLogTimeStamp()
   filename: errFilePath
   json: false)
+
+JsonDebug = new (require('winston-daily-rotate-file'))(
+  name: 'file#JsonDebug'
+  datePattern: "log_yyyy-MM-dd"
+  level: 'debug'
+  prepend: true
+  timestamp: ->
+    getLogTimeStamp()
+  filename: debugFileJSONPath)
 
 JsonLog = new (require('winston-daily-rotate-file'))(
   name: 'file#JsonLog'
@@ -82,8 +104,8 @@ JsonError = new (require('winston-daily-rotate-file'))(
 
 global.logger = new (winston.Logger)(transports: [
   consoleLog
-  fileLog, fileWarn, fileError
-  JsonLog, JsonWarn, JsonError
+  fileDebug, fileLog, fileWarn, fileError
+  JsonDebug, JsonLog, JsonWarn, JsonError
 ])
 
 getLogTimeStamp = ->

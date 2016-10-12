@@ -1,4 +1,4 @@
-console.log "Loaded into CoffeeScript"
+console.log "Loaded into IcedCoffeeScript"
 console.log "Starting setup"
 
 require('../controllers/logger')

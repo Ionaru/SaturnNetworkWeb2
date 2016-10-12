@@ -8,13 +8,12 @@ router.get '/', (req, res) ->
   res.render 'modpacks/gates/main',
     title: "GATES Modpack - Saturn Server Network"
 
-#router.get '/changelog', (req, res) ->
-#  res.render 'modpacks/gates/changelog',
-#    title: "GATES Changelog - Saturn Server Network"
+router.get '/changelog', (req, res) ->
+  res.render 'modpacks/gates/changelog',
+    title: "GATES Changelog - Saturn Server Network"
 
 router.get '/mod_list', (req, res) ->
-  solder.getFullModList 'gates', (err, fullModList) ->
-    res.send([err, fullModList])
+  res.send(solder.getFullModList('gates'))
 
 router.get '/serverfiles', (req, res) ->
   ftp.getServerFiles 'gates', (err, serverFilesList) ->

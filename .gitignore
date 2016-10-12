@@ -13,3 +13,4 @@ node_modules
 /logs/
 /cache/
 *.db
+changelog.hbs
