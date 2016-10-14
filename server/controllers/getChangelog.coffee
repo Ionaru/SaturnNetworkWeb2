@@ -1,6 +1,7 @@
 request = require('request')
 fs = require('fs')
 sortObj = require('sort-object')
+sort = require('alphanum-sort')
 
 exports.getChangelog = (modpack) ->
   try
@@ -28,6 +29,7 @@ exports.createChangelog = (modpack, callback) ->
   prettyName = data['display_name']
   changelog.latestVersion = data['latest']
   builds = data['builds']
+  builds = sort(builds)
   lastBuildMods = {}
   buildNr = 1
   changelogDisplay = ""
