@@ -1,3 +1,5 @@
+nodemailer = require('nodemailer')
+
 exports.sendResetPassword = (user, token, done) ->
   date = new Date().toDateString()
   emailTemplate = """
@@ -14,28 +16,29 @@ exports.sendResetPassword = (user, token, done) ->
   The Saturn Server Network<br>
   <a href="https://saturnserver.org">https://saturnserver.org</a>
   """
-  smtpConfig =
+  smtpConfig = {
     service: "Mailjet"
     auth:
       user: mailConfig['mail_user']
       pass: mailConfig['mail_pass']
     tls:
       rejectUnauthorized: false
+  }
 
-  nodemailer = require('nodemailer')
   transporter = nodemailer.createTransport(smtpConfig)
-  mailOptions =
+  mailOptions = {
     from: '"Saturn Server Network" <info@saturnserver.org>'
     to: user['user_email']
     bcc: '"Saturn Server Network" <info@saturnserver.org>'
     subject: 'Password reset request'
     html: emailTemplate
+  }
 
   # send mail with defined transport object
-  transporter.sendMail mailOptions, (error, info) ->
-    if error
-      logger.error error
-      done error
-    else
-      logger.info "Password reset mail sent to user -> #{user['user_name']} with email #{user['user_email']}"
-      done null
+  await transporter.sendMail(mailOptions, defer(err, info))
+  if err
+    logger.error(err)
+    done(err)
+  else
+    logger.info("Password reset mail sent to user -> #{user['user_name']} with email #{user['user_email']}")
+    done(null)

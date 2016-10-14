@@ -1,26 +1,26 @@
-db = require '../controllers/databaseConnector'
-pidGen = require '../controllers/pidGenerator'
-validator = require '../controllers/validationHelper'
-bcrypt = require 'bcrypt-nodejs'
+db = require('../controllers/databaseConnector')
+pidGen = require('../controllers/pidGenerator')
+validator = require('../controllers/validationHelper')
+bcrypt = require('bcrypt-nodejs')
 
 exports.create = (username, email, password, done) ->
-  pidGen.generateUniqueUserPid (err, pid) ->
-# Validate input again, just to be on the safe side
-    if validator.validateUsername(username) and validator.validatePassword(password) and validator.validateEmail(email)
-      password = bcrypt.hashSync(password)
-      values = [
-        pid
-        username
-        password
-        email
-        new Date
-      ]
-      db.get().query "INSERT INTO users (user_pid, user_name, user_password_hash, user_email, user_registerdate) VALUES(?, ?, ?, ?, ?)", values, (err, result) ->
-        if err
-          return done err
-        done null, pid
-    else
-      return done("validation_error")
+  await pidGen.generateUniqueUserPid(defer(err, pid))
+  # Validate input again, just to be on the safe side
+  if validator.validateUsername(username) and validator.validatePassword(password) and validator.validateEmail(email)
+    password = bcrypt.hashSync(password)
+    values = [
+      pid
+      username
+      password
+      email
+      new Date
+    ]
+    db.get().query "INSERT INTO users (user_pid, user_name, user_password_hash, user_email, user_registerdate) VALUES(?, ?, ?, ?, ?)", values, (err, result) ->
+      if err
+        return done err
+      done null, pid
+  else
+    return done("validation_error")
 
 exports.getColumns = (columns, order = false, done) ->
   if order
@@ -188,7 +188,7 @@ exports.getToken = (token, done) ->
 exports.deleteToken = (token, done) ->
   db.get().query "DELETE FROM tokens WHERE token = \"#{token}\"", (err, rows) ->
     if err
-#      logger.error err
+    # logger.error err
       done err
     else
       done null

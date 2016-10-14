@@ -7,18 +7,18 @@ app.locals.defaultCookieExpiry = 30 * 24 * 60 * 60 * 1000
 hbs = require('hbs')
 path = require('path')
 hbsHelperRegistrator = require('./controllers/hbsHelperRegistrator')
-app.set 'views', path.join(__dirname, 'views')
-app.set 'view engine', 'hbs'
-hbsHelperRegistrator.registerHelpers hbs
-hbs.registerPartials path.join(__dirname, 'views/partials')
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'hbs')
+hbsHelperRegistrator.registerHelpers(hbs)
+hbs.registerPartials(path.join(__dirname, 'views/partials'))
 
 # Connect to MySQL DB
-db = require './controllers/databaseConnector'
+db = require('./controllers/databaseConnector')
 db.connect (err) ->
   if err
     throw err
   else
-    logger.info "Connected to #{dbConfig['db_name']} MySQL database"
+    logger.info("Connected to #{dbConfig['db_name']} MySQL database")
 
 # Setup session storage
 session = require('express-session')
@@ -31,7 +31,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-logger.info "MySQL session storage connected to #{dbConfig['db_name']}"
+logger.info("MySQL session storage connected to #{dbConfig['db_name']}")
 
 # Setup favicon and stylesheets
 favicon = require('serve-favicon')
@@ -61,9 +61,9 @@ app.use '/reset', require('./routes/reset')
 #app.use '/profiles', require('./routes/profiles')
 #app.use '/profilemanager', require('./routes/profilemanager')
 
-schedule = require 'node-schedule'
-solder = require './controllers/solderAPI'
-cl = require './controllers/getChangelog'
+schedule = require('node-schedule')
+solder = require('./controllers/solderAPI')
+cl = require('./controllers/getChangelog')
 await(solder.writeFullModList('technolution', defer()))
 await(solder.writeFullModList('gates', defer()))
 await(cl.createChangelog('technolution', defer()))
@@ -78,22 +78,24 @@ schedule.scheduleJob '*/60 * * * *', ->
 app.use (req, res) ->
   err = new Error('Not Found')
   err.status = 404
-  res.render 'status/404'
+  res.render('status/404')
 
 # error handlers
 # development error handler
 # will print stacktrace
 if app.get('env') == 'development'
   app.use (err, req, res) ->
-    res.status err.status or 500
-    res.render 'error',
+    res.status(err.status or 500)
+    res.render('error',
       message: err.message
       error: err
+    )
 
 # production error handler
 # no stacktraces leaked to user
 app.use (err, req, res) ->
-  res.status err.status or 500
-  res.render 'error',
+  res.status(err.status or 500)
+  res.render('error',
     message: err.message
     error: {}
+  )

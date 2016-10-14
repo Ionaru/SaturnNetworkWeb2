@@ -1,4 +1,4 @@
-Client = require 'ftp'
+Client = require('ftp')
 
 exports.getServerFiles = (modpack, done) ->
   serverFiles = []

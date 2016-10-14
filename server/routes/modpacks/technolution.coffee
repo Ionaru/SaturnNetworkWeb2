@@ -1,7 +1,6 @@
-express = require('express')
+router = require('express').Router()
 solder = require('../../controllers/solderAPI')
 ftp = require('../../controllers/serverFiles')
-router = express.Router()
 
 ### GET home page. ###
 router.get '/', (req, res) ->

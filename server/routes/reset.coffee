@@ -1,5 +1,4 @@
-express = require('express')
-router = express.Router()
+router = require('express').Router()
 User = require('../models/user')
 val = require('./../controllers/validationHelper')
 Jsesc = require('jsesc')
@@ -14,23 +13,20 @@ router.get '/*', (req, res) ->
         email = user['user_email']
         User.resetPassword email, (err, newpass) ->
           if not err
-            User.deleteToken token, (err) ->
-              if not err
-                res.render 'reset',
-                  valid: true
-                  name: username
-                  new_pass: newpass
-              else
-                res.render 'reset',
-                  valid: false
+            await User.deleteToken(token, defer(err))
+            if not err
+              res.render('reset', {
+                valid: true
+                name: username
+                new_pass: newpass
+              })
+            else
+              res.render('reset', {valid: false})
           else
-            res.render 'reset',
-              valid: false
+            res.render('reset', {valid: false})
       else
-        res.render 'reset',
-          valid: false
+        res.render('reset', {valid: false})
   else
-    res.render 'reset',
-      valid: false
+    res.render('reset', {valid: false})
 
 module.exports = router

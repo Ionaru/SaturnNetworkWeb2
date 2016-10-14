@@ -1,15 +1,16 @@
 fs = require('fs')
 mysql = require('mysql')
 
-state =
+state = {
   pool: null
   mode: null
+}
 
 exports.connect = (done, customConfig=null) ->
   if customConfig
     dbOptions = customConfig
   else
-    dbOptions =
+    dbOptions = {
       host: dbConfig['db_host']
       user: dbConfig['db_user']
       password: dbConfig['db_pass']
@@ -19,9 +20,10 @@ exports.connect = (done, customConfig=null) ->
         cert: fs.readFileSync('./config/crts/' + dbConfig['db_cc_f'])
         key: fs.readFileSync('./config/crts/' + dbConfig['db_ck_f'])
         rejectUnauthorized: false
-  state.pool = mysql.createPool dbOptions
+    }
+  state.pool = mysql.createPool(dbOptions)
   done()
   return
 
 exports.get = ->
-  state.pool
+  return state.pool

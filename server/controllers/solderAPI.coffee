@@ -18,10 +18,10 @@ exports.writeFullModList = (modpack, callback) ->
   fullModList = {}
   apiLink = solderConfig['api_link']
   modpackLink = apiLink + "modpack/" + modpack
-  await(request(modpackLink, defer(err, result)))
+  await request(modpackLink, defer(err, result))
   if not err
     modpack = JSON.parse(result['body'])
-    await(request(modpackLink + "/" + modpack['latest'], defer(err, result)))
+    await request(modpackLink + "/" + modpack['latest'], defer(err, result))
     modpackVersion = JSON.parse(result['body'])
     minecraftVersion = modpackVersion['minecraft']
     versionPrefix = minecraftVersion + '_'
@@ -36,7 +36,7 @@ exports.writeFullModList = (modpack, callback) ->
     index = 0
     for mod in modsKeys
       modSelect = modsKeys[index]
-      await(request(apiLink + "mod/" + modSelect, defer(err, result)))
+      await request(apiLink + "mod/" + modSelect, defer(err, result))
       if not err
         modInfo = JSON.parse(result['body'])
         fullModList['mods'][modSelect]['pretty_name'] = modInfo['pretty_name']

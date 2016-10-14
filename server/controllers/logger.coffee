@@ -20,13 +20,14 @@ for k, logDir of logDirs
   require('mkdirp') logDir
 
 winston = require 'winston'
-consoleLog = new (winston.transports.Console)(
+consoleLog = new (winston.transports.Console)({
   level: 'info'
   timestamp: ->
     getLogTimeStamp()
-  colorize: true)
+  colorize: true
+})
 
-fileDebug = new (require('winston-daily-rotate-file'))(
+fileDebug = new (require('winston-daily-rotate-file'))({
   name: 'file#Debug'
   datePattern: "log_yyyy-MM-dd"
   level: 'debug'
@@ -34,9 +35,10 @@ fileDebug = new (require('winston-daily-rotate-file'))(
   timestamp: ->
     getLogTimeStamp()
   filename: debugFilePath
-  json: false)
+  json: false
+})
 
-fileLog = new (require('winston-daily-rotate-file'))(
+fileLog = new (require('winston-daily-rotate-file'))({
   name: 'file#log'
   datePattern: "log_yyyy-MM-dd"
   level: 'debug'
@@ -44,9 +46,10 @@ fileLog = new (require('winston-daily-rotate-file'))(
   timestamp: ->
     getLogTimeStamp()
   filename: logFilePath
-  json: false)
+  json: false
+})
 
-fileWarn = new (require('winston-daily-rotate-file'))(
+fileWarn = new (require('winston-daily-rotate-file'))({
   name: 'file#warn'
   datePattern: "log_yyyy-MM-dd"
   level: 'warn'
@@ -54,9 +57,10 @@ fileWarn = new (require('winston-daily-rotate-file'))(
   timestamp: ->
     getLogTimeStamp()
   filename: warnFilePath
-  json: false)
+  json: false
+})
 
-fileError = new (require('winston-daily-rotate-file'))(
+fileError = new (require('winston-daily-rotate-file'))({
   name: 'file#error'
   datePattern: "log_yyyy-MM-dd"
   level: 'error'
@@ -64,43 +68,48 @@ fileError = new (require('winston-daily-rotate-file'))(
   timestamp: ->
     getLogTimeStamp()
   filename: errFilePath
-  json: false)
+  json: false
+})
 
-JsonDebug = new (require('winston-daily-rotate-file'))(
+JsonDebug = new (require('winston-daily-rotate-file'))({
   name: 'file#JsonDebug'
   datePattern: "log_yyyy-MM-dd"
   level: 'debug'
   prepend: true
   timestamp: ->
     getLogTimeStamp()
-  filename: debugFileJSONPath)
+  filename: debugFileJSONPath
+})
 
-JsonLog = new (require('winston-daily-rotate-file'))(
+JsonLog = new (require('winston-daily-rotate-file'))({
   name: 'file#JsonLog'
   datePattern: "log_yyyy-MM-dd"
   level: 'info'
   prepend: true
   timestamp: ->
     getLogTimeStamp()
-  filename: logFileJSONPath)
+  filename: logFileJSONPath
+})
 
-JsonWarn = new (require('winston-daily-rotate-file'))(
+JsonWarn = new (require('winston-daily-rotate-file'))({
   name: 'file#JsonWarn'
   datePattern: "log_yyyy-MM-dd"
   level: 'warn'
   prepend: true
   timestamp: ->
     getLogTimeStamp()
-  filename: warnFileJSONPath)
+  filename: warnFileJSONPath
+})
 
-JsonError = new (require('winston-daily-rotate-file'))(
+JsonError = new (require('winston-daily-rotate-file'))({
   name: 'file#JsonError'
   datePattern: "log_yyyy-MM-dd"
   level: 'error'
   prepend: true
   timestamp: ->
     getLogTimeStamp()
-  filename: errFileJSONPath)
+  filename: errFileJSONPath
+})
 
 global.logger = new (winston.Logger)(transports: [
   consoleLog
@@ -118,6 +127,6 @@ getLogTimeStamp = ->
   second = ('0' + now.getSeconds()).slice(-2)
   date = [year, month, day].join('-')
   time = [hour, minute, second].join(':')
-  return [date, time].join ' '
+  return [date, time].join(' ')
 
-logger.info 'Logger enabled and taking over!'
+logger.info('Logger enabled and taking over!')

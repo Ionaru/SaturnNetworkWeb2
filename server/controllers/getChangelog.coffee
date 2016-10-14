@@ -1,6 +1,6 @@
-request = require 'request'
-fs = require 'fs'
-sortObj = require 'sort-object'
+request = require('request')
+fs = require('fs')
+sortObj = require('sort-object')
 
 exports.getChangelog = (modpack) ->
   try
@@ -23,7 +23,7 @@ exports.createChangelog = (modpack, callback) ->
   link = 'https://solder.saturnserver.org/index.php/api/'
   modpackLink = "#{link}modpack/#{modpack}"
   modsLink = "#{link}mod/"
-  await(request modpackLink, defer(err, resultModpack))
+  await request(modpackLink, defer(err, resultModpack))
   data = JSON.parse(resultModpack['body'])
   prettyName = data['display_name']
   changelog.latestVersion = data['latest']
@@ -31,7 +31,7 @@ exports.createChangelog = (modpack, callback) ->
   lastBuildMods = {}
   buildNr = 1
   changelogDisplay = ""
-  await(request modsLink, defer(err, resultMods))
+  await request(modsLink, defer(err, resultMods))
   modData = JSON.parse(resultMods['body'])
   dropdownDisplay = "";
   topDisplay = "<div class=\"container changelog\">
@@ -58,7 +58,7 @@ exports.createChangelog = (modpack, callback) ->
     added = {}
     changed = {}
     removed = []
-    await(request "#{modpackLink}/#{build}", defer(err, resultBuild))
+    await request("#{modpackLink}/#{build}", defer(err, resultBuild))
     buildData = JSON.parse(resultBuild['body'])
     mcVersion = buildData['minecraft']
     versionString = "#{mcVersion}_"
@@ -103,5 +103,5 @@ exports.createChangelog = (modpack, callback) ->
   changelog.changelog = changelogData
   fs.writeFileSync("./cache/changelog_#{modpack}.json", JSON.stringify(changelog))
   fs.writeFileSync("./server/views/modpacks/#{modpack}/changelog.hbs", changelogDisplay)
-  logger.debug "Successfully fetched changelog for #{prettyName}."
+  logger.debug("Successfully fetched changelog for #{prettyName}.")
   callback()

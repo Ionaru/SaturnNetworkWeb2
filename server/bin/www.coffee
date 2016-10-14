@@ -1,5 +1,5 @@
-console.log "Loaded into IcedCoffeeScript"
-console.log "Starting setup"
+console.log("Loaded into IcedCoffeeScript")
+console.log("Starting setup")
 
 require('../controllers/logger')
 require('../controllers/configLoader')
@@ -15,20 +15,20 @@ outputDirNameJS = './client/public/javascript/'
 require('mkdirp') outputDirNameStyle
 require('mkdirp') outputDirNameJS
 lessFile = fs.readFileSync(inputDirNameStyle + 'style.less', 'utf-8')
-Less = require 'less'
+Less = require('less')
 Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, output) ->
   if not e
     fs.writeFileSync(outputDirNameStyle + 'style.css', output.css)
-    CleanCSS = require 'clean-css'
+    CleanCSS = require('clean-css')
     source = fs.readFileSync(outputDirNameStyle + 'style.css', 'utf-8')
     minified = new CleanCSS().minify(source).styles
     fs.writeFileSync(outputDirNameStyle + 'style.css', minified)
-    logger.info "Client-side stylesheets ready"
+    logger.info("Client-side stylesheets ready")
 
-    Compiler = require 'coffee-script'
+    Compiler = require('iced-coffee-script-3')
     coffeeFiles = fs.readdirSync(inputDirNameJS)
     if !fs.existsSync(outputDirNameJS)
-      fs.mkdirSync outputDirNameJS
+      fs.mkdirSync(outputDirNameJS)
     fileContentJS = ""
     for file in coffeeFiles
       fileContent = fs.readFileSync(inputDirNameJS + file, 'utf-8')
@@ -39,7 +39,7 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
 #    result = UglifyJS.minify(outputDirNameJS + 'saturn.js', outSourceMap: 'saturn.js.map')
 #    fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
 #    fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
-    logger.info "Client-side javascript ready"
+    logger.info("Client-side javascript ready")
 
 
     ###
@@ -65,11 +65,11 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
       # handle specific listen errors with friendly messages
       switch error.code
         when 'EACCES'
-          logger.error bind + ' requires elevated privileges'
-          process.exit 1
+          logger.error(bind + ' requires elevated privileges')
+          process.exit(1)
         when 'EADDRINUSE'
-          logger.error bind + ' is already in use'
-          process.exit 1
+          logger.error(bind + ' is already in use')
+          process.exit(1)
         else
           throw error
       return
@@ -81,11 +81,11 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
     onListening = ->
       addr = server.address()
       bind = if typeof addr == 'string' then 'pipe ' + addr else 'port ' + addr.port
-      logger.info 'Finished setup'
-      logger.info 'Listening on ' + bind
+      logger.info('Finished setup')
+      logger.info('Listening on ' + bind)
       return
 
-    app.set 'port', port
+    app.set('port', port)
 
     ###*
     # Create HTTP server.
@@ -98,27 +98,27 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
     # Listen on provided port, on all network interfaces.
     ###
 
-    server.listen port
-    server.on 'error', onError
-    server.on 'listening', onListening
+    server.listen(port)
+    server.on('error', onError)
+    server.on('listening', onListening)
 
     exitHandler = (options, err) ->
       if options.cleanup
-        logger.warn 'Shutdown complete, goodbye!'
+        logger.warn('Shutdown complete, goodbye!')
         logger.log()
       if err
-        logger.error err.stack
+        logger.error(err.stack)
       if options.exit
-        logger.warn 'Got shutdown command, executing shutdown tasks.'
+        logger.warn('Got shutdown command, executing shutdown tasks.')
         process.exit()
       return
 
     process.stdin.resume()
     #do something when app is closing
-    process.on 'exit', exitHandler.bind(null, cleanup: true)
+    process.on('exit', exitHandler.bind(null, cleanup: true))
     #catches ctrl+c event
-    process.on 'SIGINT', exitHandler.bind(null, exit: true)
+    process.on('SIGINT', exitHandler.bind(null, exit: true))
     #catches uncaught exceptions
-    process.on 'uncaughtException', exitHandler.bind(null, exit: true)
+    process.on('uncaughtException', exitHandler.bind(null, exit: true))
   else
     throw e
