@@ -1,7 +1,9 @@
 $(document).ready ->
+# coffeelint: disable=max_line_length
   usernameRegex = /^(?!.*([_ .])\1{1})(?:[a-zA-Z0-9])([\w. ]{1,18})(?:[a-zA-Z0-9])$/
   emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   passwordRegex = /^(?!.*([_ .])\1{1})(?:[a-zA-Z0-9])([\w. @#%?!]{4,})(?:[a-zA-Z0-9!?#])$/
+  # coffeelint: enable=max_line_length
 
   loginModal = $('#loginModal')
   loginModalTitle = $('.login .modal-title')
@@ -82,15 +84,15 @@ $(document).ready ->
       forgotPasswordSubmit.addClass 'disabled'
 
   checkRegisterButton = ->
-    if registerUsername.attr('data-valid') == 'true' and registerEmail.attr('data-valid') == 'true' and registerPassword.attr('data-valid') == 'true' and registerPassword2.attr('data-valid') == 'true'
+    if (registerUsername.attr('data-valid') == 'true' and registerEmail.attr('data-valid') == 'true' and
+        registerPassword.attr('data-valid') == 'true' and registerPassword2.attr('data-valid') == 'true')
       registerButton.removeClass 'disabled'
     else
       registerButton.addClass 'disabled'
 
   checkChangeButton = ->
-    if changePasswordInputOld.attr('data-valid') == 'true' and
-      changePasswordInputNew.attr('data-valid') == 'true' and
-      changePasswordInputNew2.attr('data-valid') == 'true'
+    if changePasswordInputOld.attr('data-valid') == 'true' and changePasswordInputNew.attr('data-valid') == 'true' and
+        changePasswordInputNew2.attr('data-valid') == 'true'
       changePasswordSubmit.removeClass 'disabled'
     else
       changePasswordSubmit.addClass 'disabled'
@@ -210,7 +212,13 @@ $(document).ready ->
       loginProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
         loginProgressbar.attr 'data-transitiongoal', 100
       if success
-        loginButton.text('Continue').removeClass('btn-primary').addClass('btn-success').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
+        loginButton.text('Continue')
+        .removeClass('btn-primary')
+        .addClass('btn-success')
+        .removeClass('disabled')
+        .attr('data-dismiss', 'modal')
+        .blur()
+        .fadeIn()
         $(document).keypress (e) ->
           if e.which == 13
             loginModal.modal 'hide'
@@ -220,7 +228,14 @@ $(document).ready ->
   completeResetAttempt = (success) ->
     if success
       forgotPasswordSubmit.fadeOut ->
-        loginButton.text('Close').removeClass('btn-primary').addClass('btn-primary').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
+        loginButton
+        .text('Close')
+        .removeClass('btn-primary')
+        .addClass('btn-primary')
+        .removeClass('disabled')
+        .attr('data-dismiss', 'modal')
+        .blur()
+        .fadeIn()
         $(document).keypress (e) ->
           if e.which == 13
             loginModal.modal 'hide'
@@ -308,21 +323,21 @@ $(document).ready ->
               $.post('/login',
                 user: uLogin
                 password: uPassword).done((data) ->
-                request_finished = true
-                switch data[0]
-                  when 'valid_login'
-                    login_success = true
-                  when 'incorrect_login', 'incorrect_password'
-                    error = 'Username or password was incorrect.'
-                  when 'error_validation'
-                    error = 'The text you entered did not pass validation.'
-                  when 'hash_check_error'
-                    error = 'Your password could not be verified,\n please reset it.'
-                  else
-                    error = 'An unknown error occurred, please try again.'
-                    break
-                user = data[1]
-                continueLoginEvent()
+                  request_finished = true
+                  switch data[0]
+                    when 'valid_login'
+                      login_success = true
+                    when 'incorrect_login', 'incorrect_password'
+                      error = 'Username or password was incorrect.'
+                    when 'error_validation'
+                      error = 'The text you entered did not pass validation.'
+                    when 'hash_check_error'
+                      error = 'Your password could not be verified,\n please reset it.'
+                    else
+                      error = 'An unknown error occurred, please try again.'
+                      break
+                  user = data[1]
+                  continueLoginEvent()
               ).fail ->
                 request_finished = true
                 error = 'Login request failed.'
@@ -431,21 +446,21 @@ $(document).ready ->
               username: uUsername
               email: uEmail
               password: uPassword).done((data) ->
-              request_finished = true
-              switch data[0]
-                when 'account_created'
-                  register_success = true
-                when 'username_in_use'
-                  error = 'The name \'' + uUsername + '\' is already in use.'
-                when 'email_in_use'
-                  error = 'This email is already in use.'
-                when 'error_validation'
-                  error = 'The values you entered did not pass validation.'
-                else
-                  error = 'An unknown error occurred, please try again.'
-                  break
-              user = data[1]
-              continueRegisterEvent()
+                request_finished = true
+                switch data[0]
+                  when 'account_created'
+                    register_success = true
+                  when 'username_in_use'
+                    error = 'The name \'' + uUsername + '\' is already in use.'
+                  when 'email_in_use'
+                    error = 'This email is already in use.'
+                  when 'error_validation'
+                    error = 'The values you entered did not pass validation.'
+                  else
+                    error = 'An unknown error occurred, please try again.'
+                    break
+                user = data[1]
+                continueRegisterEvent()
             ).fail ->
               request_finished = true
               error = 'Register request failed.'
@@ -501,20 +516,20 @@ $(document).ready ->
             $.post('/change_password',
               old: uPasswordOld
               new: uPasswordNew).done((data) ->
-              request_finished = true
-              switch data
-                when 'password_changed'
-                  change_success = true
-                when 'incorrect_password'
-                  error = 'The password you entered did not match your current password'
-                when 'same_password'
-                  error = 'You didn\'t really change a lot, did you?'
-                when 'error_validation'
-                  error = 'The values you entered did not pass validation.'
-                else
-                  error = 'An unknown error occurred, please try again.'
-                  break
-              continueChangeEvent()
+                request_finished = true
+                switch data
+                  when 'password_changed'
+                    change_success = true
+                  when 'incorrect_password'
+                    error = 'The password you entered did not match your current password'
+                  when 'same_password'
+                    error = 'You didn\'t really change a lot, did you?'
+                  when 'error_validation'
+                    error = 'The values you entered did not pass validation.'
+                  else
+                    error = 'An unknown error occurred, please try again.'
+                    break
+                continueChangeEvent()
             ).fail ->
               request_finished = true
               error = 'Change request failed.'
@@ -529,7 +544,12 @@ $(document).ready ->
                 changeProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
                   changeProgressbar.attr 'data-transitiongoal', 100
                 if success
-                  changePasswordSubmit.text('Close').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
+                  changePasswordSubmit
+                  .text('Close')
+                  .removeClass('disabled')
+                  .attr('data-dismiss', 'modal')
+                  .blur()
+                  .fadeIn()
                   $(document).keypress (e) ->
                     if e.which == 13
                       changePasswordModal.modal 'hide'

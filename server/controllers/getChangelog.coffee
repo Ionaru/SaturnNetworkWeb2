@@ -34,7 +34,7 @@ exports.createChangelog = (modpack, callback) ->
   changelogDisplay = ""
   await request(modsLink, defer(err, resultMods))
   modData = JSON.parse(resultMods['body'])
-  dropdownDisplay = "";
+  dropdownDisplay = ""
   topDisplay = "<div class=\"container changelog\">
   <h2>#{prettyName} Changelog</h2>
     <div class=\"dropdown\">
@@ -49,9 +49,13 @@ exports.createChangelog = (modpack, callback) ->
   topDisplay += dropdownDisplay
   topDisplay += '</ul></div><br>
         <div class="text-right">
-        <a class="btn btn-success btn-sm btn-pad disabled mod-label">Added Mod <span class="badge">Version</span></a>
-        <a class="btn btn-primary btn-sm btn-pad disabled mod-label">Changed Mod <span class="badge">New Version</span></a>
-        <a class="btn btn-danger btn-sm btn-pad disabled mod-label">Removed Mod</a>
+            <a class="btn btn-success btn-sm btn-pad disabled mod-label">Added Mod
+                <span class="badge">Version</span>
+            </a>
+            <a class="btn btn-primary btn-sm btn-pad disabled mod-label">Changed Mod
+                <span class="badge">New Version</span>
+            </a>
+            <a class="btn btn-danger btn-sm btn-pad disabled mod-label">Removed Mod</a>
         </div>'
   changelogData = {}
   for build in builds
@@ -67,28 +71,32 @@ exports.createChangelog = (modpack, callback) ->
     for mod in buildData['mods']
       selector = modData['mods'][mod['name']]
       thisBuildMods[selector] = []
-      thisBuildMods[selector]['version'] = mod['version'].replace(versionString, "");
+      thisBuildMods[selector]['version'] = mod['version'].replace(versionString, "")
     thisBuildMods = sortObj(thisBuildMods)
     if buildNr is 1
       for mod of thisBuildMods
         added[mod] = thisBuildMods[mod]['version']
-        versionDisplay += "<a class=\"btn btn-success btn-sm btn-pad disabled mod-label\">#{mod} <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
+        versionDisplay += "<a class=\"btn btn-success btn-sm btn-pad disabled mod-label\">#{mod}
+                            <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
     else
       for mod of thisBuildMods
         if mod not of lastBuildMods
           added[mod] = thisBuildMods[mod]['version']
-          versionDisplay += "<a class=\"btn btn-success btn-sm btn-pad disabled mod-label\">#{mod} <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
+          versionDisplay += "<a class=\"btn btn-success btn-sm btn-pad disabled mod-label\">#{mod}
+                              <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
       versionDisplay += "<br>"
       for mod of thisBuildMods
         if (mod of lastBuildMods) and (lastBuildMods[mod]['version'] isnt thisBuildMods[mod]['version'])
           changed[mod] = thisBuildMods[mod]['version']
-          versionDisplay += "<a class=\"btn btn-primary btn-sm btn-pad disabled mod-label\">#{mod} <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
+          versionDisplay += "<a class=\"btn btn-primary btn-sm btn-pad disabled mod-label\">#{mod}
+                              <span class=\"badge\">#{thisBuildMods[mod]['version']}</span></a> "
       versionDisplay += "<br>"
       for mod of lastBuildMods
         if mod not of thisBuildMods
           removed.push(mod)
           versionDisplay += "<a class=\"btn btn-danger btn-sm btn-pad disabled mod-label\">#{mod}</a> "
-    versionDisplay += "<br><br><a href=\"#\" class=\"btn btn-primary btn-sm\">Back to Top <i class=\"fa fa-caret-up\"></i></a></div>"
+    versionDisplay += "<br><br><a href=\"#\" class=\"btn btn-primary btn-sm\">Back to Top
+                        <i class=\"fa fa-caret-up\"></i></a></div>"
     lastBuildMods = thisBuildMods
     buildNr++
     changelogDisplay = versionDisplay + changelogDisplay

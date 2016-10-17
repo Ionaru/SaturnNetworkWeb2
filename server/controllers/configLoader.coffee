@@ -6,7 +6,8 @@ loadConfig = (configName, allowedMissing) ->
     ini.parse(fs.readFileSync("./config/#{configName}.ini", "utf-8"))
   catch
     if allowedMissing
-      logger.warn("#{configName}.ini not found in config folder root, server might misbehave and some functions might be disabled.")
+      logger.warn("#{configName}.ini not found in config folder root,
+                   server might misbehave and some functions might be disabled.")
     else
       error = "#{configName}.ini not found in config folder root! Server cannot start."
       logger.error(error)

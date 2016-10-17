@@ -47,7 +47,8 @@ app.use express.static(path.join(__dirname, '../client/public'))
 staticGen = require('./controllers/staticGenerator')
 staticGen.generateStaticInformation(app)
 
-# Stuff all requests through the Global router first (for login, registration, cookies, permissions and things like that)
+# Stuff all requests through the Global router first
+# (for login, registration, cookies, permissions and things like that)
 app.all '/*', require('./routes/global')
 
 # Route incoming requests to the correct routes

@@ -1,6 +1,6 @@
 assert = require('assert')
 request = require('request')
-db = require '../controllers/databaseConnector'
+db = require '../../controllers/databaseConnector'
 bcrypt = require 'bcrypt-nodejs'
 
 describe 'Prologue', ->
@@ -45,7 +45,7 @@ describe 'Database', ->
 
 #TODO: More tests
 describe 'User', ->
-  user = require '../models/user'
+  user = require '../../models/user'
   testUserPid = null
   testUserName = "BILL_CIPHER"
   testUserEmail = "weirdmageddon@gravityfalls.com"

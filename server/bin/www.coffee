@@ -1,5 +1,7 @@
+# coffeelint: disable=no_debugger
 console.log("Loaded into IcedCoffeeScript")
 console.log("Starting setup")
+# coffeelint: enable=no_debugger
 
 require('../controllers/logger')
 require('../controllers/configLoader')

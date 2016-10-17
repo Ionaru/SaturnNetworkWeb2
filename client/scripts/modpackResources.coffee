@@ -3,8 +3,9 @@ window.getModList = (modpack) ->
     modList = data
     if data
       content = ''
-      content += '<p>Latest version: ' + modList['modpackVersion'] + ' for Minecraft ' + modList['minecraftVersion'] + '</p>'
-      content += '<table class="table table-hover table-responsive table-condensed sortable" style="width:100%; table-layout: fixed;">'
+      content += "<p>Latest version: #{modList['modpackVersion']} for Minecraft #{modList['minecraftVersion']}</p>"
+      content += '<table class="table table-hover table-responsive table-condensed sortable"
+                  style="width:100%; table-layout: fixed;">'
       content += '<thead>'
       content += '<tr>'
       content += '<th class="text-left">Mod Name</th>'
@@ -31,7 +32,9 @@ window.getModList = (modpack) ->
           linkType = 'GitHub'
         if mod['link'].search('forum.industrial') > -1
           linkType = 'IC2 Forum'
-        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="' + mod['link'] + '" target="_blank" rel="external"><i class="fa fa-external-link"></i> ' + linkType + '</a></td>'
+        content += '<td class="text-right">
+                    <a class="btn btn-primary btn-xs" href="' + mod['link'] + '" target="_blank" rel="external">
+                    <i class="fa fa-external-link"></i> ' + linkType + '</a></td>'
         content += '</tr>'
       content += '</tbody>'
       content += '</table>'
@@ -68,17 +71,27 @@ window.getServerFiles = (modpack) ->
           content += '<td class="text-left">' + filePackage['version'] + '</td>'
         packageSize = (filePackage['size'] / 1024 / 1024).toFixed(2)
         content += '<td class="text-left">' + packageSize + ' MB</td>'
-        content += "<td class=\"text-right\"><a class=\"btn btn-primary btn-xs\" href=\"ftp://saturnserver.org/#{modpack}/#{filePackage['name']}\"><i class=\"fa fa-download\"></i> Download</a></td>"
+        content += "<td class=\"text-right\">
+                    <a class=\"btn btn-primary btn-xs\"
+                      href=\"ftp://saturnserver.org/#{modpack}/#{filePackage['name']}\">
+                        <i class=\"fa fa-download\"></i> Download
+                    </a></td>"
         content += '</tr>'
       content += '<p class="text-right">Tip: check out these amazing projects to improve your server!<br>'
-      content += '<a target="_blank" rel="external" href="https://tcpr.ca/downloads/mcpc" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> MCPC+ (up to 1.7.2)</a> '
-      content += '<a target="_blank" rel="external" href="https://gitlab.prok.pw/KCauldron/KCauldron" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> KCauldron (1.7.10)</a> '
-      content += '<a target="_blank" rel="external" href="https://www.spongepowered.org/" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> Sponge (1.8 and up)</a></p>'
+      content += '<a target="_blank" rel="external"
+                    href="https://tcpr.ca/downloads/mcpc" class="btn btn-default btn-xs">
+                      <i class="fa fa-external-link"></i> MCPC+ (up to 1.7.2)
+                  </a> '
+      content += '<a target="_blank" rel="external" href="https://gitlab.prok.pw/KCauldron/KCauldron"
+                  class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> KCauldron (1.7.10)</a> '
+      content += '<a target="_blank" rel="external" href="https://www.spongepowered.org/"
+                  class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> Sponge (1.8 and up)</a></p>'
       content += '</tbody>'
       content += '</table>'
       $('#server-files-content').html content
     else
-      $('#server-files-content').html '<p>Unable to fetch the server files, please wait a few minutes and try again.</p>'
+      $('#server-files-content').html '<p>Unable to fetch the server files,
+                                          please wait a few minutes and try again.</p>'
     return
   ).fail ->
   $('#server-files-content').html '<p>Unable to fetch the server files, please refresh the page to try again.</p>'

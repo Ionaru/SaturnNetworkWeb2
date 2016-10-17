@@ -1,3 +1,4 @@
+# coffeelint: disable=max_line_length
 exports.validateUsername = (username) ->
   re = /^(?!.*([_ .])\1{1})(?:[a-zA-Z0-9])([\w. ]{1,18})(?:[a-zA-Z0-9])$/
   re.test(username)
@@ -25,3 +26,4 @@ exports.validateToken = (token) ->
 exports.validatePoints = (amount) ->
   re = /^[0-9]*$/
   re.test(amount)
+# coffeelint: enable=max_line_length

@@ -15,7 +15,8 @@ exports.create = (username, email, password, done) ->
       email
       new Date
     ]
-    db.get().query "INSERT INTO users (user_pid, user_name, user_password_hash, user_email, user_registerdate) VALUES(?, ?, ?, ?, ?)", values, (err, result) ->
+    db.get().query "INSERT INTO users (user_pid, user_name, user_password_hash, user_email, user_registerdate)
+                    VALUES(?, ?, ?, ?, ?)", values, (err, result) ->
       if err
         return done err
       done null, pid
@@ -77,37 +78,43 @@ exports.setEmail = (pid, email, done) ->
 exports.setPassword = (pid, password, done) ->
   if validator.validatePassword(password)
     password = bcrypt.hashSync(password)
-    db.get().query "UPDATE users SET user_password_hash = \"#{password}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
+    db.get().query "UPDATE users SET user_password_hash = \"#{password}\"
+                    WHERE user_pid = \"#{pid}\";", (err, rows) ->
       if err
         return done err
       done null, rows
 
 exports.setMC = (pid, mcName, done) ->
-  db.get().query "UPDATE users SET user_mccharacter = \"#{mcName}\" WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_mccharacter = \"#{mcName}\"
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
 
 exports.setPoints = (pid, amount, done) ->
-  db.get().query "UPDATE users SET user_points = #{amount} WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_points = #{amount}
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
 
 exports.addPoints = (pid, amount, done) ->
-  db.get().query "UPDATE users SET user_points = user_points + #{amount} WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_points = user_points + #{amount}
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
 
 exports.removePoints = (pid, amount, done) ->
-  db.get().query "UPDATE users SET user_points = user_points - #{amount} WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_points = user_points - #{amount}
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
 
 exports.toggleAdmin = (pid, done) ->
-  db.get().query "UPDATE users SET user_isadmin = IF(user_isadmin=1, 0, 1) WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_isadmin = IF(user_isadmin=1, 0, 1)
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     exports.getColumnsForPID ['user_isadmin'], pid, (err, result) ->
@@ -116,7 +123,8 @@ exports.toggleAdmin = (pid, done) ->
       done null, result['user_isadmin']
 
 exports.toggleStaff = (pid, done) ->
-  db.get().query "UPDATE users SET user_isstaff = IF(user_isstaff=1, 0, 1) WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_isstaff = IF(user_isstaff=1, 0, 1)
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     exports.getColumnsForPID ['user_isstaff'], pid, (err, result) ->
@@ -125,7 +133,8 @@ exports.toggleStaff = (pid, done) ->
       done null, result['user_isstaff']
 
 exports.deleteUser = (pid, done) ->
-  db.get().query "DELETE FROM users WHERE user_pid = \"#{pid}\";", (err, rows) ->
+  db.get().query "DELETE FROM users
+                  WHERE user_pid = \"#{pid}\";", (err, rows) ->
     if err
       return done err
     done null, rows
@@ -139,13 +148,16 @@ exports.countUsers = (done) ->
 exports.resetPassword = (email, done) ->
   newPassword = pidGen.generatePid()
   password = bcrypt.hashSync(newPassword)
-  db.get().query "UPDATE users SET user_password_hash = \"#{password}\" WHERE user_email = \"#{email}\";", (err, rows) ->
+  db.get().query "UPDATE users SET user_password_hash = \"#{password}\"
+                  WHERE user_email = \"#{email}\";", (err, rows) ->
     if err
       return done err
     done err, newPassword
 
 exports.checkPassword = (username, password, done) ->
-  db.get().query "SELECT user_pid, user_name, user_password_hash FROM users WHERE BINARY user_name = \"#{username}\" OR user_email = \"#{username}\";", (err, rows) ->
+  db.get().query "SELECT user_pid, user_name, user_password_hash FROM users
+                  WHERE BINARY user_name = \"#{username}\"
+                  OR user_email = \"#{username}\";", (err, rows) ->
     if err
       return done "incorrect_login"
     if rows.length is 0
@@ -162,7 +174,9 @@ exports.checkPassword = (username, password, done) ->
       return done "hash_check_error", null, null, e
 
 exports.createToken = (user, done) ->
-  db.get().query "DELETE FROM tokens WHERE user_name = \"#{user['user_name']}\" AND user_email = \"#{user['user_email']}\";", (err, rows) ->
+  db.get().query "DELETE FROM tokens
+                  WHERE user_name = \"#{user['user_name']}\"
+                  AND user_email = \"#{user['user_email']}\";", (err, rows) ->
     if not err
       token = pidGen.generatePid(32)
       values = [
@@ -188,7 +202,7 @@ exports.getToken = (token, done) ->
 exports.deleteToken = (token, done) ->
   db.get().query "DELETE FROM tokens WHERE token = \"#{token}\"", (err, rows) ->
     if err
-    # logger.error err
+# logger.error err
       done err
     else
       done null
