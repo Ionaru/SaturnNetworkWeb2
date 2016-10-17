@@ -15,11 +15,11 @@
         <div class="col-md-6 col-sm-12 text-left">
             <h3>Modpack Information</h3>
             <p>GATES is a modpack about the exploration of new worlds and dimensions. To help you with this, mods
-                are added that give you a wide range of weapons and technology. This will help you conquer the harsh
-                and unforgiving worlds you will encounter.</p>
+               are added that give you a wide range of weapons and technology. This will help you conquer the harsh
+               and unforgiving worlds you will encounter.</p>
             <p>In the Stargate series, some aliens were very technologically advanced, the tools they used sometimes
-                seemed magical. To simulate this, there are a number of technological mods and a few magic mods in
-                this modpack.</p>
+               seemed magical. To simulate this, there are a number of technological mods and a few magic mods in
+               this modpack.</p>
         </div>
         <div class="col-md-6 col-sm-12 text-right">
             <h3>Notable Mods</h3>
@@ -62,7 +62,7 @@
         <div class="col-lg-3 col-md-6 col-sm-6">
             <h3><span class="mdi mdi-settings" aria-hidden="true"></span> Development</h3>
             <p>The GATES Modpack is no longer in active development and will most likely not receive large updates for
-                the time being.</p>
+               the time being.</p>
         </div>
         <div class="clearfix visible-sm"></div>
         <div class="col-lg-3 col-md-6 col-sm-6">
@@ -74,14 +74,14 @@
             <h3 class="ah"><span class="fa fa-language" aria-hidden="true"></span> I can't read Ancient!</h3>
             <p class="ah">If you can not read ancient, please use
                 <a href="https://en.wikipedia.org/wiki/Ancient_%28Stargate%29">this</a>
-                page to learn it. Alternatively you can learn the secret of ascension and gain the
-                knowledge to read, speak and write ancient through this method.</p>
+                          page to learn it. Alternatively you can learn the secret of ascension and gain the
+                          knowledge to read, speak and write ancient through this method.</p>
         </div>
         <div class="clearfix visible-sm"></div>
         <div class="col-lg-3 col-md-6 col-sm-6">
             <h3><i class="fa fa-youtube"></i> Youtube</h3>
             <p>You are free to create, publish and monetise Youtube videos of the GATES Modpack, videos or pictures
-                submitted to Ionaru might be posted on this page.</p>
+               submitted to Ionaru might be posted on this page.</p>
         </div>
     </div>
 </div>
@@ -90,10 +90,15 @@
                           style="display: block; position: relative; top: -60px; visibility: hidden;"></a>
     <div class="row">
         <div class="text-center col-sm-4">
-            <h3>Installation</h3>
-            <p>Click the button below to go to the GATES page on the Technic Platform to install the modpack.</p>
+            <h3>Technic Install</h3>
+            <p>Use the link below to install the modpack.</p>
+            <div class="well" style="padding: 5px; margin-bottom: 2px;">
+                http://api.technicpack.net/modpack/gates
+            </div>
+            <a id="copyModpackLink" class="btn btn-default btn-md"><i class="fa fa-clipboard"></i>
+                <span class="btnText">Copy link</span></a>
             <a class="btn btn-primary" href="http://www.technicpack.net/modpack/gates.625315" target="_blank"
-               role="button"><i class="fa fa-external-link"></i> Technic Platform</a>
+               role="button"><i class="fa fa-external-link"></i> Technic</a>
             <a data-target="#howto" data-toggle="collapse" class="btn btn-warning btn-md">How To Install?</a>
         </div>
         <div class="text-center col-sm-4">
@@ -106,7 +111,7 @@
             <h3>Server Files</h3>
             <p>Want to start your own GATES server? Download the latest server files here!</p>
             <a data-target="#server-downloads" data-toggle="collapse" class="btn btn-primary btn-md">Server
-                Download</a>
+                                                                                                     Download</a>
         </div>
     </div>
 </div>
@@ -126,64 +131,6 @@
             <img alt="Loading" src="/images/loader.gif"/><br><br>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $.get("/gates/mod_list"
-            ).done(function (data) {
-                var modList = data;
-                if (data) {
-                    var content = "";
-                    content += '<p>Latest version: ' + modList['modpackVersion'] + ' for Minecraft ' + modList['minecraftVersion'] + '</p>';
-                    content += '<table class="table table-hover table-responsive table-condensed sortable" style="width:100%; table-layout: fixed;">';
-                    content += '<thead>';
-                    content += '<tr>';
-                    content += '<th class="text-left">Mod Name</th>';
-                    content += '<th class="text-left">Author</th>';
-                    content += '<th class="text-left">Version</th>';
-                    content += '<th class="text-right">Link</th>';
-                    content += '</tr>';
-                    content += '</thead>';
-                    content += '<tbody>';
-
-                    for (var modID in modList['mods']) {
-                        var mod = modList['mods'][modID];
-                        content += '<tr>';
-                        content += '<td class="text-left">' + modID + '</td>';
-                        content += '<td class="text-left">' + mod['author'] + '</td>';
-                        content += '<td class="text-left">' + mod['version'] + '</td>';
-                        var linkType = "Mod Website";
-                        if (mod['link'].search("minecraftforum") > -1) {
-                            linkType = 'Minecraft Forum';
-                        }
-                        if (mod['link'].search("curseforge") > -1) {
-                            linkType = 'Curse';
-                        }
-                        if (mod['link'].search("curse.com") > -1) {
-                            linkType = 'Curse';
-                        }
-                        if (mod['link'].search("github") > -1) {
-                            linkType = 'GitHub';
-                        }
-                        if (mod['link'].search("forum.industrial") > -1) {
-                            linkType = 'IC2 Forum';
-                        }
-
-                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="' + mod['link'] + '" target="_blank" rel="external"><i class="fa fa-external-link"></i> ' + linkType + '</a></td>';
-                        content += '</tr>';
-                    }
-
-                    content += '</tbody>';
-                    content += '</table>';
-                    $('#content').html(content);
-                }
-                else {
-                    $('#content').html("<p>Unable to get mod list, please wait a few minutes and try again.</p>");
-                }
-            }).fail(function () {
-                $('#content').html("<p>Unable to get mod list, please refresh the page to try again.</p>");
-            });
-        });
-    </script>
     <div class="text-center"><a href="#Buttons" data-target="#mods" data-toggle="collapse"
                                 class="btn btn-primary btn-md">Close & Go Back</a></div>
 </div>
@@ -197,55 +144,6 @@
             <img alt="Loading" src="/images/loader.gif"/><br><br>
         </div>
     </div>
-    <script>
-        $(document).ready(function () {
-            $.get("/gates/serverfiles"
-            ).done(function (data) {
-                var err = data[0];
-                var filesList = data[1];
-                if (!err) {
-                    var content = "";
-                    content += '<table class="table table-hover" style="width:100%; table-layout: fixed;">';
-                    content += '<thead>';
-                    content += '<tr>';
-                    content += '<th class="text-left">Version</th>';
-                    content += '<th class="text-left">Package size</th>';
-                    content += '<th class="text-right">Download</th>';
-                    content += '</tr>';
-                    content += '</thead>';
-                    content += '<tbody>';
-                    for (var packageID in filesList) {
-                        var filePackage = filesList[packageID];
-                        if (packageID == 0) {
-                            content += '<tr class="success">';
-                            content += '<td class="text-left">' + filePackage['version'] + ' - Latest</td>';
-                        }
-                        else {
-                            content += '<tr>';
-                            content += '<td class="text-left">' + filePackage['version'] + '</td>';
-                        }
-                        var packageSize = ((filePackage['size'] / 1024) / 1024).toFixed(2);
-                        content += '<td class="text-left">' + packageSize + ' MB</td>';
-
-                        content += '<td class="text-right"><a class="btn btn-primary btn-xs" href="ftp://saturnserver.org/gates/' + filePackage['name'] + '"><i class="fa fa-download"></i> Download</a></td>';
-                        content += '</tr>';
-                    }
-                    content += '<p class="text-right">Tip: check out these amazing projects to improve your server!<br>';
-                    content += '<a target="_blank" rel="external" href="https://tcpr.ca/downloads/mcpc" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> MCPC+ (up to 1.7.2)</a> ';
-                    content += '<a target="_blank" rel="external" href="https://gitlab.prok.pw/KCauldron/KCauldron" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> KCauldron (1.7.10)</a> ';
-                    content += '<a target="_blank" rel="external" href="https://www.spongepowered.org/" class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> Sponge (1.8 and up)</a></p>';
-                    content += '</tbody>';
-                    content += '</table>';
-                    $('#server-files-content').html(content);
-                }
-                else {
-                    $('#server-files-content').html("<p>Unable to fetch the server files, please wait a few minutes and try again.</p>");
-                }
-            }).fail(function () {
-                $('#server-files-content').html("<p>Unable to fetch the server files, please refresh the page to try again.</p>");
-            });
-        });
-    </script>
     <div class="text-center"><a data-target="#server-downloads" data-toggle="collapse"
                                 class="btn btn-primary btn-md">Close</a></div>
 </div>
@@ -286,3 +184,12 @@
         </div>
     </div>
 </section>
+<script>
+    $(document).ready(function () {
+        getModList("gates");
+        getServerFiles("gates");
+        $('#copyModpackLink').click(function () {
+            copyTextToClipboard('http://api.technicpack.net/modpack/gates');
+        });
+    });
+</script>

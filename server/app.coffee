@@ -24,13 +24,13 @@ db.connect (err) ->
 session = require('express-session')
 MySQLStore = require('express-mysql-session')(session)
 sessionStore = new MySQLStore({}, db.get())
-app.use(session({
+app.use session({
   key: mainConfig['session_key'],
   secret: mainConfig['session_secret'],
   store: sessionStore,
   resave: true,
   saveUninitialized: true
-}));
+})
 logger.info("MySQL session storage connected to #{dbConfig['db_name']}")
 
 # Setup favicon and stylesheets

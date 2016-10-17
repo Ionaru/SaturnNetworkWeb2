@@ -103,6 +103,6 @@ exports.createChangelog = (modpack, callback) ->
   changelog.time = new Date().getTime()
   changelog.changelog = changelogData
   fs.writeFileSync("./cache/changelog_#{modpack}.json", JSON.stringify(changelog))
-  fs.writeFileSync("./server/views/modpacks/#{modpack}/changelog.hbs", changelogDisplay)
+  fs.writeFileSync("./client/views/modpacks/#{modpack}/changelog.hbs", changelogDisplay)
   logger.debug("Successfully fetched changelog for #{prettyName}.")
   callback()
