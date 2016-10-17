@@ -89,8 +89,8 @@ $(document).ready ->
 
   checkChangeButton = ->
     if changePasswordInputOld.attr('data-valid') == 'true' and
-       changePasswordInputNew.attr('data-valid') == 'true' and
-       changePasswordInputNew2.attr('data-valid') == 'true'
+      changePasswordInputNew.attr('data-valid') == 'true' and
+      changePasswordInputNew2.attr('data-valid') == 'true'
       changePasswordSubmit.removeClass 'disabled'
     else
       changePasswordSubmit.addClass 'disabled'
@@ -558,11 +558,14 @@ $(document).ready ->
                   completeChangeAttempt false
 
 
-
   # Events for the login modal
   # Trigger on open event of modal
   loginModal.on 'shown.bs.modal', ->
 # Check the input values in case the browser already filled them in
+    if loginUsername.val().length is 0
+      loginUsername.focus()
+    else
+      loginPassword.focus()
     checkUsername()
     checkPassword()
 
@@ -576,6 +579,7 @@ $(document).ready ->
   # Trigger on open event of modal
   registerModal.on 'shown.bs.modal', ->
 # Check the input values in case the browser already filled them in
+    registerUsername.focus()
     checkRegisterUsername()
     checkRegisterEmail()
     checkRegisterPasswords registerPassword
