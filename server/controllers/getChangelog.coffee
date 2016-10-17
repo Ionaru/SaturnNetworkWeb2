@@ -16,7 +16,7 @@ exports.createChangelog = (modpack, callback) ->
   require('mkdirp').sync "./cache/", (err) ->
     logger.info("creating ./cache/")
   changelog = {
-    time: ""
+    time: 0
     latestVersion: ""
     changelog: {}
   }
