@@ -7,10 +7,10 @@ app.locals.defaultCookieExpiry = 30 * 24 * 60 * 60 * 1000
 hbs = require('hbs')
 path = require('path')
 hbsHelperRegistrator = require('./controllers/hbsHelperRegistrator')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, '../client/views'))
 app.set('view engine', 'hbs')
 hbsHelperRegistrator.registerHelpers(hbs)
-hbs.registerPartials(path.join(__dirname, 'views/partials'))
+hbs.registerPartials(path.join(__dirname, '../client/views/partials'))
 
 # Connect to MySQL DB
 db = require('./controllers/databaseConnector')
