@@ -14,7 +14,7 @@ loadConfig = (configName, allowedMissing) ->
       throw error
 
 global.mainConfig = loadConfig('config')
-global.dbConfig = loadConfig('database')
+global.dbConfig = if process.env.TESTMODE then loadConfig('database_test') else loadConfig('database')
 global.mailConfig = loadConfig('mail', true)
 global.solderConfig = loadConfig('solder', true)
 global.projectDir = __dirname

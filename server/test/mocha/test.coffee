@@ -1,7 +1,7 @@
 assert = require('assert')
-request = require('request')
-db = require '../../controllers/databaseConnector'
-bcrypt = require 'bcrypt-nodejs'
+request = require('supertest')
+db = require('../../controllers/databaseConnector')
+bcrypt = require('bcrypt-nodejs')
 
 describe 'Prologue', ->
   describe 'First test, ensure Mocha is working.', ->
@@ -14,28 +14,14 @@ describe 'Prologue', ->
       new Promise (resolve) ->
         assert.ok(true)
         resolve()
+  describe 'Start server', ->
+    process.env['TESTMODE'] = true
+    process.env['SILENT'] = true
+    process.env['PORT'] = 3001
+    require('../../bin/www')
 
-#TODO: Database rollbacks
 describe 'Database', ->
   describe 'Create connection to test database', ->
-    it 'should connect without issue', (done) ->
-      fs = require 'fs'
-      ini = require('ini')
-      dbConfig = ini.parse fs.readFileSync("./config/database.ini", "utf-8")
-      dbOptions = {
-        host: dbConfig['db_host']
-        user: dbConfig['db_user']
-        password: dbConfig['db_pass']
-        database: dbConfig['db_name'] + "_test"
-        ssl:
-          ca: fs.readFileSync('./config/crts/' + dbConfig['db_ca_f'])
-          cert: fs.readFileSync('./config/crts/' + dbConfig['db_cc_f'])
-          key: fs.readFileSync('./config/crts/' + dbConfig['db_ck_f'])
-          rejectUnauthorized: false
-      }
-      db.connect ((err) ->
-        if err then throw err else done()
-      ), dbOptions
     it 'should be able to get the current db session', (done) ->
       assert.notEqual(db.get(), null)
       done()
@@ -45,7 +31,7 @@ describe 'Database', ->
 
 #TODO: More tests
 describe 'User', ->
-  user = require '../../models/user'
+  User = require '../../models/user'
   testUserPid = null
   testUserName = "BILL_CIPHER"
   testUserEmail = "weirdmageddon@gravityfalls.com"
@@ -65,94 +51,105 @@ describe 'User', ->
     it 'can\'t create User with too long password'
 
     it 'can create a User without error', (done) ->
-      await user.create(testUserName, testUserEmail, testUserPassword, defer(err, result))
+      await User.create(testUserName, testUserEmail, testUserPassword, defer(err, result))
       assert.equal(err, null)
       testUserPid = result
       done()
     it 'can find newly created User by PID', (done) ->
-      await user.getByUserPID(testUserPid, defer(err, result))
+      await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_name'], testUserName)
       assert.equal(result['user_email'], testUserEmail)
       done()
     it 'can find newly created User by Name', (done) ->
-      await user.getByUserName(testUserName, defer(err, result))
+      await User.getByUserName(testUserName, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_email'], testUserEmail)
       done()
     it 'can find newly created User by Email', (done) ->
-      await user.getByUserEmail(testUserEmail, defer(err, result))
+      await User.getByUserEmail(testUserEmail, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserName)
       done()
     it 'can\'t create a User with the same name', (done) ->
-      await user.create(testUserName, "2" + testUserEmail, testUserPassword, defer(err, result))
+      await User.create(testUserName, "2" + testUserEmail, testUserPassword, defer(err, result))
       assert.equal(err.code, "ER_DUP_ENTRY")
       done()
     it 'can\'t create a User with the same email', (done) ->
-      await user.create(testUserName + "2", testUserEmail, testUserPassword, defer(err, result))
+      await User.create(testUserName + "2", testUserEmail, testUserPassword, defer(err, result))
       assert.equal(err.code, "ER_DUP_ENTRY")
       done()
+
+    testUser = {
+      username: "User123",
+      email: "mailmail@mail.com",
+      password: "passwordddddddddd5"
+    }
+    request = request('http://localhost:3001');
+    it 'can create a User through a request', ->
+      request.post('/register').send(testUser).expect((res, err) ->
+        assert.equal(res.body[0], 'account_created')
+      )
 
   describe 'Modify', ->
     testUserNameNew = "BILLCIPHER5000"
     testUserEmailNew = "bill@gnomesrule.com"
     testUserPasswordNew = "99Password99"
     it 'can change a username', (done) ->
-      await user.setName(testUserPid, testUserNameNew, defer(err, result))
+      await User.setName(testUserPid, testUserNameNew, defer(err, result))
       assert.equal(err, null)
-      await user.getByUserPID(testUserPid, defer(err, result))
+      await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserNameNew)
       assert.equal(result['user_email'], testUserEmail)
-      await user.getByUserName(testUserNameNew, defer(err, result))
+      await User.getByUserName(testUserNameNew, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserNameNew)
       assert.equal(result['user_email'], testUserEmail)
       done()
     it 'can change an email address', (done) ->
-      await user.setEmail(testUserPid, testUserEmailNew, defer(err, result))
+      await User.setEmail(testUserPid, testUserEmailNew, defer(err, result))
       assert.equal(err, null)
-      await user.getByUserPID(testUserPid, defer(err, result))
+      await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserNameNew)
       assert.equal(result['user_email'], testUserEmailNew)
-      await user.getByUserName(testUserNameNew, defer(err, result))
+      await User.getByUserName(testUserNameNew, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserNameNew)
       assert.equal(result['user_email'], testUserEmailNew)
       done()
     it 'can change a password', (done) ->
-      await user.setPassword(testUserPid, testUserPasswordNew, defer(err, result))
+      await User.setPassword(testUserPid, testUserPasswordNew, defer(err, result))
       assert.equal(err, null)
-      await user.getByUserPID(testUserPid, defer(err, result))
+      await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(true, bcrypt.compareSync(testUserPasswordNew, result['user_password_hash']))
       done()
     after ->
-      await user.setName(testUserPid, testUserName, defer(err, result))
-      await user.setEmail(testUserPid, testUserEmail, defer(err, result))
-      await user.setPassword(testUserPid, testUserPassword, defer(err, result))
+      await User.setName(testUserPid, testUserName, defer(err, result))
+      await User.setEmail(testUserPid, testUserEmail, defer(err, result))
+      await User.setPassword(testUserPid, testUserPassword, defer(err, result))
 
   describe 'Delete', ->
     it 'can delete a non-existing User, but it will affect nothing', (done) ->
-      await user.deleteUser("AAA12345BB", defer(err, result))
+      await User.deleteUser("AAA12345BB", defer(err, result))
       assert.equal(err, null)
       assert.equal(result.affectedRows, 0)
       done()
     it 'can delete a User without error', (done) ->
-      await user.deleteUser(testUserPid, defer(err, result))
+      await User.deleteUser(testUserPid, defer(err, result))
       assert.equal(err, null)
       done()
     it 'deleted User should no longer exist', (done) ->
-      await user.getByUserPID(testUserPid, defer(err, result))
+      await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result, undefined)
       done()

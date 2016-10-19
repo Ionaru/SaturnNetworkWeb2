@@ -4,6 +4,7 @@
 /client/public/javascript/*
 /npm-debug.log
 /config/database.ini
+/config/database_test.ini
 /config/mail.ini
 /config/config.ini
 /config/solder.ini

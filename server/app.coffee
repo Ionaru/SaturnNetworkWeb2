@@ -100,3 +100,4 @@ app.use (err, req, res) ->
     message: err.message
     error: {}
   )
+return app

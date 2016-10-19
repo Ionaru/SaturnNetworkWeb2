@@ -111,11 +111,15 @@ JsonError = new (require('winston-daily-rotate-file'))({
   filename: errFileJSONPath
 })
 
-global.logger = new (winston.Logger)(transports: [
-  consoleLog
-  fileDebug, fileLog, fileWarn, fileError
-  JsonDebug, JsonLog, JsonWarn, JsonError
-])
+transports = []
+if not process.env.SILENT
+  transports = [
+    consoleLog
+    fileDebug, fileLog, fileWarn, fileError
+    JsonDebug, JsonLog, JsonWarn, JsonError
+  ]
+
+global.logger = new (winston.Logger)(transports: transports)
 
 getLogTimeStamp = ->
   now = new Date

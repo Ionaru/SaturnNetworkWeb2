@@ -1,6 +1,7 @@
 # coffeelint: disable=no_debugger
-console.log("Loaded into IcedCoffeeScript")
-console.log("Starting setup")
+if not process.env.SILENT
+  console.log("Loaded into IcedCoffeeScript")
+  console.log("Starting setup")
 # coffeelint: enable=no_debugger
 
 require('../controllers/logger')
@@ -37,10 +38,10 @@ Less.render lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, (e, ou
       fileContentJS += Compiler.compile(fileContent)
 
     fs.writeFileSync(outputDirNameJS + 'saturn.js', fileContentJS)
-#    UglifyJS = require 'uglify-js'
-#    result = UglifyJS.minify(outputDirNameJS + 'saturn.js', outSourceMap: 'saturn.js.map')
-#    fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
-#    fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
+    #    UglifyJS = require 'uglify-js'
+    #    result = UglifyJS.minify(outputDirNameJS + 'saturn.js', outSourceMap: 'saturn.js.map')
+    #    fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
+    #    fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
     logger.info("Client-side javascript ready")
 
 
