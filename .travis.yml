@@ -1,10 +1,14 @@
 language: node_js
 node_js:
-  - "6"
-  - "5"
-  - "4.2.6"
+- '6'
+- '5'
+- 4.2.6
+before_install:
+- openssl aes-256-cbc -K $encrypted_d6da8abbdec3_key -iv $encrypted_d6da8abbdec3_iv
+  -in travis.tar.enc -out travis.tar -d
+- tar xvf travis.tar
 install:
-  - npm install
+- npm install
 script:
-  - npm run "Test lint"
-  - npm run "Test mocha"
+- npm run "Test lint"
+- npm run "Test mocha"
