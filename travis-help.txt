@@ -1,0 +1,5 @@
+$ travis login --pro
+$ tar cvf travis.tar ./config/config_test.ini ./config/database_test.ini ./config/solder_test.ini ./config/mail_test.ini ./config/crts/ca.pem ./config/crts/clientcert.pem ./config/crts/clientkey.pem
+$ travis encrypt-file travis.tar --add
+$ git add travis.tar.enc
+$ rm travis.tar
