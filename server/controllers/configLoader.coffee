@@ -13,9 +13,15 @@ loadConfig = (configName, allowedMissing) ->
       logger.error(error)
       throw error
 
-global.mainConfig = loadConfig('config')
-global.dbConfig = if process.env.TESTMODE then loadConfig('database_test') else loadConfig('database')
-global.mailConfig = loadConfig('mail', true)
-global.solderConfig = loadConfig('solder', true)
+if not process.env.TRAVIS
+  global.mainConfig = loadConfig('config')
+  global.dbConfig = if process.env.TESTMODE then loadConfig('database_test') else loadConfig('database')
+  global.mailConfig = loadConfig('mail', true)
+  global.solderConfig = loadConfig('solder', true)
+else
+  global.mainConfig = process.env.MAINCONFIG
+  global.dbConfig = process.env.DBCONFIG
+  global.mailConfig = process.env.MAILCONFIG
+  global.solderConfig = process.env.SOLDERCONFIG
 global.projectDir = __dirname
 logger.info("Configuration loaded")

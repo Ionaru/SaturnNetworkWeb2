@@ -2,6 +2,9 @@ assert = require('assert')
 request = require('supertest')
 db = require('../../controllers/databaseConnector')
 bcrypt = require('bcrypt-nodejs')
+request = request('http://localhost:3001')
+
+db_suffix = "_test"
 
 describe 'Prologue', ->
   describe 'First test, ensure Mocha is working.', ->
@@ -15,19 +18,38 @@ describe 'Prologue', ->
         assert.ok(true)
         resolve()
   describe 'Start server', ->
-    process.env['TESTMODE'] = true
-    process.env['SILENT'] = true
-    process.env['PORT'] = 3001
-    require('../../bin/www')
+    it 'should start the application', ->
+      process.env['TESTMODE'] = process.env['SILENT'] = true
+      process.env['PORT'] = 3001
+      require('../../bin/www')
 
 describe 'Database', ->
   describe 'Create connection to test database', ->
     it 'should be able to get the current db session', (done) ->
       assert.notEqual(db.get(), null)
       done()
-    it 'should be able to clear the test database', (done) ->
+    it "should be connected to a test database (ending with \"#{db_suffix}\")", (done) ->
+      db.get().query "SELECT DATABASE()", (err, rows) ->
+        result = rows[0]['DATABASE()']
+        assert.equal(err, null)
+        re = new RegExp("#{db_suffix}$")
+        assert.ok(re.test(result))
+        if not re.test(result)
+          process.exit(1)
+        else
+          done()
+    it 'should be able to clear the \'users\' table in the test database', (done) ->
       await db.get().query("TRUNCATE TABLE `users`;", defer(err, rows))
-      if err then throw err else done()
+      assert.equal(err, null)
+      done()
+    it 'should be able to clear the \'tokens\' table in the test database', (done) ->
+      await db.get().query("TRUNCATE TABLE `tokens`;", defer(err, rows))
+      assert.equal(err, null)
+      done()
+    it 'should be able to clear the \'sessions\' table in the test database', (done) ->
+      await db.get().query("TRUNCATE TABLE `sessions`;", defer(err, rows))
+      assert.equal(err, null)
+      done()
 
 #TODO: More tests
 describe 'User', ->
@@ -50,17 +72,21 @@ describe 'User', ->
     it 'can\'t create User with too short password'
     it 'can\'t create User with too long password'
 
-    it 'can create a User without error', (done) ->
-      await User.create(testUserName, testUserEmail, testUserPassword, defer(err, result))
-      assert.equal(err, null)
-      testUserPid = result
-      done()
-    it 'can find newly created User by PID', (done) ->
-      await User.getByUserPID(testUserPid, defer(err, result))
-      assert.equal(err, null)
-      assert.equal(result['user_name'], testUserName)
-      assert.equal(result['user_email'], testUserEmail)
-      done()
+    it 'can create a User without error', ->
+      request.post('/register')
+      .send({username: testUserName, email: testUserEmail, password: testUserPassword})
+      .expect((res) ->
+        message = res.body[0]
+        user = res.body[1]
+        assert.equal(message, 'account_created')
+        assert.equal(user['username'], testUserName)
+        assert.equal(user['email'], testUserEmail)
+        assert.equal(user['points'], 0)
+        assert.equal(user['isStaff'], 0)
+        assert.equal(user['isAdmin'], 0)
+        assert.equal(user['login'], true)
+        testUserPid = user['pid']
+      )
     it 'can find newly created User by Name', (done) ->
       await User.getByUserName(testUserName, defer(err, result))
       assert.equal(err, null)
@@ -73,6 +99,12 @@ describe 'User', ->
       assert.equal(result['user_pid'], testUserPid)
       assert.equal(result['user_name'], testUserName)
       done()
+    it 'can find newly created User by PID', (done) ->
+      await User.getByUserPID(testUserPid, defer(err, result))
+      assert.equal(err, null)
+      assert.equal(result['user_name'], testUserName)
+      assert.equal(result['user_email'], testUserEmail)
+      done()
     it 'can\'t create a User with the same name', (done) ->
       await User.create(testUserName, "2" + testUserEmail, testUserPassword, defer(err, result))
       assert.equal(err.code, "ER_DUP_ENTRY")
@@ -81,17 +113,6 @@ describe 'User', ->
       await User.create(testUserName + "2", testUserEmail, testUserPassword, defer(err, result))
       assert.equal(err.code, "ER_DUP_ENTRY")
       done()
-
-    testUser = {
-      username: "User123",
-      email: "mailmail@mail.com",
-      password: "passwordddddddddd5"
-    }
-    request = request('http://localhost:3001');
-    it 'can create a User through a request', ->
-      request.post('/register').send(testUser).expect((res, err) ->
-        assert.equal(res.body[0], 'account_created')
-      )
 
   describe 'Modify', ->
     testUserNameNew = "BILLCIPHER5000"
