@@ -3,7 +3,10 @@ ini = require('ini')
 
 loadConfig = (configName, allowedMissing) ->
   try
-    ini.parse(fs.readFileSync("./config/#{configName}.ini", "utf-8"))
+    if process.env.TESTMODE
+      ini.parse(fs.readFileSync("./config/#{configName}_test.ini", "utf-8"))
+    else
+      ini.parse(fs.readFileSync("./config/#{configName}.ini", "utf-8"))
   catch
     if allowedMissing
       logger.warn("#{configName}.ini not found in config folder root,
@@ -14,7 +17,7 @@ loadConfig = (configName, allowedMissing) ->
       throw error
 
 global.mainConfig = loadConfig('config')
-global.dbConfig = if process.env.TESTMODE then loadConfig('database_test') else loadConfig('database')
+global.dbConfig = loadConfig('database')
 global.mailConfig = loadConfig('mail', true)
 global.solderConfig = loadConfig('solder', true)
 global.projectDir = __dirname
