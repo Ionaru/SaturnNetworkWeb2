@@ -21,3 +21,9 @@ exports.registerHelpers = (hbs) ->
         return if v1 or v2 then options.fn(this) else options.inverse(this)
       else
         return options.inverse(this)
+
+  hbs.registerHelper 'withItem', (object, options) ->
+    return options.fn object[options.hash.key]
+
+  hbs.registerHelper 'len', (json) ->
+    Object.keys(json).length

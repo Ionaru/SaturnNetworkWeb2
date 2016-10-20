@@ -1,5 +1,6 @@
 router = require('express').Router()
 solder = require('../../controllers/solderAPI')
+changelog = require('../../controllers/getChangelog')
 ftp = require('../../controllers/serverFiles')
 
 ### GET home page. ###
@@ -8,8 +9,10 @@ router.get '/', (req, res) ->
     title: "GATES Modpack - Saturn Server Network"
 
 router.get '/changelog', (req, res) ->
+  log = changelog.getChangelog('gates')
   res.render 'modpacks/gates/changelog',
     title: "GATES Changelog - Saturn Server Network"
+    changelog: log
 
 router.get '/mod_list', (req, res) ->
   res.send(solder.getFullModList('gates'))

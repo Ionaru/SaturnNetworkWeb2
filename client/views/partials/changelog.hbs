@@ -1,0 +1,47 @@
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle btn-primary btn-sm"
+            type="button" id="dropdownMenu\" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Choose a Version <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        {{#each changelog.builds}}
+            <li><a href="#{{this}}">{{this}}</a></li>
+        {{/each}}
+    </ul>
+</div>
+<br>
+<div class="text-right">
+    <a class="btn btn-success btn-sm btn-pad disabled mod-label">Added Mod
+        <span class="badge">Version</span>
+    </a>
+    <a class="btn btn-primary btn-sm btn-pad disabled mod-label">Changed Mod
+        <span class="badge">New Version</span>
+    </a>
+    <a class="btn btn-danger btn-sm btn-pad disabled mod-label">Removed Mod</a>
+</div>
+{{#each changelog.builds}}
+    <hr>
+    <div><h3>{{this}}</h3><a class="anchor" id="{{this}}"></a>
+    {{#withItem ../changelog.changelog key=this}}
+        {{#each this.added}}
+                <a class="btn btn-success btn-sm btn-pad disabled mod-label">{{@key}}
+                    <span class="badge">{{this}}</span></a>
+        {{/each}}
+        {{#ifCond (len this.added) 'and' (len this.changed)}}
+                <br>
+        {{/ifCond}}
+        {{#each this.changed}}
+                <a class="btn btn-primary btn-sm btn-pad disabled mod-label">{{@key}}
+                    <span class="badge">{{this}}</span></a>
+        {{/each}}
+        {{#ifCond (len this.changed) 'and' this.removed.length}}
+                <br>
+        {{/ifCond}}
+        {{#each this.removed}}
+                <a class="btn btn-danger btn-sm btn-pad disabled mod-label">{{this}}</a>
+        {{/each}}
+            <br><br><a href="#" class="btn btn-primary btn-sm">Back to Top
+            <i class="fa fa-caret-up"></i></a>
+    {{/withItem}}
+{{/each}}
+</div>
