@@ -76,7 +76,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {{#if user.login}}
-                            <li><a href="/profile">My profile</a></li>
+                            <li><a onclick="getProfile('{{user.pid}}');">My profile</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" data-toggle="modal" data-target="#passwordModal">Change password</a></li>
                             <li role="separator" class="divider"></li>

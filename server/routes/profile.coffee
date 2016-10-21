@@ -5,7 +5,9 @@ router.get '/', (req, res) ->
   if req.session.user.login
     await User.getColumnsForPID(['*'], req.session.user.pid, defer(err, result))
     if not err
-      res.render('profile', {profile: result})
+      delete result['user_id']
+      delete result['user_password_hash']
+      res.send(result)
     else
       res.render('status/404')
   else
@@ -18,7 +20,9 @@ router.get '/*', (req, res) ->
     if not err
       if result
         if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
-          res.render('profile', {profile: result})
+          delete result['user_id']
+          delete result['user_password_hash']
+          res.send(result)
         else
           res.render('status/404')
       else
@@ -26,7 +30,9 @@ router.get '/*', (req, res) ->
         if not err
           if result
             if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
-              res.render('profile', {profile: result})
+              delete result['user_id']
+              delete result['user_password_hash']
+              res.send(result)
             else
               res.render('status/404')
           else
@@ -34,7 +40,9 @@ router.get '/*', (req, res) ->
             if not err
               if result
                 if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
-                  res.render('profile', {profile: result})
+                  delete result['user_id']
+                  delete result['user_password_hash']
+                  res.send(result)
                 else
                   res.render('status/404')
               else

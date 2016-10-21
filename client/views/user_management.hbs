@@ -69,8 +69,8 @@
                         <li role="presentation" class="dropdown-header">{{this.user_name}}</li>
                         <li role="presentation" class="divider"></li>
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" target="_blank"
-                               href="/user/{{this.user_name}}">View profile</a></li>
+                            <a role="menuitem" tabindex="-1" onclick="getProfile('{{this.user_pid}}');">View profile</a>
+                        </li>
                         <li role="presentation" class="disabled">
                             <a role="menuitem" tabindex="-1" href="#">Reset Password</a>
                         </li>
