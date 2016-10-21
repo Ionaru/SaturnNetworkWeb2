@@ -212,6 +212,52 @@ describe 'User interactions', ->
         message = res.body[0]
         assert.equal(message, 'incorrect_login')
       )
+  describe 'User profile', ->
+    it 'can fetch its own profile by name', ->
+      request.post('/login')
+      .send({user: testUserEmail, password: testUserPassword})
+      .expect((res) ->
+        message = res.body[0]
+        assert.equal(message, 'valid_login')
+        request.get("/profile/#{testUserName}")
+        .expect((res) ->
+          console.log res
+          message = res.body[0]
+          assert.equal(message['user_pid'], testUserPid)
+          assert.equal(message['user_name'], testUserName)
+          assert.equal(message['user_email'], testUserEmail)
+        )
+      )
+    it 'can fetch its own profile by email', ->
+      request.post('/login')
+      .send({user: testUserEmail, password: testUserPassword})
+      .expect((res) ->
+        message = res.body[0]
+        assert.equal(message, 'valid_login')
+        request.get("/profile/#{testUserEmail}")
+        .expect((res) ->
+          console.log res
+          message = res.body[0]
+          assert.equal(message['user_pid'], testUserPid)
+          assert.equal(message['user_name'], testUserName)
+          assert.equal(message['user_email'], testUserEmail)
+        )
+      )
+    it 'can fetch its own profile by PID', ->
+      request.post('/login')
+      .send({user: testUserEmail, password: testUserPassword})
+      .expect((res) ->
+        message = res.body[0]
+        assert.equal(message, 'valid_login')
+        request.get("/profile/#{testUserPid}")
+        .expect((res) ->
+          console.log res
+          message = res.body[0]
+          assert.equal(message['user_pid'], testUserPid)
+          assert.equal(message['user_name'], testUserName)
+          assert.equal(message['user_email'], testUserEmail)
+        )
+      )
 
   describe 'Modify the User', ->
     testUserNameNew = "BILLCIPHER5000"
@@ -280,7 +326,7 @@ describe 'User interactions', ->
       assert.equal(err, null)
       done()
 
-    it 'deleted User should no longer exist', (done) ->
+    it 'should no longer exist after deletion', (done) ->
       await User.getByUserPID(testUserPid, defer(err, result))
       assert.equal(err, null)
       assert.equal(result, undefined)
