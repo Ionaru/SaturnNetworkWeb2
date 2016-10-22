@@ -53,7 +53,11 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{#if user.login}}
-                    <li><a class="navbar-info">{{user.points}} points</a></li>
+                    {{#ifCond user.points 'is' 1}}
+                        <li><a class="navbar-info">{{user.points}} point</a></li>
+                    {{else}}
+                        <li><a class="navbar-info">{{user.points}} points</a></li>
+                    {{/ifCond}}
                 {{/if}}
                 {{#ifCond user.login 'and' user.isAdmin}}
                     <li class="dropdown">
@@ -76,7 +80,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {{#if user.login}}
-                            <li><a onclick="getProfile('{{user.pid}}');">My profile</a></li>
+                            <li><a href="#" onclick="getProfile('{{user.pid}}');">My profile</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" data-toggle="modal" data-target="#passwordModal">Change password</a></li>
                             <li role="separator" class="divider"></li>
