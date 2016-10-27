@@ -25,7 +25,7 @@ describe 'Prologue', ->
   describe 'Start server', ->
 
     it 'should start the application', ->
-      this.timeout(5000);
+      this.timeout(5000)
       process.env['TESTMODE'] = process.env['SILENT'] = true
       process.env['PORT'] = 3001
       require('../../bin/www')
