@@ -21,7 +21,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
-                        Mods <span class="caret"></span>
+                        Mods <i class="mdi mdi-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2151712"
@@ -31,7 +31,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
-                        Modpacks <span class="caret"></span>
+                        Modpacks <i class="mdi mdi-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="/Gates">Gates</a></li>
@@ -44,7 +44,7 @@
                 <!--<li class="dropdown">-->
                 <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
                 <!--aria-expanded="false">-->
-                <!--Servers <span class="caret"></span>-->
+                <!--Servers <i class="mdi mdi-chevron-down"></i>-->
                 <!--</a>-->
                 <!--<ul class="dropdown-menu">-->
                 <!--<li class="disabled"><a href="#">Technolution</a></li>-->
@@ -63,7 +63,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">
-                            Admin <span class="caret"></span></a>
+                            Admin <i class="mdi mdi-chevron-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="/a/users">User management</a></li>
                         </ul>
@@ -77,10 +77,10 @@
                         {{else}}
                             <i class="mdi mdi-account"></i>
                         {{/if}}
-                        <span class="caret"></span></a>
+                        <i class="mdi mdi-chevron-down"></i></a>
                     <ul class="dropdown-menu">
                         {{#if user.login}}
-                            <li><a href="#" onclick="getProfile('{{user.pid}}');">My profile</a></li>
+                            <li><a href="javascript:void(0)" onclick="getProfile('{{user.pid}}');">My profile</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" data-toggle="modal" data-target="#passwordModal">Change password</a></li>
                             <li role="separator" class="divider"></li>

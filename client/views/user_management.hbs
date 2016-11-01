@@ -64,12 +64,12 @@
                 </td>
                 <td class="text-right dropdown">
                     <button type="button" class="btn btn-xs btn-standard dropdown-toggle" data-toggle="dropdown"
-                            aria-expanded="false"><i class="fa fa-pencil"></i> <span class="caret"></span></button>
+                            aria-expanded="false"><i class="mdi mdi-pencil"></i><i class="mdi mdi-chevron-down"></i></button>
                     <ul class="dropdown-menu dropdown-menu-right" role="menu">
                         <li role="presentation" class="dropdown-header">{{this.user_name}}</li>
                         <li role="presentation" class="divider"></li>
                         <li role="presentation">
-                            <a role="menuitem" href="#" tabindex="-1" onclick="getProfile('{{this.user_pid}}');">View profile</a>
+                            <a role="menuitem" href="javascript:void(0)" tabindex="-1" onclick="getProfile('{{this.user_pid}}');">View profile</a>
                         </li>
                         <li role="presentation" class="disabled">
                             <a role="menuitem" tabindex="-1" href="#">Reset Password</a>

@@ -22,19 +22,25 @@ window.getModList = (modpack) ->
         content += '<td class="text-left">' + mod['author'] + '</td>'
         content += '<td class="text-left">' + mod['version'] + '</td>'
         linkType = 'Mod Website'
+        linkIcon = 'web'
         if mod['link'].search('minecraftforum') > -1
           linkType = 'Minecraft Forum'
+          linkIcon = 'cube-outline'
         if mod['link'].search('curseforge') > -1
           linkType = 'Curse'
+          linkIcon = 'fire'
         if mod['link'].search('curse.com') > -1
           linkType = 'Curse'
+          linkIcon = 'fire'
         if mod['link'].search('github') > -1
           linkType = 'GitHub'
+          linkIcon = 'github-circle'
         if mod['link'].search('forum.industrial') > -1
           linkType = 'IC2 Forum'
+          linkIcon = 'settings'
         content += '<td class="text-right">
                     <a class="btn btn-primary btn-xs" href="' + mod['link'] + '" target="_blank" rel="external">
-                    <i class="fa fa-external-link"></i> ' + linkType + '</a></td>'
+                    <i class="mdi mdi-' + linkIcon + '"></i> ' + linkType + '</a></td>'
         content += '</tr>'
       content += '</tbody>'
       content += '</table>'
@@ -74,18 +80,16 @@ window.getServerFiles = (modpack) ->
         content += "<td class=\"text-right\">
                     <a class=\"btn btn-primary btn-xs\"
                       href=\"ftp://saturnserver.org/#{modpack}/#{filePackage['name']}\">
-                        <i class=\"fa fa-download\"></i> Download
+                        <i class=\"mdi mdi-download\"></i> Download
                     </a></td>"
         content += '</tr>'
       content += '<p class="text-right">Tip: check out these amazing projects to improve your server!<br>'
-      content += '<a target="_blank" rel="external"
-                    href="https://tcpr.ca/downloads/mcpc" class="btn btn-default btn-xs">
-                      <i class="fa fa-external-link"></i> MCPC+ (up to 1.7.2)
-                  </a> '
-      content += '<a target="_blank" rel="external" href="https://gitlab.prok.pw/KCauldron/KCauldron"
-                  class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> KCauldron (1.7.10)</a> '
+      content += '<a target="_blank" rel="external" href="https://tcpr.ca/downloads/mcpc"
+                  class="btn btn-default btn-xs"><i class="mdi mdi-web"></i> MCPC+ (up to 1.7.2)</a> '
+      content += '<a target="_blank" rel="external" href="https://github.com/CyberdyneCC/Thermos"
+                  class="btn btn-default btn-xs"><i class="mdi mdi-web"></i> Thermos (1.7.10)</a> '
       content += '<a target="_blank" rel="external" href="https://www.spongepowered.org/"
-                  class="btn btn-default btn-xs"><i class="fa fa-external-link"></i> Sponge (1.8 and up)</a></p>'
+                  class="btn btn-default btn-xs"><i class="mdi mdi-web"></i> Sponge (1.8 and up)</a></p>'
       content += '</tbody>'
       content += '</table>'
       $('#server-files-content').html content

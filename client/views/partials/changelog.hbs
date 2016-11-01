@@ -1,7 +1,7 @@
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle btn-primary btn-sm"
             type="button" id="dropdownMenu\" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Choose a Version <span class="caret"></span>
+        Choose a Version <i class="mdi mdi-chevron-down"></i>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
         {{#each changelog.builds}}
@@ -41,7 +41,7 @@
                 <a class="btn btn-danger btn-sm btn-pad disabled mod-label">{{this}}</a>
         {{/each}}
             <br><br><a href="#" class="btn btn-primary btn-sm">Back to Top
-            <i class="fa fa-caret-up"></i></a>
+            <i class="mdi mdi-chevron-up"></i></a>
     {{/withItem}}
 {{/each}}
 </div>
