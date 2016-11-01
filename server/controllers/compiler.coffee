@@ -7,14 +7,16 @@ exports.compileStylesheets = (done) ->
   outputDirNameStyle = './client/public/stylesheets/'
   mkdirp(outputDirNameStyle)
 
-  lessFile = fs.readFileSync(inputDirNameStyle + 'style.less', 'utf-8')
-  Less = require('less')
-  await Less.render(lessFile, {paths: inputDirNameStyle, filename: 'style.less'}, defer(err, output))
-  fs.writeFileSync(outputDirNameStyle + 'style.css', output.css)
-  CleanCSS = require('clean-css')
-  source = fs.readFileSync(outputDirNameStyle + 'style.css', 'utf-8')
-  minified = new CleanCSS().minify(source).styles
-  fs.writeFileSync(outputDirNameStyle + 'style.css', minified)
+  sass = require('node-sass')
+  result = sass.renderSync(
+    file: inputDirNameStyle + 'style.scss'
+    outputStyle: 'compressed'
+    outFile: outputDirNameStyle + 'style.css'
+    sourceMap: devMode
+  )
+  fs.writeFileSync(outputDirNameStyle + 'style.css', result.css)
+  if devMode
+    fs.writeFileSync(outputDirNameStyle + 'style.css.map', result.map)
   logger.info("Client-side stylesheets ready, took #{(Date.now() - startTime) / 1000} seconds")
   return done()
 
@@ -28,15 +30,15 @@ exports.compileScripts = (done) ->
   coffeeFiles = fs.readdirSync(inputDirNameJS)
   if !fs.existsSync(outputDirNameJS)
     fs.mkdirSync(outputDirNameJS)
-  fileContentJS = ''
+  fileContent = ''
   for file in coffeeFiles
-    fileContent = fs.readFileSync(inputDirNameJS + file, 'utf-8')
-    fileContentJS += Compiler.compile(fileContent)
-
+    fileContent += fs.readFileSync(inputDirNameJS + file, 'utf-8') + '\n'
+  fileContentJS = Compiler.compile(fileContent)
   fs.writeFileSync(outputDirNameJS + 'saturn.js', fileContentJS)
-  UglifyJS = require 'uglify-js'
-  result = UglifyJS.minify(outputDirNameJS + 'saturn.js', outSourceMap: 'saturn.js.map')
-  fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
-  fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
+
+  if prodMode
+    UglifyJS = require 'uglify-js'
+    result = UglifyJS.minify(outputDirNameJS + 'saturn.js')
+    fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
   logger.info("Client-side javascript ready, took #{(Date.now() - startTime) / 1000} seconds")
   return done()

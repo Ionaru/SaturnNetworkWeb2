@@ -99,4 +99,4 @@ process.stdin.resume()
 #catches ctrl+c / stop event
 process.on('SIGINT', exitHandler.bind(null, cleanup: true))
 #catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, cleanup: true, err))
+process.on('uncaughtException', exitHandler.bind(null, cleanup: true))

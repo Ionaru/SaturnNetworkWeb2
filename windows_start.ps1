@@ -1,1 +1,1 @@
-npm run-script Run
+npm run-script 'Run prod'

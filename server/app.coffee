@@ -61,6 +61,8 @@ app.use bodyParser.urlencoded(extended: false)
   Setup public folders containing stylesheets, images, scripts, etc...
 ###
 app.use express.static(path.join(__dirname, '../client/public'))
+if devMode
+  app.use express.static(path.join(__dirname, '../client'))
 
 ###
   Register static information to be used in the application
