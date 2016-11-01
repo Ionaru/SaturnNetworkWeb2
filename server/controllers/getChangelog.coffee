@@ -5,7 +5,7 @@ sort = require('alphanum-sort')
 
 exports.getChangelog = (modpack) ->
   try
-    changelogFile = fs.readFileSync("./cache/changelog_#{modpack}.json", "utf-8")
+    changelogFile = fs.readFileSync("./cache/changelog_#{modpack}.json", 'utf-8')
     changelog = JSON.parse(changelogFile)
     return changelog
   catch e
@@ -13,11 +13,11 @@ exports.getChangelog = (modpack) ->
     return null
 
 exports.createChangelog = (modpack, callback) ->
-  require('mkdirp').sync "./cache/", (err) ->
-    logger.info("creating ./cache/")
+  require('mkdirp').sync './cache/', (err) ->
+    return logger.info('creating ./cache/')
   changelog = {
     time: 0
-    latestVersion: ""
+    latestVersion: ''
     changelog: {}
   }
 
@@ -46,7 +46,7 @@ exports.createChangelog = (modpack, callback) ->
     for mod in buildData['mods']
       selector = modData['mods'][mod['name']]
       thisBuildMods[selector] = []
-      thisBuildMods[selector]['version'] = mod['version'].replace(versionString, "")
+      thisBuildMods[selector]['version'] = mod['version'].replace(versionString, '')
     thisBuildMods = sortObj(thisBuildMods)
     if buildNr is 1
       for mod of thisBuildMods
@@ -74,4 +74,4 @@ exports.createChangelog = (modpack, callback) ->
   changelog.changelog = changelogData
   fs.writeFileSync("./cache/changelog_#{modpack}.json", JSON.stringify(changelog))
   logger.debug("Successfully fetched changelog for #{prettyName}.")
-  callback()
+  return callback()

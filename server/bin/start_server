@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+"use strict";
+
 /**
  * Initiate coffeescript and load entry file
  */
-console.log("Initiated Node Server");
 require('iced-coffee-script-3/register');
 require('./www');

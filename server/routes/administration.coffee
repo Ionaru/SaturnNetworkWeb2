@@ -9,13 +9,13 @@ router.all '/*', (req, res, next) ->
     next()
   else
     logger.warn("[#{req.session.user.username} (#{req['ip']})] tried to access Admin functions but was not authorised")
-    res.render('status/404')
+    return res.render('status/404')
 
 router.get '/users', (req, res) ->
   await User.getColumns(['*'], 'user_name', defer(err, result))
   if not err
     logger.info("[#{req.session.user.username}] loaded user management")
-    res.render('user_management', {users: result})
+    return res.render('user_management', {users: result})
 
 router.post '/users/update_name', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -30,16 +30,15 @@ router.post '/users/update_name', (req, res) ->
         await User.setName(pid, newName, defer(err))
         if not err
           logger.info("[#{req.session.user.username}] changed username of #{oldName} to #{newName}")
-          res.send(newName)
+          return res.send(newName)
         else
-          res.send(oldName)
+          return res.send(oldName)
       else
-        res.send(oldName)
+        return res.send(oldName)
     else
-      res.send(oldName)
+      return res.send(oldName)
   else
-    res.send("Error")
-  return
+    return res.send('Error')
 
 router.post '/users/update_email', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -55,16 +54,15 @@ router.post '/users/update_email', (req, res) ->
         await User.setEmail(pid, newEmail, defer(err))
         if not err
           logger.info("[#{req.session.user.username}] changed email of #{name} from #{oldEmail} to #{newEmail}")
-          res.send(newEmail)
+          return res.send(newEmail)
         else
-          res.send(oldEmail)
+          return res.send(oldEmail)
       else
-        res.send(oldEmail)
+        return res.send(oldEmail)
     else
-      res.send(oldEmail)
+      return res.send(oldEmail)
   else
-    res.send("Error")
-  return
+    return res.send('Error')
 
 router.post '/users/update_minecraft_name', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -78,14 +76,13 @@ router.post '/users/update_minecraft_name', (req, res) ->
       await User.setMC(pid, newName, defer(err))
       if not err
         logger.info("[#{req.session.user.username}] changed minecraft name of #{name} from #{oldName} to #{newName}")
-        res.send(newName)
+        return res.send(newName)
       else
-        res.send(oldName)
+        return res.send(oldName)
     else
-      res.send(oldName)
+      return res.send(oldName)
   else
-    res.send("Error")
-  return
+    return res.send('Error')
 
 router.post '/users/update_points', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -100,14 +97,13 @@ router.post '/users/update_points', (req, res) ->
       if not err
         newData = newData.toString()
         logger.info("[#{req.session.user.username}] changed points balance of #{name} from #{oldData} to #{newData}")
-        res.send(newData)
+        return res.send(newData)
       else
-        res.send(oldData)
+        return res.send(oldData)
     else
-      res.send(oldData)
+      return res.send(oldData)
   else
-    res.send("Error")
-  return
+    return res.send('Error')
 
 router.post '/users/toggle_staff', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -119,12 +115,11 @@ router.post '/users/toggle_staff', (req, res) ->
     if not err
       newData = result.toString()
       logger.info("[#{req.session.user.username}] changed admin status of #{name} from #{oldData} to #{newData}")
-      res.send(newData)
+      return res.send(newData)
     else
-      res.send(oldData)
+      return res.send(oldData)
   else
-    res.send("error")
-  return
+    return res.send('Error')
 
 router.post '/users/toggle_admin', (req, res) ->
   pid = req.body.id.slice(req.body.id.indexOf('_') + 1)
@@ -137,15 +132,14 @@ router.post '/users/toggle_admin', (req, res) ->
       if not err
         newData = result.toString()
         logger.info("[#{req.session.user.username}] changed staff status of #{name} from #{oldData} to #{newData}")
-        res.send(newData)
+        return res.send(newData)
       else
-        res.send(oldData)
+        return res.send(oldData)
     else
-      res.send("error")
+      return res.send('Error')
   else
-    res.send("1")
-  return
-#router.delete '/users/reset_password', (req, res) ->
+    return res.send('1')
+
 #router.delete '/users/delete_user', (req, res) ->
 
 module.exports = router

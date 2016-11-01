@@ -62,26 +62,31 @@ $(document).ready ->
   setInvalid = (element) ->
     $(element + '_icon').css 'background-color': '#ff4136'
     $(element).attr 'data-valid', 'false'
+    return
 
   setValid = (element) ->
     $(element + '_icon').css 'background-color': ''
     $(element).attr 'data-valid', 'true'
+    return
 
   clearValid = (element) ->
     $(element + '_icon').css 'background-color': ''
     $(element).attr 'data-valid', 'false'
+    return
 
   checkLoginButton = ->
     if loginUsername.attr('data-valid') == 'true' and loginPassword.attr('data-valid') == 'true'
       loginButton.removeClass 'disabled'
     else
       loginButton.addClass 'disabled'
+    return
 
   checkResetButton = ->
     if forgotPasswordEmail.attr('data-valid') == 'true'
       forgotPasswordSubmit.removeClass 'disabled'
     else
       forgotPasswordSubmit.addClass 'disabled'
+    return
 
   checkRegisterButton = ->
     if (registerUsername.attr('data-valid') == 'true' and registerEmail.attr('data-valid') == 'true' and
@@ -89,6 +94,7 @@ $(document).ready ->
       registerButton.removeClass 'disabled'
     else
       registerButton.addClass 'disabled'
+    return
 
   checkChangeButton = ->
     if changePasswordInputOld.attr('data-valid') == 'true' and changePasswordInputNew.attr('data-valid') == 'true' and
@@ -96,6 +102,7 @@ $(document).ready ->
       changePasswordSubmit.removeClass 'disabled'
     else
       changePasswordSubmit.addClass 'disabled'
+    return
 
   checkUsername = ->
     entry = loginUsername.val()
@@ -107,6 +114,7 @@ $(document).ready ->
     else
       clearValid '#uLogin'
     checkLoginButton()
+    return
 
   checkPassword = ->
     entry = loginPassword.val()
@@ -118,6 +126,7 @@ $(document).ready ->
     else
       clearValid '#uPassword'
     checkLoginButton()
+    return
 
   checkForgotEmail = ->
     entry = forgotPasswordEmail.val()
@@ -129,6 +138,7 @@ $(document).ready ->
     else
       clearValid '#uForgot_Email'
     checkResetButton()
+    return
 
   checkRegisterUsername = ->
     entry = registerUsername.val()
@@ -140,6 +150,7 @@ $(document).ready ->
     else
       clearValid '#uRegLogin'
     checkRegisterButton()
+    return
 
   checkRegisterEmail = ->
     entry = registerEmail.val()
@@ -151,6 +162,7 @@ $(document).ready ->
     else
       clearValid '#uRegEmail'
     checkRegisterButton()
+    return
 
   checkRegisterPasswords = (passwordField) ->
     entry = passwordField.val()
@@ -173,6 +185,7 @@ $(document).ready ->
       if pass.length == 0
         clearValid '#uRegPassword2'
     checkRegisterButton()
+    return
 
   checkChangePassword = ->
     entry = changePasswordInputOld.val()
@@ -184,6 +197,7 @@ $(document).ready ->
     else
       clearValid '#uOldPassword'
     checkChangeButton()
+    return
 
   checkChangePasswords = (passwordField) ->
     entry = passwordField.val()
@@ -206,11 +220,13 @@ $(document).ready ->
       if pass.length == 0
         clearValid '#uNewPassword2'
     checkChangeButton()
+    return
 
   completeLoginAttempt = (success) ->
     loginProgress.fadeOut ->
       loginProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
         loginProgressbar.attr 'data-transitiongoal', 100
+        return
       if success
         loginButton.text('Continue')
         .removeClass('btn-primary')
@@ -222,8 +238,11 @@ $(document).ready ->
         $(document).keypress (e) ->
           if e.which == 13
             loginModal.modal 'hide'
+          return
       else
         loginButton.removeClass('disabled').fadeIn()
+      return
+    return
 
   completeResetAttempt = (success) ->
     if success
@@ -239,11 +258,15 @@ $(document).ready ->
         $(document).keypress (e) ->
           if e.which == 13
             loginModal.modal 'hide'
+          return
+        return
+    return
 
   completeRegisterAttempt = (success) ->
     registerProgress.fadeOut ->
       registerProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
         registerProgressbar.attr 'data-transitiongoal', 100
+        return
       if success
         registerButton.text('Continue').removeClass('disabled').attr('data-dismiss', 'modal').blur().fadeIn()
         $(document).keypress (e) ->
@@ -252,36 +275,38 @@ $(document).ready ->
           return
       else
         registerButton.removeClass('disabled').fadeIn()
+      return
+    return
 
   loginUsername.on 'input propertychange', ->
-    checkUsername()
+    return checkUsername()
 
   loginPassword.on 'input propertychange', ->
-    checkPassword()
+    return checkPassword()
 
   forgotPasswordEmail.on 'input propertychange', ->
-    checkForgotEmail()
+    return checkForgotEmail()
 
   registerUsername.on 'input propertychange', ->
-    checkRegisterUsername()
+    return checkRegisterUsername()
 
   registerEmail.on 'input propertychange', ->
-    checkRegisterEmail()
+    return checkRegisterEmail()
 
   registerPassword.on 'input propertychange', ->
-    checkRegisterPasswords registerPassword
+    return checkRegisterPasswords registerPassword
 
   registerPassword2.on 'input propertychange', ->
-    checkRegisterPasswords registerPassword2
+    return checkRegisterPasswords registerPassword2
 
   changePasswordInputOld.on 'input propertychange', ->
-    checkChangePassword()
+    return checkChangePassword()
 
   changePasswordInputNew.on 'input propertychange', ->
-    checkChangePasswords changePasswordInputNew
+    return checkChangePasswords changePasswordInputNew
 
   changePasswordInputNew2.on 'input propertychange', ->
-    checkChangePasswords changePasswordInputNew2
+    return checkChangePasswords changePasswordInputNew2
 
   forgotPasswordButton.click ->
     loginErrorDiv.fadeOut()
@@ -289,14 +314,18 @@ $(document).ready ->
     loginModal.attr 'data-modal-mode', 'reset'
     $('.username_input').fadeOut ->
       forgotPasswordInput.fadeIn()
+      return
     $('.password_input').fadeOut()
     forgotPasswordButton.fadeOut()
     loginModalContent.css 'height', '205px'
     loginModalTitle.fadeOut ->
       loginModalTitle.text 'Reset your password'
       loginModalTitle.fadeIn()
+      return
     loginButton.fadeOut ->
       $('#forgotpasswordbutton').fadeIn()
+      return
+    return
 
   # Form interactions
   loginForm.submit (event) ->
@@ -318,6 +347,7 @@ $(document).ready ->
           loginButton.fadeOut ->
             loginErrorDiv.fadeOut ->
               loginModalContent.css 'height', '295px'
+              return
             loginButton.addClass 'disabled'
             loginProgress.fadeIn ->
               $.post('/login',
@@ -338,14 +368,17 @@ $(document).ready ->
                       break
                   user = data[1]
                   continueLoginEvent()
+                  return
               ).fail ->
                 request_finished = true
                 error = 'Login request failed.'
                 continueLoginEvent()
+                return
 
               loginProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
                 progressbar_done = true
                 continueLoginEvent()
+                return
 
               continueLoginEvent = ->
                 if request_finished and progressbar_done
@@ -356,9 +389,11 @@ $(document).ready ->
                     loginModalTitle.fadeOut ->
                       loginModalTitle.text 'Hello ' + user['username']
                       loginModalTitle.fadeIn()
+                      return
                     loginModalBody.fadeOut ->
                       postLoginBody.fadeIn()
                       loginModalContent.css 'height', '170px'
+                      return
                     completeLoginAttempt true
                   else
                     loginErrorText.html error
@@ -367,6 +402,9 @@ $(document).ready ->
                     loginModalContent.css 'height', dynamicHeight + 10 + 'px'
                     loginInputs.removeAttr 'disabled'
                     completeLoginAttempt false
+                return
+              return
+            return
 
     if loginModal.attr('data-modal-mode') is 'reset'
       uEmail = forgotPasswordEmail.val()
@@ -396,8 +434,10 @@ $(document).ready ->
               else
                 error = 'An unknown error occurred, please try again.'
                 break
+            return
           ).fail(->
             error = 'Reset request failed.'
+            return
           ).always ->
             forgotPasswordSubmit.removeClass('disabled')
             if reset_success
@@ -405,9 +445,11 @@ $(document).ready ->
               loginModalTitle.fadeOut ->
                 loginModalTitle.text 'Reset request complete'
                 loginModalTitle.fadeIn()
+                return
               loginModalBody.fadeOut ->
                 postResetBody.fadeIn()
                 loginModalContent.css 'height', '185px'
+                return
               completeResetAttempt true
             else
               loginErrorText.html error
@@ -416,6 +458,9 @@ $(document).ready ->
               loginModalContent.css 'height', dynamicHeight + 10 + 'px'
               loginInputs.removeAttr 'disabled'
               completeResetAttempt false
+            return
+          return
+    return
 
   # Form interactions
   registerForm.submit (event) ->
@@ -440,6 +485,7 @@ $(document).ready ->
         registerButton.fadeOut ->
           registerErrorDiv.fadeOut ->
             registerModalContent.css 'height', '365px'
+            return
           registerButton.addClass 'disabled'
           registerProgress.fadeIn ->
             $.post('/register',
@@ -461,14 +507,17 @@ $(document).ready ->
                     break
                 user = data[1]
                 continueRegisterEvent()
+                return
             ).fail ->
               request_finished = true
               error = 'Register request failed.'
               continueRegisterEvent()
+              return
 
             registerProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
               progressbar_done = true
               continueRegisterEvent()
+              return
 
             continueRegisterEvent = ->
               if request_finished and progressbar_done
@@ -479,9 +528,11 @@ $(document).ready ->
                   registerModalTitle.fadeOut ->
                     registerModalTitle.text 'Welcome ' + user['username']
                     registerModalTitle.fadeIn()
+                    return
                   registerModalBody.fadeOut ->
                     postRegisterBody.fadeIn()
                     registerModalContent.css 'height', '170px'
+                    return
                   completeRegisterAttempt true
                 else
                   registerErrorText.html error
@@ -490,6 +541,10 @@ $(document).ready ->
                   registerModalContent.css 'height', dynamicHeight + 10 + 'px'
                   registerInputs.removeAttr 'disabled'
                   completeRegisterAttempt false
+              return
+            return
+          return
+    return
 
   # Form interactions
   changePasswordForm.submit (event) ->
@@ -511,6 +566,7 @@ $(document).ready ->
         changePasswordSubmit.fadeOut ->
           changeErrorDiv.fadeOut ->
             changePasswordContent.css 'height', '312px'
+            return
           changePasswordSubmit.addClass 'disabled'
           changeProgress.fadeIn ->
             $.post('/change_password',
@@ -530,19 +586,23 @@ $(document).ready ->
                     error = 'An unknown error occurred, please try again.'
                     break
                 continueChangeEvent()
+                return
             ).fail ->
               request_finished = true
               error = 'Change request failed.'
               continueChangeEvent()
+              return
 
             changeProgressbar.attr('data-transitiongoal', 100).progressbar done: ->
               progressbar_done = true
               continueChangeEvent()
+              return
 
             completeChangeAttempt = (success) ->
               changeProgress.fadeOut ->
                 changeProgressbar.attr('data-transitiongoal', 0).progressbar done: ->
                   changeProgressbar.attr 'data-transitiongoal', 100
+                  return
                 if success
                   changePasswordSubmit
                   .text('Close')
@@ -556,6 +616,8 @@ $(document).ready ->
                     return
                 else
                   changePasswordSubmit.removeClass('disabled').fadeIn()
+                return
+              return
 
             continueChangeEvent = ->
               if request_finished and progressbar_done
@@ -566,16 +628,23 @@ $(document).ready ->
                   changePasswordTitle.fadeOut ->
                     changePasswordTitle.text 'Password changed'
                     changePasswordTitle.fadeIn()
+                    return
                   changePasswordBody.fadeOut ->
                     postChangeBody.fadeIn()
                     changePasswordContent.css 'height', '170px'
+                    return
                   completeChangeAttempt true
+                  return
                 else
                   changeErrorText.html error
                   changeErrorDiv.fadeIn()
                   changePasswordContent.css 'height', '350px'
                   changePasswordInputs.removeAttr 'disabled'
                   completeChangeAttempt false
+                  return
+            return
+          return
+    return
 
 
   # Events for the login modal
@@ -588,12 +657,14 @@ $(document).ready ->
       loginPassword.focus()
     checkUsername()
     checkPassword()
+    return
 
   # Trigger on close event of modal
   loginModal.on 'hidden.bs.modal', ->
 # Reload the page if modal did its job (login user)
     if loginModal.attr('data-useful') == 'true'
       location.reload()
+    return
 
   # Events for the register modal
   # Trigger on open event of modal
@@ -603,12 +674,14 @@ $(document).ready ->
     checkRegisterUsername()
     checkRegisterEmail()
     checkRegisterPasswords registerPassword
+    return
 
   # Trigger on close event of modal
   registerModal.on 'hidden.bs.modal', ->
 # Reload the page if modal did its job (Register user)
     if registerModal.attr('data-useful') == 'true'
       location.reload()
+    return
 
   # Events for the change modal
   # Trigger on close event of modal
@@ -616,3 +689,5 @@ $(document).ready ->
 # Reload the page if modal did its job (Change password)
     if changePasswordModal.attr('data-useful') == 'true'
       location.reload()
+    return
+  return

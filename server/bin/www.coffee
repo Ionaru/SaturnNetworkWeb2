@@ -1,33 +1,33 @@
-# coffeelint: disable=no_debugger
-if not process.env.SILENT
-  console.log("Loaded into IcedCoffeeScript")
-  console.log("Starting setup")
-# coffeelint: enable=no_debugger
-
 require('../controllers/logger')
+
 require('../controllers/configLoader')
 
+if devMode
+  logger.warn('Application is running in DEV mode!')
+
 ###
-# Prepare stylesheets and scripts for client use
+  Prepare stylesheets and scripts for client use
 ###
 compiler = require('../controllers/compiler')
-compiler.compileStylesheets()
-compiler.compileScripts()
+await compiler.compileStylesheets(defer())
+await compiler.compileScripts(defer())
 
 ###
-# Init application
+  Init application
 ###
+logger.info('Starting application setup')
 app = require('../app')
 app.enable('trust proxy')
+logger.info('Finished application setup')
 
-###*
-# Get port from environment and store in Express.
+###
+  Get port from environment and store in Express.
 ###
 port = process.env.PORT or '3000'
 app.set('port', port)
 
-###*
-# Event listener for HTTP server "error" event.
+###
+  Event listener for HTTP server "error" event.
 ###
 onError = (error) ->
   if error.syscall != 'listen'
@@ -45,44 +45,58 @@ onError = (error) ->
       throw error
   return
 
-###*
-# Event listener for HTTP server "listening" event.
+###
+  Create HTTP server.
+###
+logger.info('Starting HTTP server')
+http = require('http')
+server = http.createServer(app)
+
+###
+ Event listener for HTTP server "listening" event.
 ###
 onListening = ->
   addr = server.address()
   bind = if typeof addr == 'string' then 'pipe ' + addr else 'port ' + addr.port
-  logger.info('Finished setup')
-  logger.info('Listening on ' + bind)
+  logger.info("HTTP server listening on #{bind}, ready for requests")
   return
 
-###*
-# Create HTTP server.
 ###
-http = require('http')
-server = http.createServer(app)
-
-###*
-# Listen on provided port, on all network interfaces.
+  Listen on provided port, on all network interfaces.
 ###
 server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
 
+###
+  Exit handler for when the application quits
+###
 exitHandler = (options, err) ->
   if options.cleanup
-    logger.warn('Shutdown complete, goodbye!')
-    logger.log()
+    logger.warn('Got shutdown command, executing shutdown tasks.')
+    cleanup = (done) ->
+      db = require('../controllers/databaseConnector')
+      db.get().end (err) ->
+        if err
+          logger.error('Error while closing Database connection!')
+          throw err
+        else
+        logger.info('Database connection closed')
+  #      sessionStore.close()
+        logger.info('Session store closed')
+        return done()
+      return
+    await cleanup(defer())
   if err
     logger.error(err.stack)
-  if options.exit
-    logger.warn('Got shutdown command, executing shutdown tasks.')
-    process.exit()
-  return
+  logger.warn('Shutdown complete, goodbye!')
+  return process.exit(0)
 
+###
+  When the application gets a shutdown signal, continue running and execute exit handler
+###
 process.stdin.resume()
-#do something when app is closing
-process.on('exit', exitHandler.bind(null, cleanup: true))
-#catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, exit: true))
+#catches ctrl+c / stop event
+process.on('SIGINT', exitHandler.bind(null, cleanup: true))
 #catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, exit: true))
+process.on('uncaughtException', exitHandler.bind(null, cleanup: true, err))

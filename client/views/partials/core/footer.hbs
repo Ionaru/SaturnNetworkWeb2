@@ -23,5 +23,8 @@
         e.preventDefault();
         e.stopPropagation();
         return false;
-    })
+    });
+    $(".dropdown-toggle").mouseup(function(){
+        $(this).blur();
+    });
 </script>

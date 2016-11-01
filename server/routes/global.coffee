@@ -30,7 +30,7 @@ router.get '/*', (req, res, next) ->
       login: false
     }
     req.app.locals.user = req.session.user
-    next()
+    return next()
 
 # Router that handles the registration process
 router.post '/register', (req, res) ->
@@ -47,7 +47,7 @@ router.post '/register', (req, res) ->
       unless result
         await User.create(username, email, password, defer(err, pid))
         if err
-          res.send(['other_error', null])
+          return res.send(['other_error', null])
         else
           userResult = {
             pid: pid
@@ -61,13 +61,13 @@ router.post '/register', (req, res) ->
           req.app.locals.user = userResult
           req.session.user = userResult
           logger.info "New User created -> #{username}"
-          res.send(['account_created', userResult])
+          return res.send(['account_created', userResult])
       else
-        res.send(['email_in_use', null])
+        return res.send(['email_in_use', null])
     else
-      res.send(['username_in_use', null])
+      return res.send(['username_in_use', null])
   else
-    res.send(['error_validation', null])
+    return res.send(['error_validation', null])
 
 # Router that handles the login process
 router.post '/login', (req, res) ->
@@ -82,7 +82,7 @@ router.post '/login', (req, res) ->
     password = jsesc(password)
     User.checkPassword username, password, (result, pid, name, e) ->
       switch result
-        when "valid_login"
+        when 'valid_login'
           logger.info "User password validated -> #{name}"
           User.getByUserPID pid, (err, result_user) ->
             userResult = {
@@ -96,23 +96,19 @@ router.post '/login', (req, res) ->
             }
             req.app.locals.user = userResult
             req.session.user = userResult
-            res.send([result, userResult])
-          break
-        when "incorrect_login"
+            return res.send([result, userResult])
+        when 'incorrect_login'
           logger.warn("User login incorrect -> #{username}")
-          res.send([result, null])
-          break
-        when "incorrect_password"
+          return res.send([result, null])
+        when 'incorrect_password'
           logger.warn("User password incorrect -> #{username}")
-          res.send([result, null])
-          break
-        when "hash_check_error"
+          return res.send([result, null])
+        when 'hash_check_error'
           logger.error("Unable to validate password for User -> #{username}")
           logger.error("> #{e}")
-          res.send([result, null])
-          break
+          return res.send([result, null])
   else
-    res.send ['error_validation', null]
+    return res.send ['error_validation', null]
 
 # Router that handles the password-change process
 router.post '/change_password', (req, res) ->
@@ -130,37 +126,36 @@ router.post '/change_password', (req, res) ->
         username = jsesc(username)
         User.checkPassword username, oldPass, (result, pid, name, e) ->
           switch result
-            when "valid_login"
+            when 'valid_login'
               if pid is userPid and name is username
                 await User.setPassword(pid, newPass, defer(err))
                 if not err
-                  res.send('password_changed')
+                  return res.send('password_changed')
                 else
-                  res.send('password_set_fail')
-              break
-            when "incorrect_login"
-              res.send('user_get_fail')
-              break
-            when "incorrect_password"
-              res.send(result)
-              break
-            when "hash_check_error"
+                  return res.send('password_set_fail')
+            when 'incorrect_login'
+              return res.send('user_get_fail')
+            when 'incorrect_password'
+              return res.send(result)
+            when 'hash_check_error'
               logger.error("Unable to validate password for User -> #{username}")
               logger.error("> #{e}")
-              res.send(result)
-              break
+              return res.send(result)
       else
-        res.send('same_password')
+        return res.send('same_password')
     else
-      res.send('error_validation')
+      return res.send('error_validation')
   else
-    res.render('auth')
+    return res.render('auth')
 
 
 # Router that handles the logout process
 router.all '/logout', (req, res) ->
+  # Destroy the user session
   req.session.destroy ->
-    res.redirect("/")
+    # Redirect the user back to the homepage, in case they were on a page with sensitive information
+    return res.redirect('/')
+  return
 
 # Router that handles the password-reset process
 router.post '/reset', (req, res) ->
@@ -174,17 +169,17 @@ router.post '/reset', (req, res) ->
         if not err
           await mail.sendResetPassword(result, token, defer(err))
           if not err
-            res.send(['password_reset', User])
+            return res.send(['password_reset', User])
           else
-            res.send(['error_mail', null])
+            return res.send(['error_mail', null])
         else
-          res.send(['token_error', null])
+          return res.send(['token_error', null])
       else
-        res.send(['incorrect_email', null])
+        return res.send(['incorrect_email', null])
     else
-      res.send(['error_user', null])
+      return res.send(['error_user', null])
   else
-    res.send(['error_validation', null])
+    return res.send(['error_validation', null])
 
 # TODO: IMPLEMENT
 # Router that handles the cookie notification

@@ -1,9 +1,14 @@
 express = require('express')
 app = module.exports = express()
 
-app.locals.defaultCookieExpiry = 30 * 24 * 60 * 60 * 1000
+###
+  Set the default time a session should be kept
+###
+app.locals.defaultCookieExpiry = 30 * 24 * 60 * 60 * 1000 # 30 days
 
-# Setup view engine
+###
+  Setup Handlebars view engine
+###
 hbs = require('hbs')
 path = require('path')
 hbsHelperRegistrator = require('./controllers/hbsHelperRegistrator')
@@ -11,16 +16,22 @@ app.set('views', path.join(__dirname, '../client/views'))
 app.set('view engine', 'hbs')
 hbsHelperRegistrator.registerHelpers(hbs)
 hbs.registerPartials(path.join(__dirname, '../client/views/partials'))
+logger.info('View engine registered')
 
-# Connect to MySQL DB
+###
+  Create connection to MySQL Database
+###
 db = require('./controllers/databaseConnector')
 db.connect (err) ->
   if err
     throw err
   else
-    logger.info("Connected to #{dbConfig['db_name']} MySQL database")
+    logger.info("Connected to '#{dbConfig['db_name']}' MySQL database")
+  return
 
-# Setup session storage
+###
+  Setup session storage, use the previously created connection to the MySQL Database
+###
 session = require('express-session')
 MySQLStore = require('express-mysql-session')(session)
 sessionStore = new MySQLStore({}, db.get())
@@ -31,27 +42,42 @@ app.use session({
   resave: true,
   saveUninitialized: true
 })
-logger.info("MySQL session storage connected to #{dbConfig['db_name']}")
+logger.info("MySQL session storage connected to '#{dbConfig['db_name']}'")
 
-# Setup favicon and stylesheets
+###
+  Add the favicon
+###
 favicon = require('serve-favicon')
+app.use favicon(path.join(__dirname, '../client/public/', 'favicon.ico'))
+
+###
+  Setup bodyparser
+###
 bodyParser = require('body-parser')
-app.use favicon(path.join(__dirname, '../client/public', 'favicon.ico'))
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: false)
 
-# Setup static folders
+###
+  Setup public folders containing stylesheets, images, scripts, etc...
+###
 app.use express.static(path.join(__dirname, '../client/public'))
 
-# Generate static data
+###
+  Register static information to be used in the application
+###
+#TODO: Needed?
 staticGen = require('./controllers/staticGenerator')
 staticGen.generateStaticInformation(app)
 
-# Stuff all requests through the Global router first
-# (for login, registration, cookies, permissions and things like that)
+###
+  All requests should go through the global router first, this way we can keep track of sessions and permissions
+  as well as doing things like login, logout and register through a modal on any page
+###
 app.all '/*', require('./routes/global')
 
-# Route incoming requests to the correct routes
+###
+  Register the rest of the routes the application should use
+###
 app.use '/', require('./routes/index')
 app.use '/a', require('./routes/administration')
 app.use '/gates', require('./routes/modpacks/gates')
@@ -59,45 +85,62 @@ app.use '/technolution', require('./routes/modpacks/technolution')
 app.use '/profile', require('./routes/profile')
 app.use '/user', require('./routes/profile')
 app.use '/reset', require('./routes/reset')
-#app.use '/profiles', require('./routes/profiles')
-#app.use '/profilemanager', require('./routes/profilemanager')
+if devMode then app.use '/shop', require('./routes/shop/frontpage')
 
-schedule = require('node-schedule')
-solder = require('./controllers/solderAPI')
-cl = require('./controllers/getChangelog')
-await(solder.writeFullModList('technolution', defer()))
-await(solder.writeFullModList('gates', defer()))
-await(cl.createChangelog('technolution', defer()))
-await(cl.createChangelog('gates', defer()))
-schedule.scheduleJob '*/60 * * * *', ->
-  await(solder.writeFullModList('technolution', defer()))
-  await(solder.writeFullModList('gates', defer()))
-  await(cl.createChangelog('technolution', defer()))
-  await(cl.createChangelog('gates', defer()))
-
-# Catch 404 and show pretty error page
+###
+  Register a 404 error page
+###
 app.use (req, res) ->
   err = new Error('Not Found')
   err.status = 404
   res.render('status/404')
+  return
 
-# error handlers
-# development error handler
-# will print stacktrace
-if app.get('env') == 'development'
+###
+  Register the error handler for the development environment
+###
+if devMode
   app.use (err, req, res) ->
     res.status(err.status or 500)
     res.render('error',
       message: err.message
       error: err
     )
+    return
 
-# production error handler
-# no stacktraces leaked to user
+###
+  Register the error handler for the production environment, no stacktraces should be sent to the client
+###
 app.use (err, req, res) ->
   res.status(err.status or 500)
   res.render('error',
     message: err.message
     error: {}
   )
-return app
+  return
+
+logger.info('Routes registered')
+
+###
+  Fetch modpack information semi-asynchonously on application start
+  The application will continue with the startup, but these tasks will execute one-by-one
+###
+solder = require('./controllers/solderAPI')
+cl = require('./controllers/getChangelog')
+await(solder.writeFullModList('technolution', defer()))
+await(solder.writeFullModList('gates', defer()))
+await(cl.createChangelog('technolution', defer()))
+await(cl.createChangelog('gates', defer()))
+
+###
+  Register a scheduler after the above tasks are complete to keep modpack information up-to-date
+  It will fetch new information every 60 mninutes
+###
+schedule = require('node-schedule')
+schedule.scheduleJob '*/60 * * * *', ->
+  await(solder.writeFullModList('technolution', defer()))
+  await(solder.writeFullModList('gates', defer()))
+  await(cl.createChangelog('technolution', defer()))
+  await(cl.createChangelog('gates', defer()))
+  return
+logger.info('Tasks executed and re-scheduled')

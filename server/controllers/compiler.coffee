@@ -1,7 +1,7 @@
 fs = require('fs')
 mkdirp = require('mkdirp')
 
-exports.compileStylesheets = () ->
+exports.compileStylesheets = (done) ->
   startTime = Date.now()
   inputDirNameStyle = './client/style/'
   outputDirNameStyle = './client/public/stylesheets/'
@@ -16,9 +16,9 @@ exports.compileStylesheets = () ->
   minified = new CleanCSS().minify(source).styles
   fs.writeFileSync(outputDirNameStyle + 'style.css', minified)
   logger.info("Client-side stylesheets ready, took #{(Date.now() - startTime) / 1000} seconds")
+  return done()
 
-
-exports.compileScripts = () ->
+exports.compileScripts = (done) ->
   startTime = Date.now()
   inputDirNameJS = './client/scripts/'
   outputDirNameJS = './client/public/javascript/'
@@ -28,7 +28,7 @@ exports.compileScripts = () ->
   coffeeFiles = fs.readdirSync(inputDirNameJS)
   if !fs.existsSync(outputDirNameJS)
     fs.mkdirSync(outputDirNameJS)
-  fileContentJS = ""
+  fileContentJS = ''
   for file in coffeeFiles
     fileContent = fs.readFileSync(inputDirNameJS + file, 'utf-8')
     fileContentJS += Compiler.compile(fileContent)
@@ -39,3 +39,4 @@ exports.compileScripts = () ->
   fs.writeFileSync(outputDirNameJS + 'saturn.js', result.code)
   fs.writeFileSync(outputDirNameJS + 'saturn.js.map', result.map)
   logger.info("Client-side javascript ready, took #{(Date.now() - startTime) / 1000} seconds")
+  return done()

@@ -27,6 +27,12 @@
   },
   "no_implicit_returns": {
     "module": "coffeelint-no-implicit-returns",
-    "level": "ignore"
+    "level": "warn"
+  },
+  "no_interpolation_in_single_quotes": {
+    "level": "error"
+  },
+  "no_unnecessary_double_quotes": {
+    "level": "error"
   }
 }

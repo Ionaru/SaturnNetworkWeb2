@@ -15,18 +15,18 @@ router.get '/*', (req, res) ->
           if not err
             await User.deleteToken(token, defer(err))
             if not err
-              res.render('reset', {
+              return res.render('reset', {
                 valid: true
                 name: username
                 new_pass: newpass
               })
             else
-              res.render('reset', {valid: false})
+              return res.render('reset', {valid: false})
           else
-            res.render('reset', {valid: false})
+            return res.render('reset', {valid: false})
       else
-        res.render('reset', {valid: false})
+        return res.render('reset', {valid: false})
   else
-    res.render('reset', {valid: false})
+    return res.render('reset', {valid: false})
 
 module.exports = router

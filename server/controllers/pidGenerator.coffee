@@ -1,8 +1,6 @@
 db = require('./databaseConnector')
 
-exports.generatePid = (pidLength = 6) ->
-  if pidLength is 0
-    pidLength = mainConfig['pid_length']
+exports.generatePid = (pidLength) ->
   pid = ''
   possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   i = 0
@@ -19,4 +17,4 @@ exports.generateUniqueUserPid = (done, pidLength = 10) ->
   if rows.length > 0
     exports.generateUniqueUserPid(done, pidLength)
   else
-    done(null, pid)
+    return done(null, pid)

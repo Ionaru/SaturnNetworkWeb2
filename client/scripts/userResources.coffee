@@ -1,5 +1,5 @@
 window.getProfile = (user) ->
-  $.get("/profile/#{user}").done((profile) ->
+  $.get("/profile/#{user}").done (profile) ->
     if profile
       $('#profile-username').text profile['user_name']
       $('#profile-email').text profile['user_email']
@@ -10,7 +10,8 @@ window.getProfile = (user) ->
         $('#profile-mcimage').attr 'src', "https://cravatar.eu/helmhead/#{profile['user_mccharacter']}/128.png"
         $('#profile-mccharacter').text profile['user_mccharacter']
       else
-        $('#profile-mcimage').attr 'src', "https://cravatar.eu/helmhead/steve/128.png"
+        $('#profile-mcimage').attr 'src', 'https://cravatar.eu/helmhead/steve/128.png'
         $('#profile-mccharacter').text 'Not linked'
-      $('#profileModal').modal 'show')
+      $('#profileModal').modal 'show'
+    return
   return

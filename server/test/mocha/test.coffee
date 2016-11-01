@@ -4,7 +4,9 @@ db = require('../../controllers/databaseConnector')
 bcrypt = require('bcrypt-nodejs')
 request = request('http://localhost:3001')
 
-db_suffix = "_test"
+db_suffix = '_test'
+
+# coffeelint: disable=no_implicit_returns
 
 describe 'Prologue', ->
 
@@ -39,7 +41,7 @@ describe 'Preparing the Database', ->
       done()
 
     it "should be connected to a test database (ending with \"#{db_suffix}\")", (done) ->
-      db.get().query "SELECT DATABASE()", (err, rows) ->
+      db.get().query 'SELECT DATABASE()', (err, rows) ->
         result = rows[0]['DATABASE()']
         assert.equal(err, null)
         re = new RegExp("#{db_suffix}$")
@@ -50,17 +52,17 @@ describe 'Preparing the Database', ->
           done()
 
     it 'should be able to clear the \'users\' table in the test database', (done) ->
-      await db.get().query("TRUNCATE TABLE `users`;", defer(err, rows))
+      await db.get().query('TRUNCATE TABLE `users`;', defer(err, rows))
       assert.equal(err, null)
       done()
 
     it 'should be able to clear the \'tokens\' table in the test database', (done) ->
-      await db.get().query("TRUNCATE TABLE `tokens`;", defer(err, rows))
+      await db.get().query('TRUNCATE TABLE `tokens`;', defer(err, rows))
       assert.equal(err, null)
       done()
 
     it 'should be able to clear the \'sessions\' table in the test database', (done) ->
-      await db.get().query("TRUNCATE TABLE `sessions`;", defer(err, rows))
+      await db.get().query('TRUNCATE TABLE `sessions`;', defer(err, rows))
       assert.equal(err, null)
       done()
 
@@ -69,15 +71,15 @@ describe 'User interactions', ->
 
   User = require '../../models/user'
   testUserPid = null
-  testUserName = "BILL_CIPHER"
-  testUserEmail = "weirdmageddon@gravityfalls.com"
-  testUserPassword = "Bill93"
+  testUserName = 'BILL_CIPHER'
+  testUserEmail = 'weirdmageddon@gravityfalls.com'
+  testUserPassword = 'Bill93'
 
   describe 'Create a User', ->
 
     it 'can\'t use special characters in username', ->
       request.post('/register')
-      .send({username: "MyInval|d_name", email: testUserEmail, password: testUserPassword})
+      .send({username: 'MyInval|d_name', email: testUserEmail, password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -85,7 +87,7 @@ describe 'User interactions', ->
 
     it 'can\'t use special characters in email', ->
       request.post('/register')
-      .send({username: testUserName, email: "ma()il@mail.com", password: testUserPassword})
+      .send({username: testUserName, email: 'ma()il@mail.com', password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -93,7 +95,7 @@ describe 'User interactions', ->
 
     it 'can\'t use special characters in password', ->
       request.post('/register')
-      .send({username: testUserName, email: testUserEmail, password: "MyInva/ilPassword"})
+      .send({username: testUserName, email: testUserEmail, password: 'MyInva/ilPassword'})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -101,7 +103,7 @@ describe 'User interactions', ->
 
     it 'can\'t create User with too short username', ->
       request.post('/register')
-      .send({username: "Bo", email: testUserEmail, password: testUserPassword})
+      .send({username: 'Bo', email: testUserEmail, password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -109,7 +111,7 @@ describe 'User interactions', ->
 
     it 'can\'t create User with too long username', ->
       request.post('/register')
-      .send({username: "ThisUSernameIsWayTooLongForTheSystem", email: testUserEmail, password: testUserPassword})
+      .send({username: 'ThisUSernameIsWayTooLongForTheSystem', email: testUserEmail, password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -117,7 +119,7 @@ describe 'User interactions', ->
 
     it 'can\'t create User with too short email', ->
       request.post('/register')
-      .send({username: testUserName, email: "m@m.c", password: testUserPassword})
+      .send({username: testUserName, email: 'm@m.c', password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -125,7 +127,7 @@ describe 'User interactions', ->
 
     it 'can\'t create User with too short password', ->
       request.post('/register')
-      .send({username: testUserName, email: testUserEmail, password: "Passw"})
+      .send({username: testUserName, email: testUserEmail, password: 'Passw'})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'error_validation')
@@ -170,7 +172,7 @@ describe 'User interactions', ->
 
     it 'can\'t create a User with the same name', ->
       request.post('/register')
-      .send({username: testUserName, email: testUserEmail + "m", password: testUserPassword})
+      .send({username: testUserName, email: testUserEmail + 'm', password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'username_in_use')
@@ -178,7 +180,7 @@ describe 'User interactions', ->
 
     it 'can\'t create a User with the same email', ->
       request.post('/register')
-      .send({username: testUserName + "2", email: testUserEmail, password: testUserPassword})
+      .send({username: testUserName + '2', email: testUserEmail, password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'email_in_use')
@@ -201,14 +203,14 @@ describe 'User interactions', ->
       )
     it 'can\'t login with incorrect password', ->
       request.post('/login')
-      .send({user: testUserName, password: "Bogopass123"})
+      .send({user: testUserName, password: 'Bogopass123'})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'incorrect_password')
       )
     it 'can\'t login with non-existing username', ->
       request.post('/login')
-      .send({user: "Bogoname", password: testUserPassword})
+      .send({user: 'Bogoname', password: testUserPassword})
       .expect((res) ->
         message = res.body[0]
         assert.equal(message, 'incorrect_login')
@@ -258,9 +260,9 @@ describe 'User interactions', ->
       )
 
   describe 'Modify the User', ->
-    testUserNameNew = "BILLCIPHER5000"
-    testUserEmailNew = "bill@gnomesrule.com"
-    testUserPasswordNew = "99Password99"
+    testUserNameNew = 'BILLCIPHER5000'
+    testUserEmailNew = 'bill@gnomesrule.com'
+    testUserPasswordNew = '99Password99'
 
     it 'can change a username', (done) ->
       await User.setName(testUserPid, testUserNameNew, defer(err, result))
@@ -314,7 +316,7 @@ describe 'User interactions', ->
   describe 'Delete the User', ->
 
     it 'can delete a non-existing User, but it will affect nothing', (done) ->
-      await User.deleteUser("AAA12345BB", defer(err, result))
+      await User.deleteUser('AAA12345BB', defer(err, result))
       assert.equal(err, null)
       assert.equal(result.affectedRows, 0)
       done()
@@ -331,3 +333,5 @@ describe 'User interactions', ->
       done()
 
 #TODO: More tests!!
+
+# coffeelint: enable=no_implicit_returns

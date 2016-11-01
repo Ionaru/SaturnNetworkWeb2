@@ -7,11 +7,11 @@ router.get '/', (req, res) ->
     if not err
       delete result['user_id']
       delete result['user_password_hash']
-      res.send(result)
+      return res.send(result)
     else
-      res.render('status/404')
+      return res.render('status/404')
   else
-    res.render('status/404')
+    return res.render('status/404')
 
 router.get '/*', (req, res) ->
   user = req.url.slice(1)
@@ -22,9 +22,9 @@ router.get '/*', (req, res) ->
         if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
           delete result['user_id']
           delete result['user_password_hash']
-          res.send(result)
+          return res.send(result)
         else
-          res.render('status/404')
+          return res.render('status/404')
       else
         await User.getByUserName(user, defer(err, result))
         if not err
@@ -32,9 +32,9 @@ router.get '/*', (req, res) ->
             if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
               delete result['user_id']
               delete result['user_password_hash']
-              res.send(result)
+              return res.send(result)
             else
-              res.render('status/404')
+              return res.render('status/404')
           else
             await User.getByUserEmail(user, defer(err, result))
             if not err
@@ -42,18 +42,18 @@ router.get '/*', (req, res) ->
                 if (req.session.user.pid is result['user_pid']) or req.session.user.isAdmin
                   delete result['user_id']
                   delete result['user_password_hash']
-                  res.send(result)
+                  return res.send(result)
                 else
-                  res.render('status/404')
+                  return res.render('status/404')
               else
-                res.render('status/404')
+                return res.render('status/404')
             else
-              res.render('status/404')
+              return res.render('status/404')
         else
-          res.render('status/404')
+          return res.render('status/404')
     else
-      res.render('status/404')
+      return res.render('status/404')
   else
-    res.render('status/404')
+    return res.render('status/404')
 
 module.exports = router

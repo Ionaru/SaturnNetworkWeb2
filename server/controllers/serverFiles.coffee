@@ -21,9 +21,11 @@ exports.getServerFiles = (modpack, done) ->
       for versionID in versions
         versionsFinal.push serverFiles[versionID]
       c.end()
-      done null, versionsFinal
+      return done null, versionsFinal
+    return
 
   c.connect(
     host: '85.25.237.10'
     user: 'serverfiles'
   )
+  return
