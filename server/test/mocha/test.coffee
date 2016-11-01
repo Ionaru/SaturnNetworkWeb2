@@ -30,6 +30,7 @@ describe 'Prologue', ->
       this.timeout(5000)
       process.env['TESTMODE'] = process.env['SILENT'] = true
       process.env['PORT'] = 3001
+      process.env['ENV'] = 'DEV'
       require('../../bin/www')
 
 describe 'Preparing the Database', ->

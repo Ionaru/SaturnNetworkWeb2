@@ -19,9 +19,13 @@ errFileJSONPath = logDirs.error + '_json.txt'
 for k, logDir of logDirs
   require('mkdirp') logDir
 
+consoleLogLevel = 'info'
+if process.env.ENV is 'DEV'
+  consoleLogLevel = 'debug'
+
 winston = require 'winston'
 consoleLog = new (winston.transports.Console)({
-  level: 'info'
+  level: consoleLogLevel
   timestamp: ->
     return getLogTimeStamp()
   colorize: true

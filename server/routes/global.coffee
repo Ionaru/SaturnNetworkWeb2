@@ -4,6 +4,10 @@ User = require('../models/user')
 jsesc = require('jsesc')
 mail = require('../controllers/pidgeon')
 
+router.all '/*', (req, res, next) ->
+  logger.debug("[#{req.session.user?.username} (#{req['ip']})] #{req.method} - #{req.url}")
+  return next()
+
 # GLobal router for user info, permissions and cookies
 router.get '/*', (req, res, next) ->
   if not req.session.user then req.session.user = {}
