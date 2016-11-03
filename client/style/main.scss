@@ -1,16 +1,43 @@
-$main_colour: #01A7E1;
+@import "../public/libs/bourbon-4.2.7/bourbon";
+
+// Define main colours
+$primary_colour: #F26921;
+$secondary_colour: #EF4023;
+$secondary_colour2: #F15A29;
+$secondary_colour3: #F7941E;
+$primary_highlight: #0095DA;
+$secondary_highlight: #00ADEF;
+
+$standard_text_colour: #333333;
+$standard_bg_colour: #ffffff;
+
+* {
+  // Set box-sizing: border-box on every element
+  box-sizing: border-box;
+}
 
 html {
+  // Never hide the scrollbar, this messes with modals
+  overflow-y: scroll !important;
 
-  overflow-y: scroll;
   body {
+    // Set standard rendering as the defaults might vary between browsers and operating systems
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: $standard_text_colour;
+    background-color: $standard_bg_colour;
+    margin: 0;
+
     padding-top: 50px;
 
     &.modal-open {
+      // Prevent the page from jumping when a modal is opened
       padding-right: 0 !important;
     }
 
     .modal {
+      // Re-center modals on the screen
       padding-right: 0 !important;
     }
 
@@ -18,11 +45,12 @@ html {
       .navbar-brand {
         padding-left: 35px;
         position: relative;
+        @include transition(color 0.15s ease-in-out);
 
         img {
           position: absolute;
           top: 50%;
-          transform: translate(-50%, -50%);
+          @include transform(translate(-50%, -50%));
         }
         span {
           display: none;
@@ -33,16 +61,28 @@ html {
             display: inline;
             padding-left: 25px;
           }
+
+          &:hover, &:active {
+            color: $secondary_colour2 !important;
+          }
         }
       }
 
-      .navbar-nav * {
-        font-size: medium;
+      .navbar-nav {
+        * {
+          font-size: medium;
+        }
+
+        li.dropdown.open a.dropdown-toggle i.mdi:before {
+          @include transform(rotate(-180deg));
+        }
       }
+
       .navbar-info {
         cursor: default;
         pointer-events: none;
       }
+
       .dropdown-menu > li > form > input {
         display: block;
         padding: 3px 20px;
@@ -71,12 +111,15 @@ html {
           }
         }
       }
+
       &.gates_header {
         background-image: url(/images/modpacks/gates/image2C.png);
       }
+
       &.technolution_header {
         background-image: url(/images/modpacks/technolution/jumbo.png);
       }
+
       .modpack-logo {
         width: 300px;
         height: 300px;
