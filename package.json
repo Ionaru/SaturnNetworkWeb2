@@ -2,8 +2,7 @@
   "name": "SaturnNetworkWeb2",
   "private": true,
   "scripts": {
-    "Run dev": "ENV=DEV node ./server/bin/start_server",
-    "Run prod": "ENV=PROD node ./server/bin/start_server",
+    "Start": "node ./server/bin/start_server",
     "Test mocha": "mocha --compilers coffee:iced-coffee-script-3/register server/test/mocha -s 1000",
     "Test lint": "./node_modules/.bin/coffeelint -f ./server/test/lint/coffeelint.json ./server ./client/scripts",
     "Update from git": "git pull",

@@ -1,1 +1,2 @@
-npm run-script 'Run prod'
+set ENV=PROD
+npm run-script "Start"
