@@ -2,15 +2,16 @@ os:
 - linux
 language: node_js
 node_js:
+- '7'
 - '6'
-- '5'
-- '4.2.6'
 before_install:
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- export PATH=$HOME/.yarn/bin:$PATH
 - openssl aes-256-cbc -K $encrypted_d6da8abbdec3_key -iv $encrypted_d6da8abbdec3_iv
   -in travis.tar.enc -out travis.tar -d
-- tar xvf travis.tar
 install:
-- npm install
+- tar xvf travis.tar
+- yarn
 script:
-- npm run "Test lint"
-- npm run "Test mocha"
+- yarn run "Test lint"
+- yarn run "Test mocha"
