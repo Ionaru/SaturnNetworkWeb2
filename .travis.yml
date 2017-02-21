@@ -13,5 +13,5 @@ install:
 - tar xvf travis.tar
 - yarn
 script:
-- yarn run "Test lint"
-- yarn run "Test mocha"
+- yarn run lint
+- yarn run mocha

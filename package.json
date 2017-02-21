@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "Start": "node ./server/bin/start_server",
-    "Test mocha": "mocha --compilers coffee:iced-coffee-script-3/register server/test/mocha -s 1000",
-    "Test lint": "./node_modules/.bin/coffeelint -f ./server/test/lint/coffeelint.json ./server ./client/scripts",
+    "mocha": "mocha --compilers coffee:iced-coffee-script-3/register server/test/mocha -s 1000",
+    "lint": "./node_modules/.bin/coffeelint -f ./server/test/lint/coffeelint.json ./server ./client/scripts",
     "Update from git": "git pull",
     "Install packages": "npm install"
   },
@@ -19,16 +19,16 @@
     "express-session": "^1.14.2",
     "ftp": "^0.3.10",
     "hbs": "~4.0.1",
-    "iced-coffee-script-3": "^110.0.0",
+    "iced-coffee-script-3": "^111.1.1",
     "iced-runtime-3": "^3.0.4",
     "ini": "^1.3.4",
     "jsesc": "^2.2.0",
     "mkdirp": "^0.5.1",
     "mysql": "^2.11.1",
-    "node-sass": "^3.10.1",
+    "node-sass": "^4.5.0",
     "node-schedule": "^1.2.0",
-    "nodemailer": "^2.6.4",
-    "serve-favicon": "~2.3.0",
+    "nodemailer": "^3.1.3",
+    "serve-favicon": "^2.4.0",
     "sort-object": "^3.0.2",
     "uglify-js": "^2.7.4",
     "winston": "^2.2.0",
@@ -39,7 +39,7 @@
     "coffeelint-no-implicit-returns": "0.0.6",
     "mocha": "^3.1.2",
     "request": "^2.76.0",
-    "supertest": "^2.0.1"
+    "supertest": "^3.0.0"
   },
   "license": "ISC"
 }
