@@ -73,7 +73,7 @@ html {
           font-size: medium;
         }
 
-        li.dropdown.open a.dropdown-toggle i.mdi:before {
+        li.dropdown.open a.dropdown-toggle i.mdi.mdi-chevron-down:before {
           @include transform(rotate(-180deg));
         }
       }
