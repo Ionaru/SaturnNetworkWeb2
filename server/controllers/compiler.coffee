@@ -5,7 +5,7 @@ exports.compileStylesheets = (done) ->
   startTime = Date.now()
   inputDirNameStyle = './client/style/'
   outputDirNameStyle = './client/public/stylesheets/'
-  mkdirp(outputDirNameStyle)
+  mkdirp.sync(outputDirNameStyle)
 
   sass = require('node-sass')
   result = sass.renderSync(
@@ -24,12 +24,10 @@ exports.compileScripts = (done) ->
   startTime = Date.now()
   inputDirNameJS = './client/scripts/'
   outputDirNameJS = './client/public/javascript/'
-  mkdirp(outputDirNameJS)
+  mkdirp.sync(outputDirNameJS)
 
   Compiler = require('iced-coffee-script-3')
   coffeeFiles = fs.readdirSync(inputDirNameJS)
-  if !fs.existsSync(outputDirNameJS)
-    fs.mkdirSync(outputDirNameJS)
   fileContent = ''
   for file in coffeeFiles
     fileContent += fs.readFileSync(inputDirNameJS + file, 'utf-8') + '\n'

@@ -17,7 +17,7 @@ warnFileJSONPath = logDirs.warn + '_json.txt'
 errFileJSONPath = logDirs.error + '_json.txt'
 
 for k, logDir of logDirs
-  require('mkdirp') logDir
+  require('mkdirp').sync(logDir)
 
 consoleLogLevel = 'info'
 if process.env.ENV is 'DEV'

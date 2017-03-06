@@ -93,31 +93,18 @@ if devMode then app.use '/shop', require('./routes/shop/frontpage')
   Register a 404 error page
 ###
 app.use (req, res) ->
-  err = new Error('Not Found')
-  err.status = 404
+  res.status(404)
   res.render('status/404')
   return
 
 ###
-  Register the error handler for the development environment
-###
-if devMode
-  app.use (err, req, res) ->
-    res.status(err.status or 500)
-    res.render('error',
-      message: err.message
-      error: err
-    )
-    return
-
-###
-  Register the error handler for the production environment, no stacktraces should be sent to the client
+  Register the error handler, only send the stacktrace to the client when the app is in DEV mode
 ###
 app.use (err, req, res) ->
   res.status(err.status or 500)
   res.render('error',
     message: err.message
-    error: {}
+    error: if devMode then err else {}
   )
   return
 

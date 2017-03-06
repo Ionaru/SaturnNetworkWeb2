@@ -12,8 +12,7 @@ exports.getFullModList = (modpack) ->
     return null
 
 exports.writeFullModList = (modpack, callback) ->
-  require('mkdirp').sync './cache/', (err) ->
-    return logger.info('creating ./cache/')
+  require('mkdirp').sync('./cache/')
   modpackName = modpack
   fullModList = {
     time: 0
